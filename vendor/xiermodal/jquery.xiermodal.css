@@ -1,0 +1,257 @@
+/* Базовые */
+.xierModal{position: fixed; top: 0; right: 0; bottom: 0; left: 0; /*visibility: hidden;*/}
+.xierModal__item{position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+.xierModal__background{position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(43, 46, 56, .5); animation-fill-mode: forwards; animation-duration: 0.2s;}
+.xierModal__scroller{position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable; display: flex; align-items: stretch;}
+/* Старые браузеры без scrollbar-gutter: резерв под полосу при появлении скролла (класс из JS) */
+.xierModal__scroller.xierModal__scroller--overflowFallback{overflow-y: scroll;}
+.xierModal__contentInner{overflow: visible;}
+.xierModal__aligner{flex: 1 1 auto; margin: auto; display: flex; width: 100%;}
+.xierModal__content{flex: 0 0 auto; min-height: 0; position: relative; display: flex; animation-fill-mode: forwards; animation-duration: 0.2s; max-width: 100%;}
+.xierModal__contentInner{flex: 1 1 auto; max-width: 100%;}
+.xierModal__hide{position: absolute; top: 0; right: 0; transform: translate(100%, -100%); width: 32px; height: 32px; padding: 0; background: #272E32; color: #fff; cursor: pointer; display: flex; justify-content: center; align-items: center; border: none; box-sizing: border-box;}
+.xierModal__hideIcon{display: block; position: relative; width: 14px; height: 14px;}
+.xierModal__hideIcon::before,
+.xierModal__hideIcon::after{content: ""; position: absolute; left: 50%; top: 50%; width: 14px; height: 2px; background: currentColor; border-radius: 1px;}
+.xierModal__hideIcon::before{transform: translate(-50%, -50%) rotate(45deg);}
+.xierModal__hideIcon::after{transform: translate(-50%, -50%) rotate(-45deg);}
+
+/* Имена анимаций */
+.xierModal__backgroundAnimation--fadeIn-1{-webkit-animation-name: background-fadein-1; animation-name: background-fadein-1;}
+.xierModal__backgroundAnimation--fadeOut-0{-webkit-animation-name: background-fadeout-0; animation-name: background-fadeout-0;}
+.xierModal__contentAnimation--fadeIn-1{-webkit-animation-name: content-fadein-1; animation-name: content-fadein-1;}
+.xierModal__contentAnimation--fadeOut-0{-webkit-animation-name: content-fadeout-0; animation-name: content-fadeout-0;}
+.xierModal__contentAnimation--rightSlide-1{-webkit-animation-name: content-right-slide-1; animation-name: content-right-slide-1;}
+.xierModal__contentAnimation--rightSlide-0{-webkit-animation-name: content-right-slide-0; animation-name: content-right-slide-0;}
+.xierModal__contentAnimation--leftSlide-1{-webkit-animation-name: content-left-slide-1; animation-name: content-left-slide-1;}
+.xierModal__contentAnimation--leftSlide-0{-webkit-animation-name: content-left-slide-0; animation-name: content-left-slide-0;}
+
+/* Скрывать кнопку закрытия у скрытых состояний контента */
+.xierModal__contentAnimation--fadeOut-0 .xierModal__hide,
+.xierModal__contentAnimation--rightSlide-0 .xierModal__hide,
+.xierModal__contentAnimation--leftSlide-0 .xierModal__hide{
+	opacity: 0;
+	pointer-events: none;
+}
+.xierModal__contentAnimation--fadeIn-1 .xierModal__hide,
+.xierModal__contentAnimation--rightSlide-1 .xierModal__hide,
+.xierModal__contentAnimation--leftSlide-1 .xierModal__hide{
+	opacity: 1;
+	pointer-events: auto;
+}
+
+/* Форсер анимации */
+.xierModal--animationForce{animation-duration: 0.001s;}
+
+/* Фикс полного экрана в хроме */
+.xierModal--animationFillmodeFix{animation-fill-mode: backwards;}
+
+/* Алигнер по центру */
+.xierModal__aligner--aligned-center{padding: 50px;}
+.xierModal__aligner--aligned-center .xierModal__content{margin: auto;}
+
+/* Алигнер справа / слева — на всю высоту viewport */
+.xierModal__aligner--aligned-right,
+.xierModal__aligner--aligned-left{align-items: stretch; align-self: stretch; margin: 0; min-height: 100%; width: 100%;}
+.xierModal__aligner--aligned-right{justify-content: flex-end;}
+.xierModal__aligner--aligned-left{justify-content: flex-start;}
+.xierModal__aligner--aligned-right .xierModal__content,
+.xierModal__aligner--aligned-left .xierModal__content{flex: 0 0 auto; align-self: stretch; min-height: 100%; height: 100%;}
+.xierModal__aligner--aligned-right .xierModal__contentInner,
+.xierModal__aligner--aligned-left .xierModal__contentInner{flex: 1 1 auto; min-height: 100%; height: 100%; box-sizing: border-box;}
+.xierModal__aligner--aligned-right .xierModal__hide{left: 0; right: initial; transform: translate(-100%, 0);}
+.xierModal__aligner--aligned-left .xierModal__hide{transform: translate(100%, 0);}
+
+/* Алигнер на весь экран */
+.xierModal__aligner--aligned-full{align-items: stretch; align-self: stretch; margin: 0; min-height: 100%; width: 100%;}
+.xierModal__aligner--aligned-full .xierModal__content{flex: 1 1 auto; width: 100%; min-height: 100%; max-width: none;}
+.xierModal__aligner--aligned-full .xierModal__contentInner{flex: 1 1 auto; width: 100%; min-height: 100%; height: 100%; box-sizing: border-box;}
+.xierModal__aligner--aligned-full .xierModal__hide{transform: translate(0, 0);}
+
+/* Анимации */
+@-webkit-keyframes background-fadein-1{
+	from{
+		opacity: 0;
+	}
+	to{
+		opacity: 1;
+	}
+}
+@keyframes background-fadein-1{
+	from{
+		opacity: 0;
+	}
+	to{
+		opacity: 1;
+	}
+}
+@-webkit-keyframes background-fadeout-0{
+	from{
+		opacity: 1;
+	}
+	to{
+		opacity: 0;
+	}
+}
+@keyframes background-fadeout-0{
+	from{
+		opacity: 1;
+	}
+	to{
+		opacity: 0;
+	}
+}
+
+/* --- */
+
+@-webkit-keyframes content-fadein-1{
+	from{
+		-webkit-transform: scale(0.95);
+		transform: scale(0.95);
+		opacity: 0;
+	}
+	to{
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+@keyframes content-fadein-1{
+	from{
+		-webkit-transform: scale(0.95);
+		transform: scale(0.95);
+		opacity: 0;
+	}
+	to{
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes content-fadeout-0{
+	from{
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		opacity: 1;
+	}
+	to{
+		-webkit-transform: scale(0.95);
+		transform: scale(0.95);
+		opacity: 0;
+	}
+}
+@keyframes content-fadeout-0{
+	from{
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		opacity: 1;
+	}
+	to{
+		-webkit-transform: scale(0.95);
+		transform: scale(0.95);
+		opacity: 0;
+	}
+}
+
+/* --- */
+
+@-webkit-keyframes content-right-slide-1{
+	from{
+		-webkit-transform: translateX(100%);
+	}
+	to{
+		-webkit-transform: translateX(0);
+	}
+}
+@keyframes content-right-slide-1{
+	from{
+		-webkit-transform: translateX(100%);
+	}
+	to{
+		-webkit-transform: translateX(0);
+	}
+}
+
+@-webkit-keyframes content-right-slide-0{
+	from{
+		-webkit-transform: translateX(0);
+	}
+	to{
+		-webkit-transform: translateX(100%);
+	}
+}
+@keyframes content-right-slide-0{
+	from{
+		-webkit-transform: translateX(0);
+	}
+	to{
+		-webkit-transform: translateX(100%);
+	}
+}
+
+/* --- */
+
+@-webkit-keyframes content-left-slide-1{
+	from{
+		-webkit-transform: translateX(-100%);
+	}
+	to{
+		-webkit-transform: translateX(0);
+	}
+}
+@keyframes content-left-slide-1{
+	from{
+		-webkit-transform: translateX(-100%);
+	}
+	to{
+		-webkit-transform: translateX(0);
+	}
+}
+
+@-webkit-keyframes content-left-slide-0{
+	from{
+		-webkit-transform: translateX(0);
+	}
+	to{
+		-webkit-transform: translateX(-100%);
+	}
+}
+@keyframes content-left-slide-0{
+	from{
+		-webkit-transform: translateX(0);
+	}
+	to{
+		-webkit-transform: translateX(-100%);
+	}
+}
+
+
+/*Формы*/
+@media screen and (max-width: 768px){
+	
+	.xierModal__content .xierModal__hideIcon{width: 16px; height: 16px;}
+	.xierModal__content .xierModal__hideIcon::before,
+	.xierModal__content .xierModal__hideIcon::after{width: 16px; height: 2px;}
+	.xierModal__item .xierModal__aligner--aligned-center{ padding: 20px }
+	.xierModal__hide.xierModal__hide{width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; top: 40px; right: 40px;}
+}
+
+@media (max-width:500px) {
+
+	.xierModal__aligner--aligned-center {
+		padding: 40px 10px;
+	}
+}
+
+/* Блокировка прокрутки страницы (дублируется inline в JS — перебивает overflow-y: scroll на html/body) */
+html.xierModal--scrollLock,
+html.xierModal--scrollLock body {
+	overflow: hidden !important;
+}
+/* Пока модалка открыта — не держим gutter страницы (скролл только у .xierModal__scroller) */
+html.xierModal--scrollLock{
+	scrollbar-gutter: auto;
+}
+
+.xierModal__background--noOpacity { background: #1d1d1d;}

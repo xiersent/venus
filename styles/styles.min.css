@@ -1,0 +1,8035 @@
+@charset "UTF-8";
+/* Mixins */
+/** Кастомный чекбокс списков (как в lists.css до миграции). */
+/** Галочка ✓ — как в lists.css (10px, по центру ячейки). */
+/* Design tokens (SCSS only — not on DOM) */
+/* Global */
+* {
+  box-sizing: border-box;
+}
+
+button:focus-visible {
+  outline: 2px solid #666;
+  outline-offset: 2px;
+}
+
+input:focus-visible {
+  outline: 2px solid #666;
+  outline-offset: 2px;
+}
+
+textarea:focus-visible {
+  outline: 2px solid #666;
+  outline-offset: 2px;
+}
+
+select:focus-visible {
+  outline: 2px solid #666;
+  outline-offset: 2px;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #666;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 400;
+  font-family: Tahoma, sans-serif;
+}
+
+button:hover {
+  filter: brightness(0.9);
+}
+
+[type=checkbox] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+[type=text] {
+  padding: 5px;
+  border: 1px solid #ddd;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+}
+
+[type=number] {
+  padding: 5px;
+  border: 1px solid #ddd;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+}
+
+[type=date] {
+  padding: 5px;
+  border: 1px solid #ddd;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+}
+
+select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+}
+
+textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-family: Tahoma, sans-serif;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 80px;
+  width: 100%;
+}
+
+/* Keyframes */
+@keyframes list-item-save-flash {
+  0% {
+    background-color: rgba(199, 21, 133, 0.42);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+@keyframes list-item-save-flash-active {
+  0% {
+    background-color: rgba(199, 21, 133, 0.42);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+/* Блок .sun- */
+.sun- {
+  /* --- migration blocks from HEAD --- */
+}
+@media (min-width: 0px) {
+  .sun-root {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px;
+    background-color: #f5f5f5;
+    font-family: Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileDeviceRoot {
+    overflow: hidden;
+    height: 100vh;
+  }
+}
+@media (min-width: 0px) {
+  .sun-layoutHidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-layoutVisibleWhenUiHidden {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-layoutMobileWarning {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+  }
+}
+@media (min-width: 0px) {
+  .sun-grayFiltered {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphGrayElement {
+    filter: grayscale(1) !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphGrayMode {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateLabelVisible {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateName.sun-dateLabelVisible {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateName.sun-dateLabelVisible {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateName {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateStar {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app .sun-graphSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-starsMode .sun-dateName {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-starsMode .sun-dateStar {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-starsMode .sun-centerDateName {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-starsMode .sun-centerDateStar {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-namesMode .sun-dateName {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-namesMode .sun-dateStar {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-namesMode .sun-centerDateName {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-namesMode .sun-centerDateStar {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-grayMode {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-grayMode .sun-cornerSquare {
+    filter: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-uiHidden .sun-interfaceContainer {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-uiHidden .sun-controlsSection {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-uiHidden .sun-graphSection {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-uiHidden .sun-panelSection {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-uiHidden .sun-cornerSquare {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-graphHidden .sun-graphSection {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-graphGrayMode .sun-graphContainer {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-graphGrayMode .sun-waveLabelsContainer {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-graphGrayMode .sun-waveLabelsVerticalContainer {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-graphGrayMode .sun-timeBarContainer {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-graphGrayMode .sun-waveLabel {
+    filter: grayscale(1) !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-graphGrayMode .sun-extremumLabel {
+    filter: grayscale(1) !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-graphGrayMode .sun-waveAxisXPoint {
+    filter: grayscale(1) !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-mobileDevice {
+    overflow: hidden;
+    height: 100vh;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-mobileDevice .sun-interfaceContainer {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-mobileDevice .sun-controlsSection {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-mobileDevice .sun-graphSection {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-mobileDevice .sun-panelSection {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-mobileDevice .sun-cornerSquare {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-app.sun-mobileDevice .sun-warningOverlay {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 40px;
+    background-color: #f5f5f5;
+    font-family: Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateName {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateStar {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateName {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateStar {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-interfaceContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1200px;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarWrap {
+    margin: 15px auto;
+    align-self: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsSection .sun-tabContainer {
+    align-items: flex-start;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsSection .sun-tabButtons.sun-tabButtonsFramed {
+    width: fit-content;
+    max-width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsSection .sun-tabButtons {
+    justify-content: flex-start;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsSection .sun-tabButtons.sun-tabButtonsFramed .sun-tabButton {
+    flex: 0 1 auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarWrap > .sun-panelSection.sun-timeBarControlsSection {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarWrap > .sun-panelSection.sun-timeBarControlsSection > .sun-timeBarControls {
+    outline: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControls {
+    background: #fafafa;
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 11px;
+    user-select: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsCollapsed {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px 12px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlCheck {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    text-align: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlLabel {
+    font-size: 11px;
+    line-height: 1.1;
+    color: #666;
+    font-variant-numeric: tabular-nums;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsGroups .sun-timeBarControlLabel {
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsEmpty {
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarWrap .sun-timeBarContainer {
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    background-color: #fff;
+    outline: 1px solid #ddd;
+    position: relative;
+    user-select: none;
+    margin: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarContainer {
+    min-height: 0;
+    height: auto;
+    background-color: #fff;
+    outline: 1px solid #ddd;
+    position: relative;
+    user-select: none;
+    margin: 15px 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer.sun-graphGrayMode + .sun-timeBarContainer {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBar {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStacked {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    position: relative;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarHoursRow {
+    flex-shrink: 0;
+    min-height: 28px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateSideHours {
+    min-height: 28px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarHoursTrack {
+    flex: 1 1 auto;
+    position: relative;
+    min-width: 0;
+    min-height: 28px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarHoursTrack .sun-timeScale {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarHoursTrack .sun-timeLabels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateStack {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateRow {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 20px;
+    border-bottom: 1px solid #eee;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateStack > .sun-timeBarStateRow:hover > .sun-timeBarStateTrack {
+    background-color: rgba(0, 0, 0, 0.025);
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateStack > .sun-timeBarStateRow:not(.sun-timeBarStateRowHidden):not(:has(~ .sun-timeBarStateRow:not(.sun-timeBarStateRowHidden))) {
+    border-bottom: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateRowHidden {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateRow.sun-timeBarHoursRow {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowRow {
+    border-top: 1px solid #ddd;
+    border-bottom: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateSide {
+    flex: 0 0 72px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 6px;
+    border-right: 1px solid #ddd;
+    background: #fafafa;
+    font-size: 11px;
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateToggle {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 20px;
+    padding: 0;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 11px;
+    line-height: 1;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateToggle:hover {
+    background: #f0f0f0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateLabel {
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+    min-width: 22px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateTrack {
+    flex: 1 1 auto;
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    min-height: 28px;
+    background: #fff;
+    overflow: hidden;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateTrack:hover {
+    z-index: 5;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegmentSlot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegmentSlot:hover {
+    z-index: 200 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabel.sun-timeBarSegmentLabel {
+    position: relative;
+    transform: none;
+    bottom: auto;
+    top: auto;
+    margin: 0;
+    max-width: none;
+    pointer-events: auto;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabel.sun-timeBarSegmentLabel.sun-extremumLabelTop {
+    bottom: auto;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabelText {
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabel.sun-timeBarSegmentLabel:hover {
+    border-color: #000;
+    pointer-events: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumWaveName {
+    cursor: pointer;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumWaveNameOnVizor {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowVline {
+    position: absolute;
+    top: 0;
+    bottom: calc(26px / 2);
+    left: 0;
+    width: 0;
+    z-index: 12;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowVline::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #ff0000;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowRow {
+    display: flex;
+    flex-shrink: 0;
+    min-height: 26px;
+    background: #fff;
+    position: relative;
+    z-index: 13;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateStack:not(:has(> .sun-timeBarStateRow:not(.sun-timeBarStateRowHidden))) ~ .sun-timeBarNowRow {
+    border-top: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateSideNow {
+    min-height: 26px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowTrack {
+    flex: 1 1 auto;
+    position: relative;
+    min-width: 0;
+    min-height: 26px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowMarker.sun-timeIndicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 0;
+    height: 0;
+    transform: translate(-50%, -50%);
+    z-index: 14;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowMarker .sun-timeBarNowLabel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 2px 6px;
+    font-size: 10px;
+    white-space: nowrap;
+    font-weight: 400;
+    font-family: monospace;
+    background-color: #ff0000;
+    color: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowMarker .sun-timeBarNowLabel::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: -4px;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #ff0000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowMarker .sun-timeBarNowLabel::after {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarHoursTrack .sun-timeScale > .sun-hourMarker {
+    min-height: 100%;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourMarker {
+    flex: 1;
+    border-left: 1px solid #ddd;
+    position: relative;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourMarker:first-child {
+    border-left: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourMarker:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourLabel {
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #666;
+    white-space: nowrap;
+    font-weight: 400;
+    font-family: Tahoma, sans-serif;
+  }
+}
+@media (min-width: 0px) {
+  .sun-halfHourMarker {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 1px;
+    height: 30%;
+    background-color: rgba(0, 0, 0, 0.15);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeIndicator {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background-color: transparent;
+    z-index: 10;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeIndicator::before {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeIndicator::after {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeIndicatorLabel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ff0000;
+    color: white;
+    padding: 2px 6px;
+    font-size: 10px;
+    white-space: nowrap;
+    font-weight: 400;
+    font-family: monospace;
+    z-index: 11;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeIndicatorLabel::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeIndicatorLabel::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeIndicatorLabel::before {
+    top: -4px;
+    border-bottom: 4px solid #ff0000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeIndicatorLabel::after {
+    bottom: -4px;
+    border-top: 4px solid #ff0000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarContainer .sun-hourLabel {
+    font-size: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourMarker.sun-clickable {
+    cursor: pointer;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourMarker.sun-midnight {
+    border-left-color: #ff0000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourMarker.sun-midnight .sun-hourLabel {
+    color: #ff0000;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-controlsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphSection {
+    display: flex !important;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    margin: 20px 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mainControlsPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-controlPanel {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 20px;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-controlPanel > .sun-datesPanel {
+    grid-column: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-controlPanel > .sun-wavesPanel {
+    grid-column: 2;
+  }
+}
+@media (min-width: 0px) {
+  .sun-btnToday.sun-todayActive {
+    background-color: #666;
+    color: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-btnToday.sun-todayInactive {
+    background-color: #ff9900;
+    color: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-btnToday.sun-todayInactive:hover {
+    background-color: #ffad33;
+    filter: brightness(1.1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-btnFlipH.sun-flipHActive {
+    background-color: #ff9900;
+    color: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-btnFlipH.sun-flipHActive:hover {
+    background-color: #ffad33;
+    filter: brightness(1.1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-btnFlipV.sun-flipVActive {
+    background-color: #ff9900;
+    color: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-btnFlipV.sun-flipVActive:hover {
+    background-color: #ffad33;
+    filter: brightness(1.1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-btnDeleteDisplayViewTemplate {
+    min-width: 28px;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: center;
+    line-height: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeGroupSelect {
+    min-width: 12em;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeAnchorSelect {
+    min-width: 4.5em;
+  }
+}
+@media (min-width: 0px) {
+  .sun-panelSection {
+    background: #fff;
+    padding: 15px;
+    overflow: visible;
+    min-width: 0;
+    outline: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesListContainer {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesList {
+    height: 100%;
+    background: #fff;
+    overflow-y: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-notesPanelLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-notesListContainer {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-noteEditorContainer {
+    flex: 2;
+    min-width: 300px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f5f5f5;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningOverlay.sun-hidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningBox {
+    background: #fff;
+    padding: 40px;
+    border: 1px solid #ddd;
+    max-width: 525px;
+    text-align: center;
+    display: block;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningBox.sun-hidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButtons {
+    display: flex;
+    padding: 0;
+    gap: 0;
+    flex-wrap: wrap;
+    background: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButton {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    font-size: 16px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButton:last-child {
+    border-right: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButton.sun-active {
+    background: #666;
+    color: #fff;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButton:hover:not(.sun-active) {
+    background: #f5f5f5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButtons.sun-tabButtonsFramed {
+    width: fit-content;
+    max-width: 100%;
+    align-self: flex-start;
+    border: none;
+    overflow: visible;
+    background: transparent;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButtons.sun-tabButtonsFramed .sun-tabButton {
+    font-size: 11px;
+    padding: 10px 15px;
+    flex: 0 0 auto;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButtons.sun-tabButtonsFramed .sun-tabButton.sun-active {
+    background: #666;
+    color: #fff;
+    border-color: #666;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButtons.sun-tabButtonsFramed .sun-tabButton:hover:not(.sun-active) {
+    background: #e5e5e5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent {
+    display: none;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent.sun-active {
+    display: block;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent .sun-summaryPanel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent .sun-intersectionPanel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent .sun-dateComparePanel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent .sun-analysisPanel {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent .sun-notesPanel {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent .sun-dbImportSection {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent .sun-panelSection {
+    border: none;
+    padding: 0;
+    outline: none;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabsSection .sun-tabContainer {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabsSection .sun-tabContent {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-inputRow {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listContainer {
+    border: 1px solid #ddd;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listContainerScrollable {
+    overflow-y: auto;
+    max-height: 400px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listContainerNoScroll {
+    overflow-y: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItem {
+    padding: 10px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    position: relative;
+    outline: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemClickable {
+    cursor: pointer;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDraggable {
+    cursor: move;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDragHandle {
+    cursor: move;
+    color: #999;
+    padding: 2px;
+    flex-shrink: 0;
+    user-select: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDragHandle:hover {
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDragging {
+    opacity: 0.5;
+    background-color: #f0f0f0;
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDragOver {
+    background-color: #e6f2ff;
+    border-top: 2px solid #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemSaveFlash::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    animation: list-item-save-flash 0.85s ease-out forwards;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemSaveFlash > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 0px) {
+  .sun-listItemSaveFlash::before {
+    animation-duration: 0.15s;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemContent {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemTitleContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+    flex: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemTitle {
+    font-weight: 400;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemIcon {
+    color: #666;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemRight {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemValue {
+    color: #666;
+    white-space: nowrap;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-dateGenderBadge {
+    margin: 0 0.15em;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemActions {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditForm {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-listItemEditForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-listItemEditRowDateMain {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-listItemEditRowDateMain .sun-dateNameEdit {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-listItemEditRowDateMain .dateInput {
+    flex: 0 1 auto;
+    min-width: 140px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-dateGenderSelect {
+    flex: 0 0 auto;
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+    height: 25px;
+    padding: 2px 4px;
+    font-size: 11px;
+    text-align: center;
+    text-align-last: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-listItemEditRowDateActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-listItemEditRowDateActions .sun-listItemEditActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-listItemEditRowFull {
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-dateDescriptionEdit {
+    width: 100%;
+    min-height: 44px;
+    max-height: 160px;
+    resize: vertical;
+    height: auto;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    line-height: 1.35;
+    font-family: Tahoma, sans-serif;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditRow {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditLabel {
+    font-weight: 400;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditInput {
+    flex: 1;
+    padding: 3px 5px;
+    border: 1px solid #ddd;
+    min-width: 0;
+    font-size: 11px;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditActions {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditing > .sun-listItemContent > .sun-listItemNormalView {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditing > .sun-listItemContent > .sun-listItemEditForm {
+    display: flex;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-listItemEditing .sun-groupChildren .sun-listItemWave .sun-listItemNormalView {
+    display: flex !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-listItemEditing .sun-groupChildren .sun-listItemWave .sun-listItemEditForm {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave.sun-listItemEditing .sun-listItemNormalView {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave.sun-listItemEditing .sun-listItemEditForm {
+    display: flex;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditing > .sun-listItemDragHandle {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate {
+    cursor: pointer;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate:hover {
+    background-color: #f5f5f5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate.sun-active {
+    background-color: #e6f2ff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave {
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave:hover {
+    background-color: #f5f5f5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave .sun-waveControlsInline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave .sun-waveVisibilityCheck {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave .sun-waveBVisibilityCheck {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave .sun-waveCornerColorCheck {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave .sun-waveCornerColorCheck {
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-dateCheckbox {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave .sun-wavePeriodBadge {
+    background: #e0e0e0;
+    padding: 2px 6px;
+    font-size: 10px;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave .sun-waveColorPreviewSmall {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-self: center;
+    margin: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup {
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup:not(.sun-listItemExpanded):hover {
+    background-color: #f5f5f5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-listItemExpanded {
+    background-color: inherit;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-listItemExpanded:hover {
+    background-color: inherit;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-active {
+    background-color: #e6f2ff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup .sun-waveGroupToggle {
+    margin-right: 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup .sun-waveGroupToggle:hover {
+    filter: brightness(0.9);
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren {
+    margin-top: 10px;
+    max-height: 361px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemExpanded .sun-groupChildren {
+    display: block;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-listItemWave {
+    background: #fafafa;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-listItemWave:last-child {
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-listItemWave:hover {
+    background: #f0f0f0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-waveControlsInline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-wavePeriodBadge {
+    background: #e0e0e0;
+    padding: 2px 6px;
+    font-size: 9px;
+    margin-left: 6px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-waveColorPreviewSmall {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    align-self: center;
+    margin: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-waveCornerColorCheck {
+    margin-left: 1px;
+    margin-right: 1px;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemNote {
+    cursor: default;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemNote:hover {
+    background-color: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemNote .sun-noteContentWrapper {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemNote .noteTime {
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 3px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemNote .noteText {
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemIntersection.sun-exactMatch {
+    background-color: #e6f7e6;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemIntersection.sun-closeMatch {
+    background-color: #fffbe6;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemIntersection .sun-intersectionInfo {
+    flex: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemIntersection .sun-intersectionPeriod {
+    font-weight: 400;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemIntersection .sun-intersectionMatchType {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemIntersection .sun-intersectionControls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listEmpty {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listError {
+    padding: 10px;
+    text-align: center;
+    color: #ff0000;
+    font-size: 11px;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupStats {
+    font-size: 11px;
+    white-space: nowrap;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupStatTotal {
+    color: #666;
+    font-size: 10px;
+    opacity: 0.95;
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupStatTotal:hover {
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-underline-offset: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupStatA {
+    font-size: 10px;
+    cursor: pointer;
+    font-weight: 400;
+    text-decoration: none;
+    color: #1565c0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupStatA:hover {
+    color: #0d47a1;
+    text-decoration: underline;
+    text-decoration-color: #0d47a1;
+    text-underline-offset: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupStatB {
+    font-size: 10px;
+    cursor: pointer;
+    font-weight: 400;
+    text-decoration: none;
+    color: #ef6c00;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupStatB:hover {
+    color: #e65100;
+    text-decoration: underline;
+    text-decoration-color: #e65100;
+    text-underline-offset: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupEnabledCount {
+    color: #666;
+    font-size: 10px;
+    opacity: 0.8;
+    cursor: pointer;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupTotalCount {
+    color: #666;
+    font-size: 10px;
+    opacity: 0.8;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-listItemDragging {
+    opacity: 0.5;
+    background-color: #f0f0f0;
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-listItemDragOverTop::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 10px;
+    height: 10px;
+    background: #000;
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-listItemDragOverBottom::after {
+    content: "";
+    position: absolute;
+    left: -5px;
+    bottom: -5px;
+    width: 10px;
+    height: 10px;
+    background: #000;
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup:not(.sun-listItemEditing) .sun-listItemDragHandle {
+    cursor: move;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemGroup.sun-listItemEditing .sun-listItemDragHandle {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup {
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup:not(.sun-listItemExpanded):hover {
+    background-color: #f5f5f5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup.sun-listItemExpanded {
+    background-color: inherit;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup:not(.sun-listItemEditing) .sun-listItemDragHandle {
+    cursor: move;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup.sun-listItemEditing .sun-listItemDragHandle {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup.sun-listItemDragging {
+    opacity: 0.5;
+    background-color: #f0f0f0;
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup.sun-listItemDragOverTop::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 10px;
+    height: 10px;
+    background: #000;
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup.sun-listItemDragOverBottom::after {
+    content: "";
+    position: absolute;
+    left: -5px;
+    bottom: -5px;
+    width: 10px;
+    height: 10px;
+    background: #000;
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-personGroupChildren {
+    margin-top: 10px;
+    max-height: 361px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-personGroupChildren .sun-listItemDate {
+    background: #fafafa;
+  }
+}
+@media (min-width: 0px) {
+  .sun-personGroupChildren .sun-listItemDate:hover {
+    background: #f0f0f0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-personGroupChildren .sun-listItemDate.sun-listItemDragOverTop {
+    border-top: 2px solid #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-personGroupChildren .sun-listItemDate.sun-listItemDragOverBottom {
+    border-bottom: 2px solid #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup.sun-listItemEditing .sun-personGroupChildren .sun-listItemDate .sun-listItemNormalView {
+    display: flex !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemPersonGroup.sun-listItemEditing .sun-personGroupChildren .sun-listItemDate .sun-listItemEditForm {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateDragHandle {
+    color: #999;
+    cursor: move;
+    padding: 2px;
+    flex-shrink: 0;
+    user-select: none;
+    margin-right: 4px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateDragHandle:hover {
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate.sun-listItemEditing .sun-dateDragHandle {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dropIndicator {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #666;
+    z-index: 100;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItem:first-child {
+    overflow: hidden;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItem:last-child {
+    overflow: hidden;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-listItemWave.sun-listItemDragging {
+    opacity: 0.5;
+    background-color: #f0f0f0;
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-listItemWave.sun-listItemDragOverTop {
+    border-top: 2px solid #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-listItemWave.sun-listItemDragOverBottom {
+    border-bottom: 2px solid #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-listItemWave.sun-listItemDragOverTop::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 10px;
+    height: 10px;
+    background: #666;
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren .sun-listItemWave.sun-listItemDragOverBottom::after {
+    content: "";
+    position: absolute;
+    left: -5px;
+    bottom: -5px;
+    width: 10px;
+    height: 10px;
+    background: #666;
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren.sun-groupChildrenDragOver {
+    background: rgba(0, 102, 204, 0.06);
+    outline: 2px dashed #666;
+    outline-offset: -2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-personGroupChildren.sun-groupChildrenDragOver {
+    background: rgba(0, 102, 204, 0.06);
+    outline: 2px dashed #666;
+    outline-offset: -2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveDragHandle {
+    color: #999;
+    cursor: move;
+    padding: 2px;
+    flex-shrink: 0;
+    user-select: none;
+    margin-right: 4px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveDragHandle:hover {
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemWave.sun-listItemEditing .sun-waveDragHandle {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateCheckbox {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveGroupToggle {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveVisibilityCheck {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveBVisibilityCheck {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveCornerColorCheck {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateCheck {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarGroupCheck {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateCheckbox[data-type=a]:checked {
+    background-color: #2196f3;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateCheckbox[data-type=b]:checked {
+    background-color: #ff9800;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveBVisibilityCheck:checked {
+    background-color: #ff9800;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveGroupToggle:checked {
+    background-color: #2196f3;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveVisibilityCheck:checked {
+    background-color: #2196f3;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveCornerColorCheck:checked {
+    background-color: #2196f3;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateCheck:checked {
+    background-color: #2196f3;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarGroupCheck:checked {
+    background-color: #2196f3;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateCheckbox:checked::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveGroupToggle:checked::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveVisibilityCheck:checked::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveBVisibilityCheck:checked::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveCornerColorCheck:checked::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateCheck:checked::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarGroupCheck:checked::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateCheckbox:checked {
+    border-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveGroupToggle:checked {
+    border-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveVisibilityCheck:checked {
+    border-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveBVisibilityCheck:checked {
+    border-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveCornerColorCheck:checked {
+    border-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateCheck:checked {
+    border-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarGroupCheck:checked {
+    border-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate .sun-dateSelectionChecks {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate:has(.sun-dateCheckbox[data-type=a]:checked) {
+    background-color: #e8f4fe;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDate:has(.sun-dateCheckbox[data-type=b]:checked) {
+    background-color: #fff4e5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-uiBtn {
+    padding: 5px 10px;
+    background-color: #666;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-uiBtn.sun-uiBtnToggleOff {
+    opacity: 0.55;
+  }
+}
+@media (min-width: 0px) {
+  .sun-parableBtnWrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-parableBtnWrapper {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningActions {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-parableBtn {
+    background-color: #4a6fa5;
+    color: #fff;
+    font-weight: 400;
+    padding: 5px 10px;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-parableBtn:hover {
+    filter: brightness(0.9);
+    background-color: #3a5a8a;
+  }
+}
+@media (min-width: 0px) {
+  .sun-smallButton {
+    padding: 5px 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-transformBtn {
+    padding: 5px 10px;
+    background-color: #666;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-deleteDateBtn {
+    background-color: #666;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-editBtn {
+    background-color: #666;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-deleteGroupBtn {
+    background-color: #666;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-saveBtn {
+    background-color: #666;
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cancelBtn {
+    background-color: #666;
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-expandCollapseBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding-left: 0;
+    padding-right: 0;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-editBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding-left: 0;
+    padding-right: 0;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-deleteDateBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding-left: 0;
+    padding-right: 0;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-saveBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding-left: 0;
+    padding-right: 0;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cancelBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding-left: 0;
+    padding-right: 0;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsToggle {
+    min-width: 0;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addGroupBtn {
+    padding: 5px 10px;
+    background-color: #666;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningActions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningOverlay {
+    background: #f0f0f0;
+    padding: 20px;
+    overflow-y: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningOverlay .sun-warningBox {
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px;
+    background: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningTitle {
+    font-size: 16px;
+    margin-bottom: 0px;
+    text-align: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningText {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningText ul {
+    text-align: left;
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningText li {
+    margin-bottom: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningInfo {
+    margin-top: 15px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningInfoItem {
+    margin-bottom: 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningInfoItem:last-child {
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileRetryBtn {
+    width: 100%;
+    padding: 12px;
+    font-size: 13px;
+    background: #666;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileRetryBtn:hover {
+    background: #555;
+  }
+}
+@media (min-width: 0px) {
+  .sun-formInput {
+    padding: 3px 5px;
+    border: 1px solid #ddd;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateInput {
+    padding: 3px 5px;
+    border: 1px solid #ddd;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addGroupInput {
+    border: 1px solid #ddd;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateInput {
+    flex: 0;
+    width: 100%;
+    height: 25px;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-colorInput {
+    width: 30px;
+    height: 25px;
+    padding: 0;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background: transparent;
+    box-sizing: border-box;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningTitle {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningText {
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningInfoItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: space-between;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningInfoItem strong {
+    font-weight: 400;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningInfoItem span {
+    color: #666;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-mobileWarning {
+    color: #ff0000;
+    font-weight: 400;
+    margin-top: 10px;
+    padding: 10px;
+    background: #fff3f3;
+    border: 1px solid #ff0000;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningLoading {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-currentDay {
+    background-color: #666;
+    color: #fff;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    max-width: 9em;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+    font-family: Monospace;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-currentDay:hover {
+    filter: brightness(0.9);
+  }
+}
+@media (min-width: 0px) {
+  .sun-labels {
+    position: absolute;
+    color: #666;
+    z-index: 8;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-weekdayLabel {
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-zoomOverlay {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid red;
+    z-index: 100;
+    pointer-events: none;
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-spoilerToggle {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 2px 5px;
+    text-decoration: underline;
+  }
+}
+@media (min-width: 0px) {
+  .sun-spoilerContent {
+    display: none;
+    background: #f9f9f9;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #eee;
+    font-size: 11px;
+    color: #888;
+  }
+}
+@media (min-width: 0px) {
+  .sun-spoilerContent.sun-show {
+    display: block;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportStatus {
+    margin: 10px 0;
+    padding: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportStatus.sun-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportStatus.sun-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportStatus.sun-info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportProgress {
+    width: 100%;
+    height: 20px;
+    background: #f0f0f0;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportProgressBar {
+    height: 100%;
+    background: #666;
+    transition: width 0.3s;
+  }
+}
+@media (min-width: 0px) {
+  .sun-matchTypeBadge {
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-matchTypeExact {
+    background: #4caf50;
+    color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-matchTypeClose {
+    background: #ffc107;
+    color: black;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveVisibilityCheck:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cursorTooltip {
+    position: fixed;
+    z-index: 100000;
+    pointer-events: none;
+    max-width: min(360px, 92vw);
+    padding: 8px 10px;
+    background: #1e1e1e;
+    color: #f2f2f2;
+    font-size: 11px;
+    line-height: 1.4;
+    white-space: pre-line;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    word-wrap: break-word;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeWrap {
+    max-width: 100%;
+    margin: 15px auto 0;
+    align-self: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeWrapHidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeSection .sun-tabContainer {
+    align-items: flex-start;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeSection .sun-tabButtons.sun-tabButtonsFramed {
+    width: fit-content;
+    max-width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeSection .sun-tabButtons {
+    justify-content: flex-start;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeSection .sun-tabButtons.sun-tabButtonsFramed .sun-tabButton {
+    flex: 0 1 auto;
+    max-width: 100%;
+    white-space: normal;
+    text-align: left;
+    line-height: 1.25;
+    padding: 6px 12px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 0;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemePanel {
+    background: #fafafa;
+    padding: 10px;
+    outline: 1px solid #ddd;
+    overflow: visible;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeControls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px 15px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeControlLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #333;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeControlSelect {
+    min-width: 6em;
+    max-width: 100%;
+    height: 28px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemePanelCollapsed {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeBoard {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeBoardBody {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeVline {
+    flex: 0 0 1px;
+    width: 1px;
+    background: #333;
+    align-self: stretch;
+    flex-shrink: 0;
+    margin-top: calc(1.25em + 5px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeEntrances {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeEntrancesRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0;
+    align-items: stretch;
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeEntrance {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 5px;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeBlockTitle {
+    font-size: 11px;
+    font-weight: 400;
+    text-align: center;
+    color: #333;
+    min-height: 1.25em;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeMiniGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 5px;
+    align-items: stretch;
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+    aspect-ratio: 3/5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeMiniGrid > .sun-secretSchemeCell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    box-sizing: border-box;
+    background: #fff;
+    outline: 1px solid #ddd;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeCellAnchor {
+    outline-color: #c71585;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphViewport {
+    position: relative;
+    align-self: center;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer {
+    position: relative;
+    background-color: #fff;
+    outline: 1px solid #ddd;
+    overflow: hidden;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesMount {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesMount .sun-waveContainer {
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesMount .sun-waveContainer svg {
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesMount .sun-waveContainer .sun-wave {
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesMount .sun-waveContainer .sun-wavePath {
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer.sun-graphGrayMode {
+    filter: grayscale(1);
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer.sun-graphGrayMode .sun-waveLabel {
+    filter: grayscale(1) !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer.sun-graphGrayMode .sun-waveAxisXPoint {
+    filter: grayscale(1) !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer.sun-graphGrayMode .sun-axis {
+    filter: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer.sun-graphGrayMode .sun-gridLine {
+    filter: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer.sun-graphGrayMode .sun-gridLineInner {
+    filter: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graphContainer.sun-graphGrayMode .sun-wavePath {
+    filter: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsContainer .sun-waveLabelsSide {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 200px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsLeft {
+    left: -200px;
+    text-align: right;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsRight {
+    right: -200px;
+    text-align: left;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsVerticalContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsVerticalContainer .sun-waveLabelsSide {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsTop {
+    top: -30px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsBottom {
+    bottom: -30px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsContainer.sun-hidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsVerticalContainer.sun-hidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveAxisXPoints {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 8;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveAxisXPoints.sun-hidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveAxisXPoint {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 1px solid #fff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 9;
+    transition: transform 0.2s, box-shadow 0.2s;
+    transform: translate(-50%, -50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveAxisXPoint:hover {
+    transform: translate(-50%, -50%) scale(1.3);
+    z-index: 10;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    width: max-content;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 400;
+    pointer-events: auto;
+    cursor: default;
+    padding: 2px 8px;
+    color: #fff;
+    opacity: 0.5;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel:hover {
+    opacity: 1;
+    z-index: 10;
+    filter: brightness(1.2);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsContainer .sun-waveLabel.sun-horizontal {
+    transform: translateY(-50%);
+    height: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsLeft .sun-waveLabel {
+    flex-direction: row-reverse;
+    right: 0;
+    margin-right: calc(5px + 1px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsRight .sun-waveLabel {
+    flex-direction: row;
+    left: 0;
+    margin-left: calc(5px + 1px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsVerticalContainer .sun-waveLabel.sun-vertical {
+    transform: translateX(-50%);
+    height: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsTop .sun-waveLabel {
+    top: auto;
+    bottom: 0;
+    margin-top: 0;
+    margin-bottom: calc(5px + 1px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsBottom .sun-waveLabel {
+    bottom: auto;
+    top: 0;
+    margin-bottom: 0;
+    margin-top: calc(5px + 1px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelText {
+    white-space: nowrap;
+    font-weight: 400;
+    font-size: 11px;
+    position: relative;
+    z-index: 2;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelName {
+    font-family: inherit;
+    letter-spacing: normal;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelExtremum {
+    font-family: monospace;
+    letter-spacing: 0.5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelArrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsContainer .sun-waveLabelArrow {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsVerticalContainer .sun-waveLabelArrow {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-graph {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graph > .sun-wavesTransformLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    transform-origin: 50% 50%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graph > .sun-gridStaticContainer {
+    z-index: 4;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graph > .sun-gridAbsoluteContainer {
+    z-index: 4;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graph > .sun-gridAbsoluteContainer .sun-gridWrapper {
+    pointer-events: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-graph.sun-graphAxisSwapped .sun-xAxis.sun-active {
+    background-color: #666 !important;
+    z-index: 6;
+  }
+}
+@media (min-width: 0px) {
+  .sun-axis {
+    position: absolute;
+    background-color: #c9c9c9;
+    z-index: 5;
+    cursor: pointer;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-xAxis {
+    width: 100%;
+    height: 1px;
+    bottom: 50%;
+    left: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-yAxis {
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridWrapper {
+    position: absolute;
+    height: 100%;
+    cursor: pointer;
+    z-index: 4;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridWrapper:hover .sun-gridLineInner {
+    background-color: #ccc;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLineInner {
+    position: absolute;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+    background-color: #eee;
+    z-index: 5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLineInner.sun-active {
+    background-color: #666 !important;
+    z-index: 6 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLineInner.sun-hasNotes {
+    background-color: #ff0000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridWrapper:hover .sun-gridLineInner.sun-hasNotes {
+    background-color: #ff4444;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLineInner.sun-active:hover {
+    background-color: #666 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridWrapper:hover .sun-gridLineInner.sun-active {
+    background-color: #666 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLineInner.sun-active.sun-hasNotes {
+    background-color: #ff0000 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridWrapper:hover .sun-gridLineInner.sun-active.sun-hasNotes {
+    background-color: #ff0000 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine {
+    position: absolute;
+    background-color: #eee;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-gridLineX {
+    width: 100%;
+    height: 1px;
+    left: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-gridLineY {
+    width: 1px;
+    height: 100%;
+    top: 0;
+    cursor: pointer;
+    z-index: 6;
+    background-color: #eee;
+    transition: width 0.2s, background-color 0.2s;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-gridLineY.sun-active {
+    background-color: #666;
+    width: 1px;
+    z-index: 7;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-gridLineY.sun-active:hover {
+    background-color: #666;
+    width: 1px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-gridLineY.sun-hasNotes {
+    background-color: #ff0000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-gridLineY.sun-hasNotes:hover {
+    background-color: #ff4444;
+    width: 3px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-gridLineY.sun-active.sun-hasNotes {
+    background-color: #ff0000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-gridLineY.sun-active.sun-hasNotes:hover {
+    background-color: #ff0000;
+    width: 1px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-xLabels {
+    bottom: 10px;
+    transform: translateX(-50%);
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateLabels {
+    bottom: 30px;
+    transform: translateX(-50%);
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateRow {
+    color: #666;
+    white-space: nowrap;
+    font-size: inherit;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateRow .sun-dateLabels {
+    position: static;
+    transform: none;
+    bottom: auto;
+    left: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateRow .sun-weekdayLabel {
+    position: static;
+    transform: none;
+    bottom: auto;
+    left: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-yLabels {
+    left: 10px;
+    transform: translateY(-50%);
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-stateLabels {
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-stateV {
+    background-color: #eee;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-dayH {
+    background-color: #eee;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridLine.sun-dayH.sun-active {
+    background-color: #666 !important;
+    z-index: 6 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateLabel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px 10px;
+    z-index: 20;
+    color: #333;
+    text-align: center;
+    pointer-events: none;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+    font-size: 13px;
+    min-height: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateTime {
+    font-size: 13px;
+    color: #666;
+    margin: 2px 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateFractional {
+    font-size: 11px;
+    color: #666;
+    margin: 2px 0;
+    opacity: 0.7;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateName {
+    font-size: 13px;
+    color: #333;
+    margin-top: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateMain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 4px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateDatetime {
+    font-size: 13px;
+    color: #333;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerNameContainer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateWeekday {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-centerDateStar {
+    font-size: 22px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveIntersectionPoints {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveIntersectionPoint {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 2px solid #fff;
+    background-color: #ff0000;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveIntersectionPoint:hover {
+    transform: translate(-50%, -50%) scale(1.3);
+    z-index: 11;
+    box-shadow: 0 0 6px rgba(255, 0, 0, 0.7);
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabel {
+    position: absolute;
+    font-size: 10px;
+    font-family: Tahoma, sans-serif;
+    white-space: nowrap;
+    padding: 2px 6px;
+    text-align: center;
+    font-weight: 400;
+    z-index: 9;
+    pointer-events: none;
+    transform: translateX(-50%);
+    transition: transform 0.15s ease;
+    background-color: rgb(192, 192, 192);
+    color: #ffffff;
+    border: 1px solid rgb(192, 192, 192);
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelTop {
+    bottom: 100%;
+    margin-bottom: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelBottom {
+    top: 100%;
+    margin-top: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelText {
+    text-align: center;
+    font-weight: 400;
+    color: #000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelArrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelTop .sun-extremumLabelArrow {
+    bottom: -6px;
+    border-width: 6px 4px 0 4px;
+    border-color: rgb(192, 192, 192) transparent transparent transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelBottom .sun-extremumLabelArrow {
+    top: -6px;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent rgb(192, 192, 192) transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumMarker {
+    position: absolute;
+    width: 1px;
+    height: 15px;
+    opacity: 0.7;
+    z-index: 8;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumMarkerTop {
+    top: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumMarkerBottom {
+    bottom: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumWaveName {
+    cursor: pointer;
+    pointer-events: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabel:hover {
+    border-color: #000;
+    z-index: 20;
+    pointer-events: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabelTop .sun-extremumLabelArrow {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabelTop .sun-extremumLabelArrowTop {
+    top: -6px;
+    bottom: auto;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent rgb(192, 192, 192) transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabelTop .sun-extremumLabelArrowBottom {
+    top: auto;
+    bottom: -6px;
+    border-width: 6px 4px 0 4px;
+    border-color: rgb(192, 192, 192) transparent transparent transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabelTop:hover .sun-extremumLabelArrowTop {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color: #000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegment .sun-extremumLabelTop:hover .sun-extremumLabelArrowBottom {
+    border-top-color: #000;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveContainer {
+    position: absolute;
+    width: 3600px;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveContainerSwapped {
+    width: 100%;
+    height: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wave {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveContainerSwapped .sun-wave {
+    top: 0;
+    transform: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePath {
+    fill: none;
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePath.sun-bold {
+    stroke-width: 3px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveSvgLayerB {
+    opacity: 0.45;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePathPersonB {
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-waveLabelPersonB {
+    opacity: 0.5;
+    font-style: italic;
+    font-weight: 400;
+    outline: 1px dashed rgba(255, 255, 255, 0.42);
+    outline-offset: -1px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-waveLabelPersonB:hover {
+    opacity: 0.88;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-waveLabelPersonB .sun-waveLabelText {
+    letter-spacing: 0.35px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-waveLabelPersonB {
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsLeft .sun-waveLabel.sun-horizontal.sun-waveLabelPersonB[data-logical-edge]::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    margin-top: -1px;
+    background-color: inherit;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsRight .sun-waveLabel.sun-horizontal.sun-waveLabelPersonB[data-logical-edge]::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    margin-top: -1px;
+    background-color: inherit;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsLeft .sun-waveLabel.sun-horizontal.sun-waveLabelPersonB[data-logical-edge]::before {
+    left: 0;
+    right: auto;
+    transform: translateX(-100%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsRight .sun-waveLabel.sun-horizontal.sun-waveLabelPersonB[data-logical-edge]::before {
+    right: 0;
+    left: auto;
+    transform: translateX(100%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsTop .sun-waveLabel.sun-vertical.sun-waveLabelPersonB[data-logical-edge]::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 2px;
+    height: 10px;
+    margin-left: -1px;
+    background-color: inherit;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsBottom .sun-waveLabel.sun-vertical.sun-waveLabelPersonB[data-logical-edge]::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 2px;
+    height: 10px;
+    margin-left: -1px;
+    background-color: inherit;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsTop .sun-waveLabel.sun-vertical.sun-waveLabelPersonB[data-logical-edge]::before {
+    top: 0;
+    bottom: auto;
+    transform: translate(-50%, -100%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelsBottom .sun-waveLabel.sun-vertical.sun-waveLabelPersonB[data-logical-edge]::before {
+    bottom: 0;
+    top: auto;
+    transform: translate(-50%, 100%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveAxisXPoint.sun-waveAxisXPointPersonB {
+    opacity: 0.45;
+    border-style: dashed;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveAxisXPoint.sun-waveAxisXPointPersonB:hover {
+    opacity: 0.85;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePath.sun-solid {
+    stroke-dasharray: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePath.sun-dashed {
+    stroke-dasharray: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePath.sun-dotted {
+    stroke-dasharray: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePath.sun-zigzag {
+    stroke-linecap: butt;
+    stroke-dasharray: 3px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePath.sun-dashDot {
+    stroke-dasharray: 8px 2px 2px 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePath.sun-longDash {
+    stroke-dasharray: 12px 3px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    z-index: 1000;
+    cursor: pointer;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosTl {
+    top: 0;
+    left: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosTr {
+    top: 0;
+    right: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosBl {
+    bottom: 0;
+    left: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosBr {
+    bottom: 0;
+    right: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosTc {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosBc {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosLc {
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosRc {
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMt {
+    top: 0;
+    left: 25%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMb {
+    bottom: 0;
+    left: 25%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMl {
+    left: 0;
+    top: 25%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMr {
+    right: 0;
+    top: 25%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMt2 {
+    top: 0;
+    left: 75%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMb2 {
+    bottom: 0;
+    left: 75%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMl2 {
+    left: 0;
+    top: 75%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMr2 {
+    right: 0;
+    top: 75%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-panelSection {
+    background: #fff;
+    padding: 15px;
+    overflow: visible;
+    min-width: 0;
+    outline: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-analysisEmpty {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    font-size: 11px;
+    background: #f9f9f9;
+    border: 1px dashed #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-panelSection.sun-buttonsPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-panelSection.sun-pagelImage {
+    align-self: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-panelSection.sun-pagelImage img {
+    display: block;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesListContainer {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesList {
+    height: 100%;
+    background: #fff;
+    overflow-y: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-notesPanelLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-notesListContainer {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-noteEditorContainer {
+    flex: 2;
+    min-width: 300px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f5f5f5;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningOverlay.sun-hidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningBox {
+    background: #fff;
+    padding: 40px;
+    border: 1px solid #ddd;
+    max-width: 525px;
+    text-align: center;
+    display: block;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningBox.sun-hidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButtons {
+    display: flex;
+    padding: 0;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButton {
+    padding: 0 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #495057;
+    font-size: 11px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButton:last-child {
+    border-right: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButton.sun-active {
+    background: #666;
+    color: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContent.sun-active {
+    display: block;
+  }
+}
+@media (min-width: 0px) {
+  .sun-inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-inputRow {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addGroupForm {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    align-items: center;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-formRow {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-formLabel {
+    width: 70px;
+    font-weight: 400;
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-addGroupForm {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-addGroupInput {
+    flex: 1;
+    height: 25px;
+    padding: 3px 5px;
+    font-size: 11px;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-addGroupBtn {
+    height: 25px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow .sun-formInput {
+    height: 25px;
+    padding: 3px 5px;
+    font-size: 11px;
+    min-width: 120px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow .sun-customWaveName {
+    flex: 2;
+    min-width: 150px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow .sun-customWavePeriod {
+    flex: 1;
+    min-width: 100px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow select {
+    flex: 1;
+    min-width: 120px;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow .sun-colorInput {
+    width: 40px;
+    height: 25px;
+    padding: 0;
+    margin: 0;
+    align-self: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    display: block;
+    border: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow .sun-btnAddCustomWave {
+    height: 25px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    margin-top: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesBar.sun-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesSeparator {
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: #ddd;
+    border: none;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesLabel {
+    font-weight: 400;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesRow .sun-displayViewTemplateSelect {
+    flex: 1;
+    min-width: 160px;
+    height: 25px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesRow .sun-newDisplayViewTemplateName {
+    flex: 1;
+    min-width: 140px;
+    height: 25px;
+    padding: 3px 5px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesRow .sun-btnDeleteDisplayViewTemplate {
+    height: 25px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesDescriptionRow {
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-displayViewTemplatesDescriptionInput {
+    width: 100%;
+    min-height: 44px;
+    max-height: 160px;
+    resize: vertical;
+    font-size: 11px;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    line-height: 1.35;
+  }
+}
+@media (min-width: 0px) {
+  .sun-notesSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportSection {
+    border: 1px solid #ddd;
+    padding: 15px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportTextarea {
+    width: 100%;
+    height: 200px;
+    font-family: monospace;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dbImportControls {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResults {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionItem {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionInfo {
+    flex: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionPeriod {
+    font-weight: 400;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionMatchType {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionValue {
+    color: #666;
+    margin: 0 10px;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionControls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-exactMatch {
+    background-color: #e6f7e6;
+  }
+}
+@media (min-width: 0px) {
+  .sun-closeMatch {
+    background-color: #fffbe6;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionForm {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormRow {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormLabel {
+    width: 100px;
+    font-weight: 400;
+    flex-shrink: 0;
+    user-select: none;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormInput {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    min-width: 0;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormActions {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-start;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionStats {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-flex1 {
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-flex2 {
+    flex: 2;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-addGroupFormMb {
+    margin-bottom: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-uHidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionLabelSpaced {
+    margin-left: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningDonateRow {
+    height: 32px; /*display: flex;*/
+    display: none;
+    justify-content: center;
+    margin-top: 20px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningDonateFrame {
+    width: 216px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-warningInfoStretch {
+    flex: 1;
+    border-bottom: 1px dotted;
+    align-self: stretch;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hiddenColorPickerPos {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionEmpty {
+    text-align: center;
+    padding: 20px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionEmptyIcon {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionEmptyHint {
+    font-size: 11px;
+    color: #666;
+    margin-top: 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionEmptyHintTight {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-topControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    width: 100%;
+    min-width: 0;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-topControls > * {
+    display: flex;
+    align-items: center;
+    min-height: 25px;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-transformControls {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-transformRow {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-cornerControls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateAddForm {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateControlsButtons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateGenderSelect {
+    flex: 0 0 auto;
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+    height: 25px;
+    padding: 2px 4px;
+    font-size: 11px;
+    text-align: center;
+    text-align-last: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateAddDescriptionRow {
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateAddDescriptionInput {
+    width: 100%;
+    min-height: 44px;
+    max-height: 160px;
+    resize: vertical;
+    font-size: 11px;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    line-height: 1.35;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateTimeInputGroup {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-topControls .sun-dateTimeInputGroup .sun-dateInput {
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren[style*="display: block"] {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren[style*="display:block"] {
+    display: block !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren > * {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryPanel {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryHeader {
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryHeader h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryControls {
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summarySelectRow {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summarySelectGroup {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+    flex: 1 1 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryLabel {
+    font-weight: 400;
+    color: #333;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summarySelect {
+    flex: 1 1 10em;
+    min-width: 0;
+    max-width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    font-size: 11px;
+    height: 25px;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summarySelectGroup .sun-summarySelect {
+    flex: 1 1 140px;
+    max-width: min(100%, 320px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionSelectGroup .sun-summarySelect {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonSelects .sun-summarySelect {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    height: 25px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryDuplicateButtons {
+    display: flex;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryDuplicateButtons .sun-uiBtn {
+    height: 25px;
+    padding: 5px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer {
+    max-height: 400px;
+    min-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    background: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer .sun-summaryResults {
+    overflow: visible;
+    max-height: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer .sun-intersectionResults {
+    overflow: visible;
+    max-height: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryResults {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryEmpty {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItem:hover {
+    background-color: #f5f5f5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemInfo {
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemName {
+    font-weight: 400;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemIndex {
+    color: #666;
+    font-size: 11px;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemDetails {
+    display: flex;
+    gap: 15px;
+    font-size: 11px;
+    color: #666;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemState {
+    font-weight: 400;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemDifference {
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemCloseness {
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 400;
+    outline: 1px solid #000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemActions {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemActions .sun-uiBtn {
+    height: 25px;
+    padding: 5px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemColor {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemExact .sun-summaryItemCloseness {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemVeryClose .sun-summaryItemCloseness {
+    background: #4caf50;
+    color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemClose .sun-summaryItemCloseness {
+    background: #8bc34a;
+    color: black;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemFairlyClose .sun-summaryItemCloseness {
+    background: #ffc107;
+    color: black;
+  }
+}
+@media (min-width: 0px) {
+  .sun-summaryItemNearby .sun-summaryItemCloseness {
+    background: #ff9800;
+    color: black;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePeriodBadge {
+    background: #e0e0e0;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionControls {
+    margin-bottom: 15px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionForm {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormRow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionSelect {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    font-size: 11px;
+    height: 25px;
+    background: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormLabel {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultsContainer {
+    max-height: 400px;
+    min-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    background: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResults {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultItem:hover {
+    background-color: #f5f5f5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultInfo {
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultName {
+    font-weight: 400;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultIndex {
+    color: #666;
+    font-size: 11px;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveName {
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavePeriodBadge {
+    background: #e0e0e0;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-pastWaveMarker {
+    color: #999;
+    font-style: italic;
+    font-size: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultDetails {
+    display: flex;
+    gap: 15px;
+    font-size: 11px;
+    color: #666;
+    flex-wrap: wrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultState {
+    font-weight: 400;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultDifference {
+    color: #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultCloseness {
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultCloseness.sun-intersectionItemExact {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultCloseness.sun-intersectionItemVeryClose {
+    background: #4caf50;
+    color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultCloseness.sun-intersectionItemClose {
+    background: #8bc34a;
+    color: black;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultCloseness.sun-intersectionItemFairlyClose {
+    background: #ffc107;
+    color: black;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultCloseness.sun-intersectionItemNearby {
+    background: #ff9800;
+    color: black;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultCloseness.sun-intersectionItemWithinTolerance {
+    background: #f44336;
+    color: white;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultColor {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultActions {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionResultActions .sun-uiBtn {
+    height: 25px;
+    padding: 5px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionStats {
+    margin: 10px 0;
+    padding: 15px;
+    background: #e9f7ef;
+    border: 1px solid #c3e6cb;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #155724;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionStats strong {
+    font-weight: 400;
+    color: #0c4121;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionStatsContent {
+    line-height: 1.5;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listEmpty {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormRowActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionForm > .sun-intersectionFormRowActions {
+    justify-content: flex-end;
+    margin-left: 0;
+    margin-top: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonViewTabs {
+    border: 1px solid #ddd;
+    overflow: hidden;
+    background: #fff;
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonViewTabs + .sun-summaryResultsContainer {
+    margin-top: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContainer:has(> .sun-tabButtonsFramed) {
+    gap: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonViewTabs .sun-tabButton {
+    font-size: 11px;
+    padding: 6px 10px;
+    flex: 1 1 0;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonViewTabs .sun-tabButton.sun-active {
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonIntro {
+    font-size: 11px;
+    color: #666;
+    margin: 0 0 15px;
+    line-height: 1.4;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonSelects {
+    gap: 5px;
+    align-items: flex-end;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonSelects .sun-intersectionSelectGroup {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionSelectGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionToolbarOneRow {
+    margin-bottom: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionToolbarOneRow .sun-intersectionSelectGroup {
+    flex: 1 1 130px;
+    min-width: 0;
+    max-width: min(100%, 220px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonSelects .sun-intersectionFormLabel {
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    border: 1px solid #ddd;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTable th {
+    text-align: left;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTable td {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTable tbody tr:hover {
+    background-color: #f0f4f8;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTable td.sun-dateComparisonState {
+    width: 1%;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveDirectionLabel {
+    margin-left: 0.15em;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonName {
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonPeriod {
+    font-weight: 400;
+    color: #666;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonColor {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonActions {
+    white-space: nowrap;
+    width: 1%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTable .sun-dateComparisonActions .sun-uiBtn {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRail {
+    position: fixed;
+    inset: 0;
+    z-index: 950;
+    display: none;
+    font-family: Tahoma, sans-serif;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRail.sun-intersectionTimeRailOpen {
+    display: block;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailBackdrop {
+    position: absolute;
+    inset: 0;
+    background: #f5f5f5;
+    cursor: pointer;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailPanel {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailClose {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 960;
+    pointer-events: auto;
+    padding: 6px 14px;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailNowLine {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    margin-top: -0.5px;
+    background: #666;
+    pointer-events: none;
+    z-index: 4;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailPersonRow {
+    position: absolute;
+    left: 25%;
+    top: calc(50% - clamp(2.6rem, 7.5vw, 3.35rem));
+    transform: translate(-50%, -100%);
+    z-index: 5;
+    width: min(92vw, 640px);
+    max-width: 100%;
+    box-sizing: border-box;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailPersonField {
+    flex: 1 1 140px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailPersonLabel {
+    justify-content: center;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    font-size: 10px;
+    color: #666;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailPersonField .sun-summarySelect {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    height: 25px;
+    min-height: 25px;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailPersonField .sun-intersectionTimeRailPersonSelect {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    height: 25px;
+    min-height: 25px;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailNowIndicator {
+    position: absolute;
+    left: 25%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    border: 1px solid #666;
+    background: #f5f5f5;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailNowIndicator::after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    right: 7px;
+    height: 5px;
+    background: #f5f5f5;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailNowIndicator::before {
+    top: -3px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailNowIndicator::after {
+    bottom: -3px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailNowLabel {
+    position: relative;
+    z-index: 2;
+    display: block;
+    padding: 8px 12px;
+    font-size: clamp(1.125rem, 3.2vw, 1.5rem);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+    white-space: nowrap;
+    color: #333;
+    background: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirror {
+    position: absolute;
+    left: 25%;
+    top: calc(50% + clamp(2.5rem, 8vh, 4rem));
+    transform: translateX(-50%);
+    z-index: 6;
+    max-width: min(92vw, 520px);
+    width: max(240px, 70vw);
+    padding: 10px 12px 12px;
+    box-sizing: border-box;
+    text-align: center;
+    color: #333;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorTitle {
+    font-size: 11px;
+    font-weight: 400;
+    color: #666;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.25;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorPrev {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorHead {
+    flex: 0 0 auto;
+    font-size: 1.35rem;
+    line-height: 1;
+    opacity: 0.9;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorSep {
+    margin: 6px 0 6px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    color: #666;
+    letter-spacing: 0.05em;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorStats {
+    margin: 0;
+    padding: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorStats > .sun-intersectionTimeRailMirrorCountdown {
+    margin: 6px 0 0;
+    padding: 0;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: #333;
+    font-variant-numeric: tabular-nums;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorStats > .sun-intersectionTimeRailMirrorDuration {
+    margin-top: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailWaveAxis {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    margin-left: -0.5px;
+    pointer-events: none;
+    z-index: 3;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailViewport {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailTrack {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    will-change: transform;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailHour {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: #ddd;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailCrossWindow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    transform: translateY(-50%);
+    min-height: 1.1em;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailCrossWindowBar {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(clamp(6px, 2.5vw, 12px) * 2);
+    height: 1px;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailCrossWindowTime {
+    position: absolute;
+    left: max(2%, 8px);
+    right: calc(50% + clamp(6px, 2.5vw, 12px) + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    font-weight: 400;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    z-index: 2;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailHourLabel {
+    position: absolute;
+    font-size: 10px;
+    color: #666;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailHourLabelStart {
+    left: 10%;
+    transform: translate(calc(-100% - 6px), -50%);
+    text-align: right;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailHourLabelEnd {
+    left: 90%;
+    transform: translate(6px, -50%);
+    text-align: left;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailCross {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    transform: translateY(-50%);
+    min-height: 1.4em;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailCrossBar {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(clamp(18px, 8vw, 36px) * 2);
+    height: 1px;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailCrossTime {
+    position: absolute;
+    left: max(2%, 8px);
+    right: calc(50% + clamp(18px, 8vw, 36px) + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    font-weight: 400;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailCrossNames {
+    position: absolute;
+    left: calc(50% + clamp(18px, 8vw, 36px) + 10px);
+    right: max(2%, 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    font-weight: 400;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridAbsoluteContainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridStaticContainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-labels {
+    position: absolute;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateLabels {
+    bottom: 30px;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-weekdayLabel {
+    bottom: 10px;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-yLabels {
+    left: 10px;
+    transform: translateY(-50%);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-horizontal {
+    position: absolute;
+    background-color: #666;
+    color: #fff;
+    opacity: 0.5;
+    z-index: 1;
+    padding: 2px 6px;
+    font-size: 11px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-horizontal:hover {
+    opacity: 1;
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-horizontal.sun-left {
+    right: 0;
+    margin-right: calc(5px + 1px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-horizontal.sun-right {
+    left: 0;
+    margin-left: calc(5px + 1px);
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabelArrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-vertical {
+    position: absolute;
+    background-color: #666;
+    color: #fff;
+    opacity: 0.5;
+    z-index: 1;
+    padding: 2px 6px;
+    font-size: 11px;
+    transform: translateX(-50%);
+    cursor: pointer;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-vertical.sun-waveLabelExtremum {
+    font-family: monospace;
+    letter-spacing: 0.5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveLabel.sun-vertical.sun-waveLabelName {
+    font-family: inherit;
+    letter-spacing: normal;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonActionsBtn {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonState {
+    width: 1%;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTableCell {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTableHeadCell {
+    text-align: left;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateComparisonTableRow:hover {
+    background-color: #f0f4f8;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateDescriptionEdit {
+    width: 100%;
+    min-height: 44px;
+    max-height: 160px;
+    resize: vertical;
+    height: auto;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    line-height: 1.35;
+    font-family: Tahoma, sans-serif;
+    font-size: 11px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateEditForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateGenderBadge {
+    margin: 0 0.15em;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateInPersonGroup {
+    background: #fafafa;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateInPersonGroup:hover {
+    background: #f0f0f0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateInputInListEdit {
+    flex: 0 1 auto;
+    min-width: 140px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateNameEdit {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateSelectionChecks {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-datesPanelInControl {
+    grid-column: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelArrowBottomInSegment {
+    top: auto;
+    bottom: -6px;
+    border-width: 6px 4px 0 4px;
+    border-color: rgb(192, 192, 192) transparent transparent transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelArrowInSegment {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelArrowTopInSegment {
+    top: -6px;
+    bottom: auto;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent rgb(192, 192, 192) transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumLabelTextInSegment {
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumWaveNameInSegment {
+    cursor: pointer;
+    pointer-events: auto;
+    text-decoration: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-extremumWaveNameOnVizor {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-gridWrapperInAbsolute {
+    pointer-events: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildrenItem {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildrenOpen {
+    display: block;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourLabelInTimeBar {
+    font-size: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourLabelMidnight {
+    color: #ff0000;
+    font-weight: 400;
+  }
+}
+@media (min-width: 0px) {
+  .sun-hourMarkerInTimeBar {
+    min-height: 100%;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormRowActionsInForm {
+    justify-content: flex-end;
+    margin-left: 0;
+    margin-top: 5px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorCountdownInStats {
+    margin: 6px 0 0;
+    padding: 0;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: #333;
+    font-variant-numeric: tabular-nums;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionTimeRailMirrorDurationInStats {
+    margin-top: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemDragHandleMuted {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditRowDateActions {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditRowDateMain {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemEditRowFull {
+    width: 100%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemSaveFlash::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    animation: list-item-save-flash 0.85s ease-out forwards;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemSaveFlashChild {
+    position: relative;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemViewForceShown {
+    display: flex !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemViewHidden {
+    display: none !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-listItemViewShown {
+    display: flex !important;
+  }
+}
+@media (min-width: 0px) {
+  .sun-secretSchemeCell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    box-sizing: border-box;
+    background: #fff;
+    outline: 1px solid #ddd;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: #333;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabButtonsTimeBarControls {
+    justify-content: flex-start;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContainerInTabs {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContainerTimeBarControls {
+    align-items: flex-start;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContainerWithFramedButtons {
+    gap: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabContentInTabs {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 0px) {
+  .sun-tabPanelInner {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-sizing: border-box;
+    overflow: visible;
+    outline: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarContainerInWrap {
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    background-color: #fff;
+    outline: 1px solid #ddd;
+    position: relative;
+    user-select: none;
+    margin: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlLabelInGroups {
+    white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsInSection {
+    outline: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarControlsSectionLayout {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowLabel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 2px 6px;
+    font-size: 10px;
+    white-space: nowrap;
+    font-weight: 400;
+    font-family: monospace;
+    background-color: #ff0000;
+    color: #fff;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowLabel::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: -4px;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #ff0000;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowLabel::after {
+    display: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarNowRowWhenStackEmpty {
+    border-top: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegmentLabel {
+    position: relative;
+    transform: none;
+    bottom: auto;
+    top: auto;
+    margin: 0;
+    max-width: none;
+    pointer-events: auto;
+    z-index: 1;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarSegmentLabel:hover {
+    border-color: #000;
+    pointer-events: auto;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeBarStateRowLastVisible {
+    border-bottom: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeLabelsInHoursTrack {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
+  .sun-timeScaleInHoursTrack {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+}
+@media (min-width: 0px) {
+  .sun-topControlsItem {
+    display: flex;
+    align-items: center;
+    min-height: 25px;
+    overflow: visible;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveColorPreviewSmall {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-self: center;
+    margin: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveControlsInline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 8px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveInGroup {
+    cursor: default;
+    background: #fafafa;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveInGroup:hover {
+    background: #f0f0f0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveInGroup:last-child {
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesPanelInControl {
+    grid-column: 2;
+  }
+}
+@media (min-width: 0px) {
+  .sun-wavesTransformLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    transform-origin: 50% 50%;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveInGroup.sun-listItemDragging {
+    opacity: 0.5;
+    background-color: #f0f0f0;
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveInGroup.sun-listItemDragOverTop::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 10px;
+    height: 10px;
+    background: #666;
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveInGroup.sun-listItemDragOverBottom::after {
+    content: "";
+    position: absolute;
+    left: -5px;
+    bottom: -5px;
+    width: 10px;
+    height: 10px;
+    background: #666;
+    transform: rotate(45deg);
+    z-index: 10;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveInGroup.sun-listItemDragOverTop {
+    border-top: 2px solid #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-waveInGroup.sun-listItemDragOverBottom {
+    border-bottom: 2px solid #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-groupChildren.sun-groupChildrenDragOver {
+    background: rgba(0, 102, 204, 0.06);
+    outline: 2px dashed #666;
+    outline-offset: -2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-personGroupChildren.sun-groupChildrenDragOver {
+    background: rgba(0, 102, 204, 0.06);
+    outline: 2px dashed #666;
+    outline-offset: -2px;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateInPersonGroup.sun-listItemDragOverTop {
+    border-top: 2px solid #666;
+  }
+}
+@media (min-width: 0px) {
+  .sun-dateInPersonGroup.sun-listItemDragOverBottom {
+    border-bottom: 2px solid #666;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-controlPanel {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-topControls {
+    flex-direction: column;
+    height: auto;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-topControls > * {
+    height: auto;
+    width: 100%;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-transformControls {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-formRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-editFormRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-formLabel {
+    width: auto;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-editFormLabel {
+    width: auto;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-inputRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-inputLabel {
+    width: auto;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-tabButtons {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-tabButton {
+    text-align: center;
+    border-right: none;
+    border-bottom: 1px solid #dee2e6;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-tabButton:last-child {
+    border-bottom: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-waveControl {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-dateItem {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-dateName {
+    min-width: 100%;
+    margin-bottom: 5px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-customWaveItemControls {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosTc {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosBc {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosLc {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosRc {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMt {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMb {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMl {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMr {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMt2 {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMb2 {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMl2 {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerSquare.sun-cornerPosMr2 {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-addGroupForm {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-addGroupInput {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow .sun-formInput {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow .sun-colorInput {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-addGroupBtn {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow .sun-btnAddCustomWave {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addCustomWaveForm.sun-compact .sun-waveInputsRow {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-displayViewTemplatesRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-displayViewTemplatesRow .sun-newDisplayViewTemplateName {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-displayViewTemplatesRow .sun-btnDeleteDisplayViewTemplate {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-displayViewTemplatesDescriptionInput {
+    min-height: 56px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-dateControlsButtons {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-dateAddDescriptionInput {
+    min-height: 56px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-notesPanelLayout {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-addGroupForm {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-dbImportControls {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-intersectionFormRow {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-intersectionFormLabel {
+    width: auto;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-cornerControls {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-waveGroupHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-waveGroupRight {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-waveGroupCount {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-dateNormalView {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-editDateForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-waveGroupChildren {
+    padding: 5px 10px;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-waveGroupLeft {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 768px) and (min-width: 0px) {
+  .sun-waveGroupTitle {
+    font-size: 11px;
+  }
+}
+@media (max-width: 480px) and (min-width: 0px) {
+  .sun-mobileWarningOverlay .sun-warningBox {
+    max-width: 95%;
+    padding: 15px;
+  }
+}
+@media (max-width: 480px) and (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningTitle {
+    font-size: 13px;
+  }
+}
+@media (max-width: 480px) and (min-width: 0px) {
+  .sun-mobileWarningBox .sun-warningText {
+    font-size: 11px;
+  }
+}
+@media (max-width: 480px) and (min-width: 0px) {
+  .sun-warningInfo {
+    font-size: 11px;
+  }
+}
+
+/* Маркеры часов: алиасы без sun- у модификаторов (устаревший styles.css / кэш) */
+.sun-hourMarker.clickable {
+  cursor: pointer;
+}
+
+.sun-hourMarker.sun-clickable {
+  cursor: pointer;
+}
+
+.sun-hourMarker.midnight {
+  border-left-color: #ff0000;
+}
+
+.sun-hourMarker.sun-midnight {
+  border-left-color: #ff0000;
+}
+
+.sun-hourMarker.midnight .sun-hourLabel {
+  color: #ff0000;
+  font-weight: 400;
+}
+
+.sun-hourMarker.sun-midnight .sun-hourLabel {
+  color: #ff0000;
+  font-weight: 400;
+}
+
+/* Venus prototype — layout helpers (sun tokens) */
+/* Вкладки: без моргания — data-venus-tab выставляется в <head> до отрисовки */
+@media (min-width: 0px) {
+  html.venus-app-root[data-venus-tab] .sun-tabsSection .sun-tabContent.sun-tabContentInTabs {
+    display: none !important;
+  }
+}
+
+@media (min-width: 0px) {
+  html.venus-app-root[data-venus-tab=accounts] .sun-tabsSection .sun-tabContent[data-tab-panel=accounts],
+  html.venus-app-root[data-venus-tab=expenses] .sun-tabsSection .sun-tabContent[data-tab-panel=expenses],
+  html.venus-app-root[data-venus-tab=incomes] .sun-tabsSection .sun-tabContent[data-tab-panel=incomes] {
+    display: block !important;
+  }
+}
+
+@media (min-width: 0px) {
+  html.venus-app-root[data-venus-tab] .sun-tabsSection .sun-tabButtonsFramed .sun-tabButton {
+    background: #f0f0f0;
+    color: #333;
+    border-color: #ddd;
+  }
+}
+
+@media (min-width: 0px) {
+  html.venus-app-root[data-venus-tab=accounts] .sun-tabsSection .sun-tabButtonsFramed .sun-tabButton[data-tab=accounts],
+  html.venus-app-root[data-venus-tab=expenses] .sun-tabsSection .sun-tabButtonsFramed .sun-tabButton[data-tab=expenses],
+  html.venus-app-root[data-venus-tab=incomes] .sun-tabsSection .sun-tabButtonsFramed .sun-tabButton[data-tab=incomes] {
+    background: #666;
+    color: #fff;
+    border-color: #666;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-accountsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-accountsSubTabButtons {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-accountsSubPanel {
+    display: none;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-accountsSubPanel.sun-active {
+    display: block;
+  }
+}
+
+/* Один скролл страницы: в sun скроллятся и html.sun-root, и body.sun-app */
+@media (min-width: 0px) {
+  html.sun-root.venus-app-root {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+  }
+}
+
+@media (min-width: 0px) {
+  body.sun-app.venus-app-body {
+    overflow-y: visible;
+    overflow-x: hidden;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoHeaderTitle {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoHeader {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoHeaderMeta {
+    margin: 0;
+    font-size: 11px;
+    color: #666;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoHeaderMeta strong {
+    color: #333;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoToolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+/* В sun transformRow центрирует кнопки; в тулбаре ДБ8 — блок слева, мета/чекбокс справа */
+@media (min-width: 0px) {
+  .sun-protoToolbar .sun-transformRow {
+    justify-content: flex-start;
+    flex: 0 1 auto;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoToolbar > .sun-protoHeaderMeta,
+  .sun-protoToolbar > .sun-intersectionFormLabel {
+    flex: 0 0 auto;
+    margin-left: auto;
+    width: auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoFooter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 15px;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoTotals {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: #fffbe6;
+    font-size: 11px;
+    min-width: 200px;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoTotalsTable {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoTotalsTable th,
+  .sun-protoTotalsTable td {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoTotalsTable th:first-child,
+  .sun-protoTotalsTable td:first-child {
+    text-align: left;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoTotalsTable thead th {
+    background: #f8f9fa;
+    font-weight: 400;
+    color: #666;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoTotalsTable tbody tr:last-child td {
+    font-weight: 400;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoRowSelected {
+    background-color: #e8f4fe !important;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoMuted {
+    color: #666;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoNumExpense {
+    color: #ff0000;
+    font-weight: 400;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoNumIncome {
+    color: #4caf50;
+    font-weight: 400;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoNumBalance {
+    color: #2196f3;
+    font-weight: 400;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoNote {
+    margin-top: 15px;
+    text-align: center;
+    color: #666;
+    font-size: 11px;
+    font-style: italic;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer.sun-protoTableScroll {
+    max-height: none;
+    min-height: 220px;
+    overflow: visible;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer {
+    overflow: visible;
+  }
+}
+
+/* Контейнер со скроллом тела таблицы; шапка закреплена */
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer.sun-protoTableScroll.sun-protoTableScroll--stickyHead,
+  .venus-categoriesList.sun-summaryResultsContainer {
+    max-height: 400px;
+    min-height: 120px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    background: #fff;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesList.sun-summaryResultsContainer {
+    max-height: 280px;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer.sun-protoTableScroll.sun-protoTableScroll--stickyHead .sun-dateComparisonTable.sun-protoTable,
+  .venus-categoriesList.sun-summaryResultsContainer .sun-dateComparisonTable.sun-protoTable {
+    margin-top: 0;
+    margin-right: -1px;
+    margin-bottom: -1px;
+    margin-left: -1px;
+    width: calc(100% + 2px);
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer.sun-protoTableScroll.sun-protoTableScroll--stickyHead .sun-dateComparisonTable.sun-protoTable thead th,
+  .venus-categoriesList.sun-summaryResultsContainer .sun-dateComparisonTable.sun-protoTable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #f8f9fa;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-summaryResultsContainer.sun-protoTableScroll .sun-dateComparisonTable.sun-protoTable {
+    margin-top: -1px;
+    margin-right: -1px;
+    margin-bottom: -1px;
+    margin-left: -1px;
+    width: calc(100% + 2px);
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-dateComparisonTable.sun-protoTable td,
+  .sun-dateComparisonTable.sun-protoTable th {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-dateComparisonTable.sun-protoTable td:not(:first-child):not(:nth-child(2)) {
+    text-align: right;
+  }
+}
+
+/* xiermodal — контент в стиле sun */
+@media (min-width: 0px) {
+  .venus-xierModalStore {
+    display: none !important;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-xierModalBox {
+    width: min(560px, 100vw - 80px);
+    padding: 15px;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-xierModalBox--wide {
+    width: min(720px, 100vw - 48px);
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-xierModalBox--categories {
+    width: min(860px, 100vw - 40px);
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-xierModalBox--compact {
+    width: min(420px, 100vw - 48px);
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-hidden {
+    display: none !important;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-settingsFields {
+    gap: 15px;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-settingsBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-settingsBlock:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-settingsBlockTitle {
+    margin: 0;
+    font-size: 11px;
+    color: #333;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-settingsBlockActions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesPanel {
+    display: block;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesTabs {
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesSinglePane {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesMasterDetail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: start;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesPane {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesPaneTitle {
+    margin: 0;
+    font-size: 11px;
+    color: #333;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesPaneHead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 5px 10px;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesPaneHead .sun-protoHeaderMeta {
+    margin: 0;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-categoriesPaneActions {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-xierModalBox--side {
+    width: min(420px, 100vw - 40px);
+    min-height: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-xierModalBox .sun-summaryHeader {
+    margin-bottom: 15px;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-formFields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-expenseMultiplyLabel {
+    margin: 0;
+    align-self: flex-start;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-expenseCalcHint {
+    margin: -4px 0 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-expenseCalcRow .sun-formLabel {
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-expenseCalcFieldWrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-expenseCalcField {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    min-width: 120px;
+  }
+}
+@media (min-width: 0px) {
+  .venus-expenseCalcField .sun-summarySelect {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-app-body .sun-warningBox {
+    text-align: center;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-app-body .sun-warningText {
+    text-align: center;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-app-body .sun-warningText p {
+    margin: 0 0 0.75em;
+    line-height: 1.5;
+    text-align: center;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-app-body .sun-warningText p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-app-body .sun-warningActions {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-exp-lock {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    line-height: 1;
+    font-size: 14px;
+    background: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    opacity: 0.55;
+  }
+}
+@media (min-width: 0px) {
+  .venus-exp-lock:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
+}
+@media (min-width: 0px) {
+  .venus-exp-lock.venus-exp-lock--active {
+    opacity: 1;
+    background: #666;
+    color: #fff;
+    border-color: #666;
+  }
+}
+
+@media (min-width: 0px) {
+  .venus-xierModalActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 15px;
+  }
+}
+
+@media (min-width: 0px) {
+  .sun-protoSettingsList {
+    margin: 10px 0 0;
+    padding-left: 1.25em;
+    font-size: 11px;
+    color: #333;
+    line-height: 1.6;
+  }
+}
+
+/* Без жирного: единый normal (400) */
+.sun-root strong,
+.sun-root b,
+.sun-root h1,
+.sun-root h2,
+.sun-root h3,
+.sun-root h4,
+.sun-root h5,
+.sun-root h6 {
+  font-weight: 400;
+}
+
+/*# sourceMappingURL=styles.min.css.map */

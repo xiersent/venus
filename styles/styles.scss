@@ -1,0 +1,3397 @@
+/* Mixins */
+
+@mixin ellipsis{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+/** Кастомный чекбокс списков (как в lists.css до миграции). */
+@mixin sun-custom-checkbox-base{
+	@media(min-width: 0px){
+		-webkit-appearance: none;
+		appearance: none;
+		width: 16px;
+		height: 16px;
+		cursor: pointer;
+		margin: 0;
+		flex-shrink: 0;
+		border: 1px solid #ccc;
+		position: relative;
+		background-color: white;
+	}
+}
+/** Галочка ✓ — как в lists.css (10px, по центру ячейки). */
+@mixin sun-checkbox-checked-mark{
+	@media(min-width: 0px){
+		content: "✓";
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #fff;
+		font-size: 10px;
+		font-weight: 400;
+		line-height: 1;
+		pointer-events: none;
+	}
+}
+@mixin scrollbar{
+	&::-webkit-scrollbar{width: 12px;}
+	&::-webkit-scrollbar-track{background: #ececec;}
+	&::-webkit-scrollbar-thumb{background: #bfbfbf; background-clip: padding-box; border: 2px solid transparent;}
+}
+$bp-lg: 1126px;
+$bp-md: 768px;
+$bp-sm: 600px;
+
+/* Design tokens (SCSS only — not on DOM) */
+
+$cp: #666;
+$save-flash: #c71585;
+$clg: #ddd;
+$cbg: #f5f5f5;
+$primary-color: #666;
+$secondary-color: #ddd;
+$background-color: #f5f5f5;
+$border-color: #ddd;
+$text-color: #333;
+$text-secondary: #666;
+$danger-color: #ff0000;
+$success-color: #4caf50;
+$warning-color: #ffc107;
+$info-color: #2196f3;
+$grid-line-light: #eee;
+$grid-line-dark: #444;
+$grid-line-hover-light: #ccc;
+$grid-line-hover-dark: #888;
+
+$spacing-xs: 5px;
+$spacing-sm: 10px;
+$spacing-md: 15px;
+$spacing-lg: 20px;
+$spacing-xl: 40px;
+$font-family: Tahoma, sans-serif;
+$font-size-xs: 10px;
+$font-size-sm: 11px;
+$font-size-md: 13px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$z-corner: 1000;
+$z-waves: 3;
+$z-grid: 5;
+$z-overlay: 9999;
+$sun-wave-label-edge-gap: calc(#{$spacing-xs} + 1px);
+$time-bar-side-w: 72px;
+$time-bar-now-row-h: 26px;
+$time-bar-now-line-anchor: calc(#{$time-bar-now-row-h} / 2);
+$cursor-tooltip-bg: #1e1e1e;
+$cursor-tooltip-fg: #f2f2f2;
+$cursor-tooltip-border: rgba(255, 255, 255, 0.12);
+$cross-bar-half: clamp(18px, 8vw, 36px);
+$cross-window-half: clamp(6px, 2.5vw, 12px);
+
+/* Global */
+
+*{box-sizing: border-box;}
+button:focus-visible{outline: 2px solid #{$cp}; outline-offset: 2px;}
+input:focus-visible{outline: 2px solid #{$cp}; outline-offset: 2px;}
+textarea:focus-visible{outline: 2px solid #{$cp}; outline-offset: 2px;}
+select:focus-visible{outline: 2px solid #{$cp}; outline-offset: 2px;}
+button{padding: #{$spacing-xs} #{$spacing-sm}; background-color: #{$cp}; color: #fff; border: none; cursor: pointer; font-weight: 400; font-family: #{$font-family};}
+button:hover{filter: brightness(0.9);}
+[type="checkbox"]{width: 16px; height: 16px; cursor: pointer; flex-shrink: 0;}
+[type="text"]{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
+[type="number"]{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
+[type="date"]{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
+select{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
+textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-md}; resize: vertical; min-height: 80px; width: 100%;}
+
+/* Keyframes */
+
+@keyframes list-item-save-flash{
+	0%{background-color: rgba(199, 21, 133, 0.42);}
+	100%{background-color: transparent;}
+}
+@keyframes list-item-save-flash-active{
+	0%{background-color: rgba(199, 21, 133, 0.42);}
+	100%{background-color: transparent;}
+}
+
+/* Блок .sun- */
+
+.sun-{
+	&root{
+		@media(min-width: 0px){overflow-y: scroll; overflow-x: hidden; scrollbar-gutter: stable;}
+	}
+	&app{
+		@media(min-width: 0px){display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: #{$spacing-xl}; background-color: #{$cbg}; font-family: #{$font-family}; font-size: #{$font-size-md}; font-weight: 400; overflow-y: scroll; overflow-x: hidden;}
+	}
+	&mobileDeviceRoot{
+		@media(min-width: 0px){overflow: hidden; height: 100vh;}
+	}
+	&layoutHidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&layoutVisibleWhenUiHidden{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&layoutMobileWarning{
+		@media(min-width: 0px){display: flex !important; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999;}
+	}
+	&grayFiltered{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&graphGrayElement{
+		@media(min-width: 0px){filter: grayscale(1) !important;}
+	}
+	&graphGrayMode{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&dateLabelVisible{
+		@media(min-width: 0px){display: inline-block !important;}
+	}
+	&dateName#{&}dateLabelVisible{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&centerDateName#{&}dateLabelVisible{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&dateName{
+		@media(min-width: 0px){display: none;}
+	}
+	&dateStar{
+		@media(min-width: 0px){display: none;}
+	}
+	&app #{&}graphSection{
+		@media(min-width: 0px){display: flex; flex-direction: column; align-items: center;}
+	}
+	&app#{&}starsMode #{&}dateName{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}starsMode #{&}dateStar{
+		@media(min-width: 0px){display: inline-block !important;}
+	}
+	&app#{&}starsMode #{&}centerDateName{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}starsMode #{&}centerDateStar{
+		@media(min-width: 0px){display: inline-block !important;}
+	}
+	&app#{&}namesMode #{&}dateName{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&app#{&}namesMode #{&}dateStar{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}namesMode #{&}centerDateName{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&app#{&}namesMode #{&}centerDateStar{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}grayMode{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&app#{&}grayMode #{&}cornerSquare{
+		@media(min-width: 0px){filter: none;}
+	}
+	&app#{&}uiHidden #{&}interfaceContainer{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}uiHidden #{&}controlsSection{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}uiHidden #{&}graphSection{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}uiHidden #{&}panelSection{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}uiHidden #{&}cornerSquare{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&app#{&}graphHidden #{&}graphSection{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}graphGrayMode #{&}graphContainer{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&app#{&}graphGrayMode #{&}waveLabelsContainer{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&app#{&}graphGrayMode #{&}waveLabelsVerticalContainer{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&app#{&}graphGrayMode #{&}timeBarContainer{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&app#{&}graphGrayMode #{&}waveLabel{
+		@media(min-width: 0px){filter: grayscale(1) !important;}
+	}
+	&app#{&}graphGrayMode #{&}extremumLabel{
+		@media(min-width: 0px){filter: grayscale(1) !important;}
+	}
+	&app#{&}graphGrayMode #{&}waveAxisXPoint{
+		@media(min-width: 0px){filter: grayscale(1) !important;}
+	}
+	&app#{&}mobileDevice{
+		@media(min-width: 0px){overflow: hidden; height: 100vh;}
+	}
+	&app#{&}mobileDevice #{&}interfaceContainer{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}mobileDevice #{&}controlsSection{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}mobileDevice #{&}graphSection{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}mobileDevice #{&}panelSection{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&app#{&}mobileDevice #{&}cornerSquare{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&app#{&}mobileDevice #{&}warningOverlay{
+		@media(min-width: 0px){display: flex !important; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999;}
+	}
+	&wrapper{
+		@media(min-width: 0px){display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 100vh; margin: 0; padding: #{$spacing-xl}; background-color: #{$cbg}; font-family: #{$font-family}; font-size: #{$font-size-md}; font-weight: 400; overflow-y: scroll; overflow-x: hidden; box-sizing: border-box;}
+	}
+	&hidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&visuallyHidden{
+		@media(min-width: 0px){position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;}
+	}
+	&dateName{
+		@media(min-width: 0px){display: none;}
+	}
+	&dateStar{
+		@media(min-width: 0px){display: none;}
+	}
+	&centerDateName{
+		@media(min-width: 0px){display: none;}
+	}
+	&centerDateStar{
+		@media(min-width: 0px){display: none;}
+	}
+	&interfaceContainer{
+		@media(min-width: 0px){width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+	}
+	&container{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-lg}; max-width: 1200px; width: 100%;}
+	}
+	&timeBarWrap{
+		@media(min-width: 0px){ margin: #{$spacing-md} auto; align-self: center;}
+	}
+	&timeBarControlsSection #{&}tabContainer{
+		@media(min-width: 0px){align-items: flex-start;}
+	}
+	&timeBarControlsSection #{&}tabButtons#{&}tabButtonsFramed{
+		@media(min-width: 0px){width: fit-content; max-width: 100%;}
+	}
+	&timeBarControlsSection #{&}tabButtons{
+		@media(min-width: 0px){justify-content: flex-start;}
+	}
+	&timeBarControlsSection #{&}tabButtons#{&}tabButtonsFramed #{&}tabButton{
+		@media(min-width: 0px){flex: 0 1 auto;}
+	}
+	&timeBarWrap > #{&}panelSection#{&}timeBarControlsSection{
+		@media(min-width: 0px){margin-bottom: 0; display: flex; flex-direction: column; gap: #{$spacing-sm};}
+	}
+	&timeBarWrap > #{&}panelSection#{&}timeBarControlsSection > #{&}timeBarControls{
+		@media(min-width: 0px){outline: none;}
+	}
+	&timeBarControls{
+		@media(min-width: 0px){background: #fafafa; padding: 6px 8px; display: flex; flex-direction: column; gap: 6px; font-size: 11px; user-select: none;}
+	}
+	&timeBarControlsCollapsed{
+		@media(min-width: 0px){display: none;}
+	}
+	&timeBarControlsRow{
+		@media(min-width: 0px){display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 6px 12px;}
+	}
+	&timeBarControlCheck{
+		@media(min-width: 0px){display: inline-flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; text-align: center;}
+	}
+	&timeBarControlLabel{
+		@media(min-width: 0px){font-size: 11px; line-height: 1.1; color: #{$text-secondary}; font-variant-numeric: tabular-nums;}
+	}
+	&timeBarControlsGroups #{&}timeBarControlLabel{
+		@media(min-width: 0px){white-space: nowrap;}
+	}
+	&timeBarControlsEmpty{
+		@media(min-width: 0px){color: #{$text-secondary};}
+	}
+	&timeBarWrap #{&}timeBarContainer{
+		@media(min-width: 0px){width: 100%; min-height: 0; height: auto; background-color: #fff; outline: 1px solid #{$clg}; position: relative; user-select: none; margin: 0;}
+	}
+	&timeBarContainer{
+		@media(min-width: 0px){ min-height: 0; height: auto; background-color: #fff; outline: 1px solid #{$clg}; position: relative; user-select: none; margin: #{$spacing-md} 0;}
+	}
+	&graphContainer#{&}graphGrayMode + #{&}timeBarContainer{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&timeBar{
+		@media(min-width: 0px){position: relative; width: 100%; height: 100%;}
+	}
+	&timeBarStacked{
+		@media(min-width: 0px){display: flex; flex-direction: column; min-height: 0; position: relative;}
+	}
+	&timeBarHoursRow{
+		@media(min-width: 0px){flex-shrink: 0; min-height: 28px;}
+	}
+	&timeBarStateSideHours{
+		@media(min-width: 0px){min-height: 28px;}
+	}
+	&timeBarHoursTrack{
+		@media(min-width: 0px){flex: 1 1 auto; position: relative; min-width: 0; min-height: 28px;}
+	}
+	&timeBarHoursTrack #{&}timeScale{
+		@media(min-width: 0px){position: absolute; inset: 0; width: 100%; height: 100%; display: flex;}
+	}
+	&timeBarHoursTrack #{&}timeLabels{
+		@media(min-width: 0px){position: absolute; inset: 0; pointer-events: none;}
+	}
+	&timeBarStateStack{
+		@media(min-width: 0px){display: flex; flex-direction: column; flex: 0 0 auto; position: relative; z-index: 1;}
+	}
+	&timeBarStateRow{
+		@media(min-width: 0px){display: flex; flex-direction: row; align-items: stretch; min-height: 20px; border-bottom: 1px solid #eee;}
+	}
+	&timeBarStateStack > #{&}timeBarStateRow:hover > #{&}timeBarStateTrack{
+		@media(min-width: 0px){background-color: rgba(0, 0, 0, 0.025);}
+	}
+	&timeBarStateStack > #{&}timeBarStateRow:not(#{&}timeBarStateRowHidden):not( :has(~ #{&}timeBarStateRow:not(#{&}timeBarStateRowHidden)) ){
+		@media(min-width: 0px){border-bottom: none;}
+	}
+	&timeBarStateRowHidden{
+		@media(min-width: 0px){display: none;}
+	}
+	&timeBarStateRow#{&}timeBarHoursRow{
+		@media(min-width: 0px){border-top: none; border-bottom: 1px solid #{$clg};}
+	}
+	&timeBarNowRow{
+		@media(min-width: 0px){border-top: 1px solid #{$clg}; border-bottom: none;}
+	}
+	&timeBarStateSide{
+		@media(min-width: 0px){flex: 0 0 #{$time-bar-side-w}; display: flex; align-items: center; gap: 4px; padding: 0 6px; border-right: 1px solid #{$clg}; background: #fafafa; font-size: 11px; color: #{$text-secondary};}
+	}
+	&timeBarStateToggle{
+		@media(min-width: 0px){flex: 0 0 auto; width: 22px; height: 20px; padding: 0; border: 1px solid #{$clg}; background: #fff; cursor: pointer; font-size: 11px; line-height: 1; color: #{$text-color};}
+	}
+	&timeBarStateToggle:hover{
+		@media(min-width: 0px){background: #f0f0f0;}
+	}
+	&timeBarStateLabel{
+		@media(min-width: 0px){font-variant-numeric: tabular-nums; font-weight: 400; min-width: 22px;}
+	}
+	&timeBarStateTrack{
+		@media(min-width: 0px){flex: 1 1 auto; position: relative; z-index: 1; min-width: 0; min-height: 28px; background: #fff; overflow: hidden;}
+	}
+	&timeBarStateTrack:hover{
+		@media(min-width: 0px){z-index: 5; overflow: visible;}
+	}
+	&timeBarSegmentSlot{
+		@media(min-width: 0px){position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 9; display: flex; justify-content: center; align-items: center;}
+	}
+	&timeBarSegmentSlot:hover{
+		@media(min-width: 0px){z-index: 200 !important;}
+	}
+	&timeBarSegment{
+		@media(min-width: 0px){display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none;}
+	}
+	&timeBarSegment #{&}extremumLabel#{&}timeBarSegmentLabel{
+		@media(min-width: 0px){position: relative; transform: none; bottom: auto; top: auto; margin: 0; max-width: none; pointer-events: auto; z-index: 1;}
+	}
+	&timeBarSegment #{&}extremumLabel#{&}timeBarSegmentLabel#{&}extremumLabelTop{
+		@media(min-width: 0px){bottom: auto; margin-bottom: 0;}
+	}
+	&timeBarSegment #{&}extremumLabelText{
+		@media(min-width: 0px){overflow: visible; text-overflow: clip;}
+	}
+	&timeBarSegment #{&}extremumLabel#{&}timeBarSegmentLabel:hover{
+		@media(min-width: 0px){border-color: #000; pointer-events: auto;}
+	}
+	&timeBarSegment #{&}extremumWaveName{
+		@media(min-width: 0px){cursor: pointer; pointer-events: auto; text-decoration: none;}
+	}
+	&timeBarSegment #{&}extremumWaveNameOnVizor{
+		@media(min-width: 0px){text-decoration: underline; text-underline-offset: 2px;}
+	}
+	&timeBarNowVline{
+		@media(min-width: 0px){position: absolute; top: 0; bottom: #{$time-bar-now-line-anchor}; left: 0; width: 0; z-index: 12; pointer-events: none;}
+	}
+	&timeBarNowVline::before{
+		@media(min-width: 0px){content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background-color: #{$danger-color}; transform: translateX(-50%);}
+	}
+	&timeBarNowRow{
+		@media(min-width: 0px){display: flex; flex-shrink: 0; min-height: #{$time-bar-now-row-h}; background: #fff; position: relative; z-index: 13;}
+	}
+	&timeBarStateStack:not( :has(> #{&}timeBarStateRow:not(#{&}timeBarStateRowHidden)) ) ~ #{&}timeBarNowRow{
+		@media(min-width: 0px){border-top: none;}
+	}
+	&timeBarStateSideNow{
+		@media(min-width: 0px){min-height: #{$time-bar-now-row-h};}
+	}
+	&timeBarNowTrack{
+		@media(min-width: 0px){flex: 1 1 auto; position: relative; min-width: 0; min-height: #{$time-bar-now-row-h};}
+	}
+	&timeBarNowMarker#{&}timeIndicator{
+		@media(min-width: 0px){position: absolute; top: 50%; left: 0; width: 0; height: 0; transform: translate(-50%, -50%); z-index: 14;}
+	}
+	&timeBarNowMarker #{&}timeBarNowLabel{
+		@media(min-width: 0px){position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; padding: 2px 6px; font-size: 10px; white-space: nowrap; font-weight: 400; font-family: monospace; background-color: #{$danger-color}; color: #fff;}
+	}
+	&timeBarNowMarker #{&}timeBarNowLabel::before{
+		@media(min-width: 0px){content: ""; display: block; position: absolute; left: 50%; top: -4px; transform: translateX(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 4px solid #{$danger-color};}
+	}
+	&timeBarNowMarker #{&}timeBarNowLabel::after{
+		@media(min-width: 0px){display: none;}
+	}
+	&timeBarHoursTrack #{&}timeScale > #{&}hourMarker{
+		@media(min-width: 0px){min-height: 100%; box-sizing: border-box;}
+	}
+	&hourMarker{
+		@media(min-width: 0px){flex: 1; border-left: 1px solid #{$clg}; position: relative; cursor: pointer; box-sizing: border-box;}
+	}
+	&hourMarker:first-child{
+		@media(min-width: 0px){border-left: none;}
+	}
+	&hourMarker:hover{
+		@media(min-width: 0px){background-color: rgba(0, 0, 0, 0.05);}
+	}
+	&hourLabel{
+		@media(min-width: 0px){position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); font-size: #{$font-size-xs}; color: #{$text-secondary}; white-space: nowrap; font-weight: 400; font-family: #{$font-family};}
+	}
+	&halfHourMarker{
+		@media(min-width: 0px){position: absolute; top: 50%; left: 0; width: 1px; height: 30%; background-color: rgba(0, 0, 0, 0.15); transform: translateY(-50%); pointer-events: none;}
+	}
+	&timeIndicator{
+		@media(min-width: 0px){position: absolute; top: 0; width: 0; height: 100%; background-color: transparent; z-index: 10; pointer-events: none; transform: translateX(-50%);}
+	}
+	&timeIndicator::before{
+		@media(min-width: 0px){display: none;}
+	}
+	&timeIndicator::after{
+		@media(min-width: 0px){display: none;}
+	}
+	&timeIndicatorLabel{
+		@media(min-width: 0px){position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #{$danger-color}; color: white; padding: 2px 6px; font-size: #{$font-size-xs}; white-space: nowrap; font-weight: 400; font-family: monospace; z-index: 11;}
+	}
+	&timeIndicatorLabel::before{
+		@media(min-width: 0px){content: ""; position: absolute; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent;}
+	}
+	&timeIndicatorLabel::after{
+		@media(min-width: 0px){content: ""; position: absolute; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent;}
+	}
+	&timeIndicatorLabel::before{
+		@media(min-width: 0px){top: -4px; border-bottom: 4px solid #{$danger-color};}
+	}
+	&timeIndicatorLabel::after{
+		@media(min-width: 0px){bottom: -4px; border-top: 4px solid #{$danger-color};}
+	}
+	&timeBarContainer #{&}hourLabel{
+		@media(min-width: 0px){font-size: 10px;}
+	}
+	&hourMarker#{&}clickable{
+		@media(min-width: 0px){cursor: pointer;}
+	}
+	&hourMarker#{&}midnight{
+		@media(min-width: 0px){border-left-color: #{$danger-color};}
+	}
+	&hourMarker#{&}midnight #{&}hourLabel{
+		@media(min-width: 0px){color: #{$danger-color}; font-weight: 400;}
+	}
+	&controlsSection{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-lg}; width: 100%;}
+	}
+	&graphSection{
+		@media(min-width: 0px){display: flex !important; flex-direction: column; gap: #{$spacing-lg}; width: 100%; align-items: center; position: relative; margin: #{$spacing-lg} 0;}
+	}
+	&mainControlsPanel{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-lg}; width: 100%;}
+	}
+	&controlPanel{
+		@media(min-width: 0px){display: grid; grid-template-columns: 1fr 1.5fr; gap: #{$spacing-lg}; width: 100%;}
+	}
+	&controlPanel > #{&}datesPanel{
+		@media(min-width: 0px){grid-column: 1;}
+	}
+	&controlPanel > #{&}wavesPanel{
+		@media(min-width: 0px){grid-column: 2;}
+	}
+	&btnToday#{&}todayActive{
+		@media(min-width: 0px){background-color: #{$cp}; color: #fff;}
+	}
+	&btnToday#{&}todayInactive{
+		@media(min-width: 0px){background-color: #ff9900; color: #fff;}
+	}
+	&btnToday#{&}todayInactive:hover{
+		@media(min-width: 0px){background-color: #ffad33; filter: brightness(1.1);}
+	}
+	&btnFlipH#{&}flipHActive{
+		@media(min-width: 0px){background-color: #ff9900; color: #fff;}
+	}
+	&btnFlipH#{&}flipHActive:hover{
+		@media(min-width: 0px){background-color: #ffad33; filter: brightness(1.1);}
+	}
+	&btnFlipV#{&}flipVActive{
+		@media(min-width: 0px){background-color: #ff9900; color: #fff;}
+	}
+	&btnFlipV#{&}flipVActive:hover{
+		@media(min-width: 0px){background-color: #ffad33; filter: brightness(1.1);}
+	}
+	&btnDeleteDisplayViewTemplate{
+		@media(min-width: 0px){min-width: 28px; padding-left: 6px; padding-right: 6px; text-align: center; line-height: 1;}
+	}
+	&secretSchemeGroupSelect{
+		@media(min-width: 0px){min-width: 12em;}
+	}
+	&secretSchemeAnchorSelect{
+		@media(min-width: 0px){min-width: 4.5em;}
+	}
+	&panelSection{
+		@media(min-width: 0px){background: #fff; padding: #{$spacing-md}; overflow: visible; min-width: 0; outline: 1px solid #{$clg};}
+	}
+	&wavesListContainer{
+		@media(min-width: 0px){overflow: hidden; display: flex; flex-direction: column; flex: 1; min-height: 0;}
+	}
+	&wavesList{
+		@media(min-width: 0px){height: 100%; background: #fff; overflow-y: auto;}
+	}
+	&notesPanelLayout{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-lg};}
+	}
+	&notesListContainer{
+		@media(min-width: 0px){flex: 1; min-width: 200px;}
+	}
+	&noteEditorContainer{
+		@media(min-width: 0px){flex: 2; min-width: 300px;}
+	}
+	&warningOverlay{
+		@media(min-width: 0px){position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #{$cbg}; z-index: #{$z-overlay}; display: flex; justify-content: center; align-items: center; flex-direction: column; padding: #{$spacing-lg};}
+	}
+	&warningOverlay.sun-hidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&warningBox{
+		@media(min-width: 0px){background: #fff; padding: #{$spacing-xl}; border: 1px solid #{$clg}; max-width: 525px; text-align: center; display: block;}
+	}
+	&warningBox.sun-hidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&tabContainer{
+		@media(min-width: 0px){display: flex; flex-direction: column;}
+	}
+	&tabButtons{
+		@media(min-width: 0px){display: flex; padding: 0; gap: 0; flex-wrap: wrap; background: #fff;}
+	}
+	&tabButton{
+		@media(min-width: 0px){padding: 8px 16px; background: none; border: none; cursor: pointer; color: #{$text-secondary}; font-size: #{$font-size-lg}; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400; display: flex; align-items: center; justify-content: center;}
+	}
+	&tabButton:last-child{
+		@media(min-width: 0px){border-right: none;}
+	}
+	&tabButton.sun-active{
+		@media(min-width: 0px){background: #{$cp}; color: #fff; font-weight: 400;}
+	}
+	&tabButton:hover:not(.sun-active){
+		@media(min-width: 0px){background: #f5f5f5;}
+	}
+	&tabButtons#{&}tabButtonsFramed{
+		@media(min-width: 0px){width: fit-content; max-width: 100%; align-self: flex-start; border: none; overflow: visible; background: transparent; gap: #{$spacing-xs};}
+	}
+	&tabButtons#{&}tabButtonsFramed #{&}tabButton{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; padding: #{$spacing-sm} #{$spacing-md}; flex: 0 0 auto; font-weight: 400; display: flex; align-items: center; justify-content: center; background: #f0f0f0; border: 1px solid #{$clg}; color: #{$text-color};}
+	}
+	&tabButtons#{&}tabButtonsFramed #{&}tabButton.sun-active{
+		@media(min-width: 0px){background: #{$cp}; color: #fff; border-color: #{$cp}; font-weight: 400;}
+	}
+	&tabButtons#{&}tabButtonsFramed #{&}tabButton:hover:not(.sun-active){
+		@media(min-width: 0px){background: #e5e5e5;}
+	}
+	&tabContent{
+		@media(min-width: 0px){display: none; background: #fff; border: 1px solid #{$clg}; padding: #{$spacing-md};}
+	}
+	&tabContent.sun-active{
+		@media(min-width: 0px){display: block;}
+	}
+	&tabContent #{&}summaryPanel{
+		@media(min-width: 0px){width: 100%; max-width: 100%; min-width: 0; margin: 0; padding: 0; border: none; background: transparent; box-sizing: border-box; overflow: visible;}
+	}
+	&tabContent #{&}intersectionPanel{
+		@media(min-width: 0px){width: 100%; max-width: 100%; min-width: 0; margin: 0; padding: 0; border: none; background: transparent; box-sizing: border-box; overflow: visible;}
+	}
+	&tabContent #{&}dateComparePanel{
+		@media(min-width: 0px){width: 100%; max-width: 100%; min-width: 0; margin: 0; padding: 0; border: none; background: transparent; box-sizing: border-box; overflow: visible;}
+	}
+	&tabContent #{&}analysisPanel{
+		@media(min-width: 0px){width: 100%; margin: 0; padding: 0; border: none; background: transparent;}
+	}
+	&tabContent #{&}notesPanel{
+		@media(min-width: 0px){width: 100%; margin: 0; padding: 0; border: none; background: transparent;}
+	}
+	&tabContent #{&}dbImportSection{
+		@media(min-width: 0px){width: 100%; max-width: 100%; margin: 0; padding: 0; border: none; background: transparent;}
+	}
+	&tabContent #{&}panelSection{
+		@media(min-width: 0px){border: none; padding: 0; outline: none; max-width: 100%; min-width: 0; box-sizing: border-box; overflow: visible;}
+	}
+	&tabsSection #{&}tabContainer{
+		@media(min-width: 0px){width: 100%; max-width: 100%; min-width: 0;}
+	}
+	&tabsSection #{&}tabContent{
+		@media(min-width: 0px){max-width: 100%; min-width: 0; overflow-x: hidden; overflow-y: visible; box-sizing: border-box;}
+	}
+	&inputGroup{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; margin-bottom: #{$spacing-sm};}
+	}
+	&inputRow{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center;}
+	}
+	&listContainer{
+		@media(min-width: 0px){border: 1px solid #{$clg}; background: #fff; display: flex; flex-direction: column; overflow-y: scroll;}
+	}
+	&listContainerScrollable{
+		@media(min-width: 0px){overflow-y: auto; max-height: 400px;}
+	}
+	&listContainerNoScroll{
+		@media(min-width: 0px){overflow-y: visible;}
+	}
+	&listItem{
+		@media(min-width: 0px){padding: #{$spacing-sm}; background: #fff; display: flex; align-items: center; gap: 8px; min-height: 40px; position: relative; outline: 1px solid #{$clg};}
+	}
+	&listItemClickable{
+		@media(min-width: 0px){cursor: pointer;}
+	}
+	&listItemDraggable{
+		@media(min-width: 0px){cursor: move;}
+	}
+	&listItemDragHandle{
+		@media(min-width: 0px){cursor: move; color: #999; padding: 2px; flex-shrink: 0; user-select: none;}
+	}
+	&listItemDragHandle:hover{
+		@media(min-width: 0px){color: #{$text-color};}
+	}
+	&listItemDragging{
+		@media(min-width: 0px){opacity: 0.5; background-color: #f0f0f0; z-index: 10;}
+	}
+	&listItemDragOver{
+		@media(min-width: 0px){background-color: #e6f2ff; border-top: 2px solid #{$cp};}
+	}
+	&listItemSaveFlash::before{
+		@media(min-width: 0px){content: ""; position: absolute; inset: 1px; z-index: 0; pointer-events: none; animation: list-item-save-flash 0.85s ease-out forwards;}
+	}
+	&listItemSaveFlash > *{
+		@media(min-width: 0px){position: relative; z-index: 1;}
+	}
+	@media(prefers-reduced-motion: reduce){
+		&listItemSaveFlash::before{
+			@media(min-width: 0px){animation-duration: 0.15s;}
+		}
+	}
+	&listItemContent{
+		@media(min-width: 0px){flex: 1; min-width: 0; display: flex; flex-direction: column;}
+	}
+	&listItemRow{
+		@media(min-width: 0px){display: flex; justify-content: space-between; align-items: center; gap: #{$spacing-sm}; width: 100%;}
+	}
+	&listItemLeft{
+		@media(min-width: 0px){display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;}
+	}
+	&listItemTitleContainer{
+		@media(min-width: 0px){display: flex; align-items: center; gap: #{$spacing-xs}; min-width: 0; flex: 1;}
+	}
+	&listItemTitle{
+		@media(min-width: 0px){font-weight: 400; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #{$text-color};}
+	}
+	&listItemIcon{
+		@media(min-width: 0px){color: #{$text-secondary}; font-size: #{$font-size-lg}; flex-shrink: 0;}
+	}
+	&listItemRight{
+		@media(min-width: 0px){display: flex; gap: 8px; align-items: center; flex-shrink: 0;}
+	}
+	&listItemValue{
+		@media(min-width: 0px){color: #{$text-secondary}; white-space: nowrap; font-size: #{$font-size-sm};}
+	}
+	&listItemDate #{&}dateGenderBadge{
+		@media(min-width: 0px){margin: 0 0.15em;}
+	}
+	&listItemActions{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; flex-shrink: 0;}
+	}
+	&listItemEditForm{
+		@media(min-width: 0px){display: none; flex-wrap: wrap; gap: 8px; width: 100%;}
+	}
+	&listItemDate #{&}listItemEditForm{
+		@media(min-width: 0px){flex-direction: column; align-items: stretch; gap: #{$spacing-xs};}
+	}
+	&listItemDate #{&}listItemEditRowDateMain{
+		@media(min-width: 0px){display: flex; flex-wrap: wrap; gap: #{$spacing-xs}; align-items: center; width: 100%;}
+	}
+	&listItemDate #{&}listItemEditRowDateMain #{&}dateNameEdit{
+		@media(min-width: 0px){flex: 1; min-width: 120px;}
+	}
+	&listItemDate #{&}listItemEditRowDateMain .dateInput{
+		@media(min-width: 0px){flex: 0 1 auto; min-width: 140px;}
+	}
+	&listItemDate #{&}dateGenderSelect{
+		@media(min-width: 0px){flex: 0 0 auto; width: 42px; min-width: 42px; max-width: 42px; height: 25px; padding: 2px 4px; font-size: #{$font-size-sm}; text-align: center; text-align-last: center;}
+	}
+	&listItemDate #{&}listItemEditRowDateActions{
+		@media(min-width: 0px){width: 100%; justify-content: flex-end;}
+	}
+	&listItemDate #{&}listItemEditRowDateActions #{&}listItemEditActions{
+		@media(min-width: 0px){width: 100%; justify-content: flex-end;}
+	}
+	&listItemDate #{&}listItemEditRowFull{
+		@media(min-width: 0px){width: 100%;}
+	}
+	&listItemDate #{&}dateDescriptionEdit{
+		@media(min-width: 0px){width: 100%; min-height: 44px; max-height: 160px; resize: vertical; height: auto; padding: 6px 8px; box-sizing: border-box; line-height: 1.35; font-family: #{$font-family}; font-size: #{$font-size-sm};}
+	}
+	&listItemEditRow{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; width: 100%;}
+	}
+	&listItemEditLabel{
+		@media(min-width: 0px){font-weight: 400; flex-shrink: 0; font-size: #{$font-size-sm}; color: #{$text-color};}
+	}
+	&listItemEditInput{
+		@media(min-width: 0px){flex: 1; padding: 3px 5px; border: 1px solid #{$clg}; min-width: 0; font-size: #{$font-size-sm}; height: 25px;}
+	}
+	&listItemEditActions{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; justify-content: flex-end; flex-shrink: 0;}
+	}
+	&listItemEditing > #{&}listItemContent > #{&}listItemNormalView{
+		@media(min-width: 0px){display: none;}
+	}
+	&listItemEditing > #{&}listItemContent > #{&}listItemEditForm{
+		@media(min-width: 0px){display: flex;}
+	}
+	&listItemGroup#{&}listItemEditing #{&}groupChildren #{&}listItemWave #{&}listItemNormalView{
+		@media(min-width: 0px){display: flex !important;}
+	}
+	&listItemGroup#{&}listItemEditing #{&}groupChildren #{&}listItemWave #{&}listItemEditForm{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&listItemWave#{&}listItemEditing #{&}listItemNormalView{
+		@media(min-width: 0px){display: none;}
+	}
+	&listItemWave#{&}listItemEditing #{&}listItemEditForm{
+		@media(min-width: 0px){display: flex;}
+	}
+	&listItemEditing > #{&}listItemDragHandle{
+		@media(min-width: 0px){opacity: 0.3; cursor: default;}
+	}
+	&listItemDate{
+		@media(min-width: 0px){cursor: pointer;}
+	}
+	&listItemDate:hover{
+		@media(min-width: 0px){background-color: #f5f5f5;}
+	}
+	&listItemDate.sun-active{
+		@media(min-width: 0px){background-color: #e6f2ff;}
+	}
+	&listItemWave{
+		@media(min-width: 0px){cursor: default;}
+	}
+	&listItemWave:hover{
+		@media(min-width: 0px){background-color: #f5f5f5;}
+	}
+	&listItemWave #{&}waveControlsInline{
+		@media(min-width: 0px){display: flex; align-items: center; gap: #{$spacing-xs}; margin-right: 8px;}
+	}
+	&listItemWave #{&}waveVisibilityCheck{
+		@include sun-custom-checkbox-base;
+	}
+	&listItemWave #{&}waveBVisibilityCheck{
+		@include sun-custom-checkbox-base;
+	}
+	&listItemWave #{&}waveCornerColorCheck{
+		@include sun-custom-checkbox-base;
+	}
+	&listItemWave #{&}waveCornerColorCheck{
+		@media(min-width: 0px){margin-left: 2px; margin-right: 2px;}
+	}
+	&listItemDate #{&}dateCheckbox{
+		@include sun-custom-checkbox-base;
+	}
+	&listItemWave #{&}wavePeriodBadge{
+		@media(min-width: 0px){background: #e0e0e0; padding: 2px 6px; font-size: #{$font-size-xs}; margin-left: 8px; flex-shrink: 0;}
+	}
+	&listItemWave #{&}waveColorPreviewSmall{
+		@media(min-width: 0px){width: 14px; height: 14px; border: 1px solid #ccc; cursor: pointer; flex-shrink: 0; align-self: center; margin: 0;}
+	}
+	&listItemGroup{
+		@media(min-width: 0px){cursor: default;}
+	}
+	&listItemGroup:not(.sun-listItemExpanded):hover{
+		@media(min-width: 0px){background-color: #f5f5f5;}
+	}
+	&listItemGroup.sun-listItemExpanded{
+		@media(min-width: 0px){background-color: inherit;}
+	}
+	&listItemGroup.sun-listItemExpanded:hover{
+		@media(min-width: 0px){background-color: inherit;}
+	}
+	&listItemGroup.sun-active{
+		@media(min-width: 0px){background-color: #e6f2ff;}
+	}
+	&listItemGroup #{&}waveGroupToggle{
+		@media(min-width: 0px){margin-right: 8px;}
+	}
+	&listItemGroup #{&}waveGroupToggle:hover{
+		@media(min-width: 0px){filter: brightness(0.9);}
+	}
+	&groupChildren{
+		@media(min-width: 0px){margin-top: #{$spacing-sm}; max-height: 361px; overflow-y: scroll; border: 1px solid #{$clg};}
+	}
+	&listItemExpanded #{&}groupChildren{
+		@media(min-width: 0px){display: block;}
+	}
+	&groupChildren #{&}listItemWave{
+		@media(min-width: 0px){background: #fafafa;}
+	}
+	&groupChildren #{&}listItemWave:last-child{
+		@media(min-width: 0px){margin-bottom: 0;}
+	}
+	&groupChildren #{&}listItemWave:hover{
+		@media(min-width: 0px){background: #f0f0f0;}
+	}
+	&groupChildren #{&}waveControlsInline{
+		@media(min-width: 0px){display: flex; align-items: center; gap: #{$spacing-xs}; margin-right: 8px;}
+	}
+	&groupChildren #{&}wavePeriodBadge{
+		@media(min-width: 0px){background: #e0e0e0; padding: 2px 6px; font-size: 9px; margin-left: 6px;}
+	}
+	&groupChildren #{&}waveColorPreviewSmall{
+		@media(min-width: 0px){width: 14px; height: 14px; border: 1px solid #ccc; cursor: pointer; align-self: center; margin: 0;}
+	}
+	&groupChildren #{&}waveCornerColorCheck{
+		@media(min-width: 0px){margin-left: 1px; margin-right: 1px; flex-shrink: 0;}
+	}
+	&listItemNote{
+		@media(min-width: 0px){cursor: default; flex-direction: column; align-items: flex-start; padding: #{$spacing-md};}
+	}
+	&listItemNote:hover{
+		@media(min-width: 0px){background-color: #fff;}
+	}
+	&listItemNote #{&}noteContentWrapper{
+		@media(min-width: 0px){width: 100%; margin-bottom: 8px;}
+	}
+	&listItemNote .noteTime{
+		@media(min-width: 0px){font-weight: 400; color: #{$text-color}; margin-bottom: 3px;}
+	}
+	&listItemNote .noteText{
+		@media(min-width: 0px){color: #{$text-secondary}; line-height: 1.4; margin-bottom: #{$spacing-xs};}
+	}
+	&listItemIntersection#{&}exactMatch{
+		@media(min-width: 0px){background-color: #e6f7e6;}
+	}
+	&listItemIntersection#{&}closeMatch{
+		@media(min-width: 0px){background-color: #fffbe6;}
+	}
+	&listItemIntersection #{&}intersectionInfo{
+		@media(min-width: 0px){flex: 1;}
+	}
+	&listItemIntersection #{&}intersectionPeriod{
+		@media(min-width: 0px){font-weight: 400; color: #{$text-color};}
+	}
+	&listItemIntersection #{&}intersectionMatchType{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; color: #{$text-secondary}; margin-top: 2px;}
+	}
+	&listItemIntersection #{&}intersectionControls{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; flex-shrink: 0;}
+	}
+	&listEmpty{
+		@media(min-width: 0px){padding: #{$spacing-lg}; text-align: center; color: #999; font-style: italic; font-size: #{$font-size-sm};}
+	}
+	&listError{
+		@media(min-width: 0px){padding: #{$spacing-sm}; text-align: center; color: #{$danger-color}; font-size: #{$font-size-sm}; background: #f8d7da; border: 1px solid #f5c6cb;}
+	}
+	&groupStats{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; white-space: nowrap; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap;}
+	}
+	&groupStatTotal{
+		@media(min-width: 0px){color: #{$text-secondary}; font-size: #{$font-size-xs}; opacity: 0.95; cursor: pointer; text-decoration: none;}
+	}
+	&groupStatTotal:hover{
+		@media(min-width: 0px){text-decoration: underline; text-decoration-color: currentColor; text-underline-offset: 2px;}
+	}
+	&groupStatA{
+		@media(min-width: 0px){font-size: #{$font-size-xs}; cursor: pointer; font-weight: 400; text-decoration: none; color: #1565c0;}
+	}
+	&groupStatA:hover{
+		@media(min-width: 0px){color: #0d47a1; text-decoration: underline; text-decoration-color: #0d47a1; text-underline-offset: 2px;}
+	}
+	&groupStatB{
+		@media(min-width: 0px){font-size: #{$font-size-xs}; cursor: pointer; font-weight: 400; text-decoration: none; color: #ef6c00;}
+	}
+	&groupStatB:hover{
+		@media(min-width: 0px){color: #e65100; text-decoration: underline; text-decoration-color: #e65100; text-underline-offset: 2px;}
+	}
+	&groupEnabledCount{
+		@media(min-width: 0px){color: #{$text-secondary}; font-size: #{$font-size-xs}; opacity: 0.8; cursor: pointer;}
+	}
+	&groupTotalCount{
+		@media(min-width: 0px){color: #{$text-secondary}; font-size: #{$font-size-xs}; opacity: 0.8;}
+	}
+	&listItemGroup#{&}listItemDragging{
+		@media(min-width: 0px){opacity: 0.5; background-color: #f0f0f0; z-index: 10;}
+	}
+	&listItemGroup#{&}listItemDragOverTop::before{
+		@media(min-width: 0px){content: ""; position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; background: #000; transform: rotate(45deg); z-index: 10;}
+	}
+	&listItemGroup#{&}listItemDragOverBottom::after{
+		@media(min-width: 0px){content: ""; position: absolute; left: -5px; bottom: -5px; width: 10px; height: 10px; background: #000; transform: rotate(45deg); z-index: 10;}
+	}
+	&listItemGroup:not(#{&}listItemEditing) #{&}listItemDragHandle{
+		@media(min-width: 0px){cursor: move;}
+	}
+	&listItemGroup#{&}listItemEditing #{&}listItemDragHandle{
+		@media(min-width: 0px){opacity: 0.3; cursor: default;}
+	}
+	&listItemPersonGroup{
+		@media(min-width: 0px){cursor: default;}
+	}
+	&listItemPersonGroup:not(.sun-listItemExpanded):hover{
+		@media(min-width: 0px){background-color: #f5f5f5;}
+	}
+	&listItemPersonGroup.sun-listItemExpanded{
+		@media(min-width: 0px){background-color: inherit;}
+	}
+	&listItemPersonGroup:not(#{&}listItemEditing) #{&}listItemDragHandle{
+		@media(min-width: 0px){cursor: move;}
+	}
+	&listItemPersonGroup#{&}listItemEditing #{&}listItemDragHandle{
+		@media(min-width: 0px){opacity: 0.3; cursor: default;}
+	}
+	&listItemPersonGroup#{&}listItemDragging{
+		@media(min-width: 0px){opacity: 0.5; background-color: #f0f0f0; z-index: 10;}
+	}
+	&listItemPersonGroup#{&}listItemDragOverTop::before{
+		@media(min-width: 0px){content: ""; position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; background: #000; transform: rotate(45deg); z-index: 10;}
+	}
+	&listItemPersonGroup#{&}listItemDragOverBottom::after{
+		@media(min-width: 0px){content: ""; position: absolute; left: -5px; bottom: -5px; width: 10px; height: 10px; background: #000; transform: rotate(45deg); z-index: 10;}
+	}
+	&personGroupChildren{
+		@media(min-width: 0px){margin-top: #{$spacing-sm}; max-height: 361px; overflow-y: scroll; border: 1px solid #{$clg};}
+	}
+	&personGroupChildren #{&}listItemDate{
+		@media(min-width: 0px){background: #fafafa;}
+	}
+	&personGroupChildren #{&}listItemDate:hover{
+		@media(min-width: 0px){background: #f0f0f0;}
+	}
+	&personGroupChildren #{&}listItemDate#{&}listItemDragOverTop{
+		@media(min-width: 0px){border-top: 2px solid #{$cp};}
+	}
+	&personGroupChildren #{&}listItemDate#{&}listItemDragOverBottom{
+		@media(min-width: 0px){border-bottom: 2px solid #{$cp};}
+	}
+	&listItemPersonGroup#{&}listItemEditing #{&}personGroupChildren #{&}listItemDate #{&}listItemNormalView{
+		@media(min-width: 0px){display: flex !important;}
+	}
+	&listItemPersonGroup#{&}listItemEditing #{&}personGroupChildren #{&}listItemDate #{&}listItemEditForm{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&dateDragHandle{
+		@media(min-width: 0px){color: #999; cursor: move; padding: 2px; flex-shrink: 0; user-select: none; margin-right: 4px;}
+	}
+	&dateDragHandle:hover{
+		@media(min-width: 0px){color: #{$text-color};}
+	}
+	&listItemDate#{&}listItemEditing #{&}dateDragHandle{
+		@media(min-width: 0px){opacity: 0.3; cursor: default;}
+	}
+	&dropIndicator{
+		@media(min-width: 0px){position: absolute; left: 0; right: 0; height: 2px; background-color: #666; z-index: 100; pointer-events: none;}
+	}
+	&listItem:first-child{
+		@media(min-width: 0px){overflow: hidden;}
+	}
+	&listItem:last-child{
+		@media(min-width: 0px){overflow: hidden;}
+	}
+	&groupChildren #{&}listItemWave#{&}listItemDragging{
+		@media(min-width: 0px){opacity: 0.5; background-color: #f0f0f0; z-index: 10;}
+	}
+	&groupChildren #{&}listItemWave#{&}listItemDragOverTop{
+		@media(min-width: 0px){border-top: 2px solid #{$cp};}
+	}
+	&groupChildren #{&}listItemWave#{&}listItemDragOverBottom{
+		@media(min-width: 0px){border-bottom: 2px solid #{$cp};}
+	}
+	&groupChildren #{&}listItemWave#{&}listItemDragOverTop::before{
+		@media(min-width: 0px){content: ""; position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; background: #{$cp}; transform: rotate(45deg); z-index: 10;}
+	}
+	&groupChildren #{&}listItemWave#{&}listItemDragOverBottom::after{
+		@media(min-width: 0px){content: ""; position: absolute; left: -5px; bottom: -5px; width: 10px; height: 10px; background: #{$cp}; transform: rotate(45deg); z-index: 10;}
+	}
+	&groupChildren#{&}groupChildrenDragOver{
+		@media(min-width: 0px){background: rgba(0, 102, 204, 0.06); outline: 2px dashed #{$cp}; outline-offset: -2px;}
+	}
+	&personGroupChildren#{&}groupChildrenDragOver{
+		@media(min-width: 0px){background: rgba(0, 102, 204, 0.06); outline: 2px dashed #{$cp}; outline-offset: -2px;}
+	}
+	&waveDragHandle{
+		@media(min-width: 0px){color: #999; cursor: move; padding: 2px; flex-shrink: 0; user-select: none; margin-right: 4px;}
+	}
+	&waveDragHandle:hover{
+		@media(min-width: 0px){color: #{$text-color};}
+	}
+	&listItemWave#{&}listItemEditing #{&}waveDragHandle{
+		@media(min-width: 0px){opacity: 0.3; cursor: default;}
+	}
+	&dateCheckbox{
+		@include sun-custom-checkbox-base;
+	}
+	&waveGroupToggle{
+		@include sun-custom-checkbox-base;
+	}
+	&waveVisibilityCheck{
+		@include sun-custom-checkbox-base;
+	}
+	&waveBVisibilityCheck{
+		@include sun-custom-checkbox-base;
+	}
+	&waveCornerColorCheck{
+		@include sun-custom-checkbox-base;
+	}
+	&timeBarStateCheck{
+		@include sun-custom-checkbox-base;
+	}
+	&timeBarGroupCheck{
+		@include sun-custom-checkbox-base;
+	}
+	&dateCheckbox[data-type="a"]:checked{
+		@media(min-width: 0px){background-color: #2196f3;}
+	}
+	&dateCheckbox[data-type="b"]:checked{
+		@media(min-width: 0px){background-color: #ff9800;}
+	}
+	&waveBVisibilityCheck:checked{
+		@media(min-width: 0px){background-color: #ff9800;}
+	}
+	&waveGroupToggle:checked{
+		@media(min-width: 0px){background-color: #2196f3;}
+	}
+	&waveVisibilityCheck:checked{
+		@media(min-width: 0px){background-color: #2196f3;}
+	}
+	&waveCornerColorCheck:checked{
+		@media(min-width: 0px){background-color: #2196f3;}
+	}
+	&timeBarStateCheck:checked{
+		@media(min-width: 0px){background-color: #2196f3;}
+	}
+	&timeBarGroupCheck:checked{
+		@media(min-width: 0px){background-color: #2196f3;}
+	}
+	&dateCheckbox:checked::after{
+		@include sun-checkbox-checked-mark;
+	}
+	&waveGroupToggle:checked::after{
+		@include sun-checkbox-checked-mark;
+	}
+	&waveVisibilityCheck:checked::after{
+		@include sun-checkbox-checked-mark;
+	}
+	&waveBVisibilityCheck:checked::after{
+		@include sun-checkbox-checked-mark;
+	}
+	&waveCornerColorCheck:checked::after{
+		@include sun-checkbox-checked-mark;
+	}
+	&timeBarStateCheck:checked::after{
+		@include sun-checkbox-checked-mark;
+	}
+	&timeBarGroupCheck:checked::after{
+		@include sun-checkbox-checked-mark;
+	}
+	&dateCheckbox:checked{
+		@media(min-width: 0px){border-color: transparent;}
+	}
+	&waveGroupToggle:checked{
+		@media(min-width: 0px){border-color: transparent;}
+	}
+	&waveVisibilityCheck:checked{
+		@media(min-width: 0px){border-color: transparent;}
+	}
+	&waveBVisibilityCheck:checked{
+		@media(min-width: 0px){border-color: transparent;}
+	}
+	&waveCornerColorCheck:checked{
+		@media(min-width: 0px){border-color: transparent;}
+	}
+	&timeBarStateCheck:checked{
+		@media(min-width: 0px){border-color: transparent;}
+	}
+	&timeBarGroupCheck:checked{
+		@media(min-width: 0px){border-color: transparent;}
+	}
+	&listItemDate #{&}dateSelectionChecks{
+		@media(min-width: 0px){pointer-events: auto; display: flex; align-items: center; gap: 6px;}
+	}
+	&listItemDate:has(#{&}dateCheckbox[data-type="a"]:checked){
+		@media(min-width: 0px){background-color: #e8f4fe;}
+	}
+	&listItemDate:has(#{&}dateCheckbox[data-type="b"]:checked){
+		@media(min-width: 0px){background-color: #fff4e5;}
+	}
+	&uiBtn{
+		@media(min-width: 0px){padding: #{$spacing-xs} #{$spacing-sm}; background-color: #{$cp}; color: #fff; border: none; cursor: pointer; font-size: #{$font-size-sm}; height: 25px;}
+	}
+	&uiBtn#{&}uiBtnToggleOff{
+		@media(min-width: 0px){opacity: 0.55;}
+	}
+	&parableBtnWrapper{
+		@media(min-width: 0px){margin-top: #{$spacing-lg}; display: flex; justify-content: center; gap: 8px;}
+	}
+	&mobileWarningBox #{&}parableBtnWrapper{
+		@media(min-width: 0px){display: none;}
+	}
+	&mobileWarningBox #{&}warningActions{
+		@media(min-width: 0px){display: none;}
+	}
+	&parableBtn{
+		@media(min-width: 0px){background-color: #4a6fa5; color: #fff; font-weight: 400; padding: #{$spacing-xs} #{$spacing-sm}; height: 25px;}
+	}
+	&parableBtn:hover{
+		@media(min-width: 0px){filter: brightness(0.9); background-color: #3a5a8a;}
+	}
+	&smallButton{
+		@media(min-width: 0px){padding: #{$spacing-xs} #{$spacing-sm};}
+	}
+	&transformBtn{
+		@media(min-width: 0px){padding: #{$spacing-xs} #{$spacing-sm}; background-color: #{$cp}; color: #fff; border: none; cursor: pointer; font-size: #{$font-size-sm}; height: 25px;}
+	}
+	&deleteDateBtn{
+		@media(min-width: 0px){background-color: #{$cp}; padding: #{$spacing-xs} #{$spacing-sm}; font-size: #{$font-size-sm};}
+	}
+	&editBtn{
+		@media(min-width: 0px){background-color: #{$cp}; padding: #{$spacing-xs} #{$spacing-sm}; font-size: #{$font-size-sm};}
+	}
+	&deleteGroupBtn{
+		@media(min-width: 0px){background-color: #{$cp}; padding: #{$spacing-xs} #{$spacing-sm}; font-size: #{$font-size-sm};}
+	}
+	&saveBtn{
+		@media(min-width: 0px){background-color: #{$cp}; padding: 3px 8px; font-size: #{$font-size-sm};}
+	}
+	&cancelBtn{
+		@media(min-width: 0px){background-color: #{$cp}; padding: 3px 8px; font-size: #{$font-size-sm};}
+	}
+	&expandCollapseBtn{
+		@media(min-width: 0px){display: inline-flex; align-items: center; justify-content: center; width: 30px; min-width: 30px; max-width: 30px; padding-left: 0; padding-right: 0; flex-shrink: 0;}
+	}
+	&editBtn{
+		@media(min-width: 0px){display: inline-flex; align-items: center; justify-content: center; width: 30px; min-width: 30px; max-width: 30px; padding-left: 0; padding-right: 0; flex-shrink: 0;}
+	}
+	&deleteDateBtn{
+		@media(min-width: 0px){display: inline-flex; align-items: center; justify-content: center; width: 30px; min-width: 30px; max-width: 30px; padding-left: 0; padding-right: 0; flex-shrink: 0;}
+	}
+	&saveBtn{
+		@media(min-width: 0px){display: inline-flex; align-items: center; justify-content: center; width: 30px; min-width: 30px; max-width: 30px; padding-left: 0; padding-right: 0; flex-shrink: 0;}
+	}
+	&cancelBtn{
+		@media(min-width: 0px){display: inline-flex; align-items: center; justify-content: center; width: 30px; min-width: 30px; max-width: 30px; padding-left: 0; padding-right: 0; flex-shrink: 0;}
+	}
+	&timeBarControlsToggle{
+		@media(min-width: 0px){min-width: 0; white-space: nowrap;}
+	}
+	&addGroupBtn{
+		@media(min-width: 0px){padding: #{$spacing-xs} #{$spacing-sm}; background-color: #{$cp}; color: #fff; border: none; cursor: pointer; font-size: #{$font-size-sm}; height: 25px;}
+	}
+	&warningActions{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-sm}; justify-content: center; margin-top: #{$spacing-md};}
+	}
+	&mobileWarningOverlay{
+		@media(min-width: 0px){background: #f0f0f0; padding: #{$spacing-lg}; overflow-y: auto;}
+	}
+	&mobileWarningOverlay #{&}warningBox{
+		@media(min-width: 0px){max-width: 90%; max-height: 90vh; overflow-y: auto; padding: #{$spacing-lg}; background: #fff;}
+	}
+	&mobileWarningBox #{&}warningTitle{
+		@media(min-width: 0px){font-size: #{$font-size-lg}; margin-bottom: 0px; text-align: center;}
+	}
+	&mobileWarningBox #{&}warningText{
+		@media(min-width: 0px){font-size: #{$font-size-md}; line-height: 1.6; margin-bottom: #{$spacing-lg}; display: none;}
+	}
+	&mobileWarningBox #{&}warningText ul{
+		@media(min-width: 0px){text-align: left; margin: #{$spacing-sm} 0; padding-left: #{$spacing-lg};}
+	}
+	&mobileWarningBox #{&}warningText li{
+		@media(min-width: 0px){margin-bottom: 5px;}
+	}
+	&mobileWarningBox #{&}warningInfo{
+		@media(min-width: 0px){margin-top: #{$spacing-md};}
+	}
+	&mobileWarningBox #{&}warningInfoItem{
+		@media(min-width: 0px){margin-bottom: 8px;}
+	}
+	&mobileWarningBox #{&}warningInfoItem:last-child{
+		@media(min-width: 0px){margin-bottom: 0;}
+	}
+	&mobileRetryBtn{
+		@media(min-width: 0px){width: 100%; padding: 12px; font-size: #{$font-size-md}; background: #666; color: white; border: none; cursor: pointer; margin-top: #{$spacing-lg}; display: none;}
+	}
+	&mobileRetryBtn:hover{
+		@media(min-width: 0px){background: #555;}
+	}
+	&formInput{
+		@media(min-width: 0px){padding: 3px 5px; border: 1px solid #{$clg}; font-size: #{$font-size-sm};}
+	}
+	&dateInput{
+		@media(min-width: 0px){padding: 3px 5px; border: 1px solid #{$clg}; font-size: #{$font-size-sm};}
+	}
+	&addGroupInput{
+		@media(min-width: 0px){border: 1px solid #{$clg}; font-size: #{$font-size-sm};}
+	}
+	&dateInput{
+		@media(min-width: 0px){flex: 0; width: 100%; height: 25px; box-sizing: border-box; overflow: visible;}
+	}
+	&colorInput{
+		@media(min-width: 0px){width: 30px; height: 25px; padding: 0; border: 1px solid #{$clg}; cursor: pointer; background: transparent; box-sizing: border-box; vertical-align: middle; flex-shrink: 0;}
+	}
+	&warningTitle{
+		@media(min-width: 0px){font-size: #{$font-size-xl}; margin-bottom: #{$spacing-md};}
+	}
+	&warningText{
+		@media(min-width: 0px){line-height: 1.5; margin-bottom: #{$spacing-lg};}
+	}
+	&warningInfo{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: 8px; max-width: 300px; margin: 0 auto;}
+	}
+	&warningInfoItem{
+		@media(min-width: 0px){display: flex; align-items: center; gap: 5px; justify-content: space-between;}
+	}
+	&warningInfoItem strong{
+		@media(min-width: 0px){font-weight: 400; color: #333;}
+	}
+	&warningInfoItem span{
+		@media(min-width: 0px){color: #666; font-weight: 400;}
+	}
+	&mobileWarning{
+		@media(min-width: 0px){color: #ff0000; font-weight: 400; margin-top: #{$spacing-sm}; padding: #{$spacing-sm}; background: #fff3f3; border: 1px solid #ff0000; font-size: #{$font-size-sm};}
+	}
+	&warningLoading{
+		@media(min-width: 0px){padding: #{$spacing-lg}; text-align: center; color: #666;}
+	}
+	&currentDay{
+		@media(min-width: 0px){background-color: #{$cp}; color: #fff; padding: #{$spacing-xs} #{$spacing-sm}; display: flex; align-items: center; justify-content: center; height: 25px; max-width: 9em; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; border: none; font-family: Monospace; box-sizing: border-box;}
+	}
+	&currentDay:hover{
+		@media(min-width: 0px){filter: brightness(0.9);}
+	}
+	&labels{
+		@media(min-width: 0px){position: absolute; color: #{$text-secondary}; z-index: 8; pointer-events: none; user-select: none;}
+	}
+	&weekdayLabel{
+		@media(min-width: 0px){font-size: #{$font-size-sm};}
+	}
+	&zoomOverlay{
+		@media(min-width: 0px){position: absolute; background: rgba(255, 255, 255, 0.8); border: 2px solid red; z-index: 100; pointer-events: none; display: none;}
+	}
+	&spoilerToggle{
+		@media(min-width: 0px){background: none; border: none; color: #{$text-secondary}; cursor: pointer; font-size: #{$font-size-sm}; padding: 2px 5px; text-decoration: underline;}
+	}
+	&spoilerContent{
+		@media(min-width: 0px){display: none; background: #f9f9f9; padding: #{$spacing-sm}; margin-top: #{$spacing-xs}; border: 1px solid #eee; font-size: #{$font-size-sm}; color: #888;}
+	}
+	&spoilerContent#{&}show{
+		@media(min-width: 0px){display: block;}
+	}
+	&dbImportStatus{
+		@media(min-width: 0px){margin: #{$spacing-sm} 0; padding: #{$spacing-sm};}
+	}
+	&dbImportStatus#{&}success{
+		@media(min-width: 0px){background: #d4edda; color: #155724; border: 1px solid #c3e6cb;}
+	}
+	&dbImportStatus#{&}error{
+		@media(min-width: 0px){background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;}
+	}
+	&dbImportStatus#{&}info{
+		@media(min-width: 0px){background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb;}
+	}
+	&dbImportProgress{
+		@media(min-width: 0px){width: 100%; height: #{$spacing-lg}; background: #f0f0f0; overflow: hidden; margin: #{$spacing-sm} 0;}
+	}
+	&dbImportProgressBar{
+		@media(min-width: 0px){height: 100%; background: #666; transition: width 0.3s;}
+	}
+	&matchTypeBadge{
+		@media(min-width: 0px){padding: 2px 6px; font-size: #{$font-size-xs}; font-weight: 400;}
+	}
+	&matchTypeExact{
+		@media(min-width: 0px){background: #{$success-color}; color: white;}
+	}
+	&matchTypeClose{
+		@media(min-width: 0px){background: #{$warning-color}; color: black;}
+	}
+	&waveVisibilityCheck:disabled{
+		@media(min-width: 0px){opacity: 0.5; cursor: not-allowed;}
+	}
+	&cursorTooltip{
+		@media(min-width: 0px){position: fixed; z-index: 100000; pointer-events: none; max-width: min(360px, 92vw); padding: 8px 10px; background: #{$cursor-tooltip-bg}; color: #{$cursor-tooltip-fg}; font-size: #{$font-size-sm}; line-height: 1.4; white-space: pre-line; border: 1px solid #{$cursor-tooltip-border}; word-wrap: break-word; box-sizing: border-box;}
+	}
+	&secretSchemeWrap{
+		@media(min-width: 0px){ max-width: 100%; margin: #{$spacing-md} auto 0; align-self: center;}
+	}
+	&secretSchemeWrapHidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&secretSchemeSection #{&}tabContainer{
+		@media(min-width: 0px){align-items: flex-start;}
+	}
+	&secretSchemeSection #{&}tabButtons#{&}tabButtonsFramed{
+		@media(min-width: 0px){width: fit-content; max-width: 100%;}
+	}
+	&secretSchemeSection #{&}tabButtons{
+		@media(min-width: 0px){justify-content: flex-start;}
+	}
+	&secretSchemeSection #{&}tabButtons#{&}tabButtonsFramed #{&}tabButton{
+		@media(min-width: 0px){flex: 0 1 auto; max-width: 100%; white-space: normal; text-align: left; line-height: 1.25; padding: 6px 12px;}
+	}
+	&secretSchemeSection{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-sm}; margin-bottom: 0; width: 100%;}
+	}
+	&secretSchemePanel{
+		@media(min-width: 0px){background: #fafafa; padding: #{$spacing-sm}; outline: 1px solid #{$clg}; overflow: visible; width: 100%; box-sizing: border-box;}
+	}
+	&secretSchemeControls{
+		@media(min-width: 0px){display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: #{$spacing-sm} #{$spacing-md}; width: 100%; margin-bottom: #{$spacing-sm};}
+	}
+	&secretSchemeControlLabel{
+		@media(min-width: 0px){display: inline-flex; align-items: center; gap: #{$spacing-xs}; font-size: #{$font-size-sm}; color: #{$text-color}; font-weight: 400;}
+	}
+	&secretSchemeControlSelect{
+		@media(min-width: 0px){min-width: 6em; max-width: 100%; height: 28px; font-size: #{$font-size-sm};}
+	}
+	&secretSchemePanelCollapsed{
+		@media(min-width: 0px){display: none;}
+	}
+	&secretSchemeBoard{
+		@media(min-width: 0px){display: flex; flex-direction: column; align-items: stretch; width: 100%;}
+	}
+	&secretSchemeBoardBody{
+		@media(min-width: 0px){display: flex; flex-direction: row; align-items: stretch; gap: 0; width: 100%;}
+	}
+	&secretSchemeVline{
+		@media(min-width: 0px){flex: 0 0 1px; width: 1px; background: #{$text-color}; align-self: stretch; flex-shrink: 0; margin-top: calc(1.25em + #{$spacing-xs});}
+	}
+	&secretSchemeEntrances{
+		@media(min-width: 0px){display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 100%; flex: 1 1 auto; min-width: 0;}
+	}
+	&secretSchemeEntrancesRow{
+		@media(min-width: 0px){display: flex; flex-direction: row; flex-wrap: nowrap; gap: 0; align-items: stretch; width: 100%; flex: 1 1 auto; min-width: 0;}
+	}
+	&secretSchemeEntrance{
+		@media(min-width: 0px){display: flex; flex-direction: column; flex: 1 1 0; min-width: 0; padding: 0 #{$spacing-xs}; box-sizing: border-box;}
+	}
+	&secretSchemeBlock{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; min-width: 0; width: 100%; height: 100%;}
+	}
+	&secretSchemeBlockTitle{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; font-weight: 400; text-align: center; color: #{$text-color}; min-height: 1.25em; line-height: 1.2; flex-shrink: 0;}
+	}
+	&secretSchemeMiniGrid{
+		@media(min-width: 0px){display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(5, 1fr); gap: #{$spacing-xs}; align-items: stretch; width: 100%; flex: 1 1 auto; min-width: 0; aspect-ratio: 3 / 5;}
+	}
+	&secretSchemeMiniGrid > #{&}secretSchemeCell{
+		@media(min-width: 0px){display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; width: 100%; height: 100%; padding: 0; box-sizing: border-box; background: #fff; outline: 1px solid #{$clg}; transition: background-color 0.15s ease, color 0.15s ease; font-size: #{$font-size-sm}; font-variant-numeric: tabular-nums; color: #{$text-color};}
+	}
+	&secretSchemeCellAnchor{
+		@media(min-width: 0px){outline-color: #{$save-flash}; font-weight: 400;}
+	}
+	&graphViewport{
+		@media(min-width: 0px){position: relative;  align-self: center; flex-shrink: 0;}
+	}
+	&graphContainer{
+		@media(min-width: 0px){position: relative;   background-color: #fff; outline: 1px solid #{$clg}; overflow: hidden;}
+	}
+	&wavesMount{
+		@media(min-width: 0px){position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden;}
+	}
+	&wavesMount #{&}waveContainer{
+		@media(min-width: 0px){pointer-events: none;}
+	}
+	&wavesMount #{&}waveContainer svg{
+		@media(min-width: 0px){pointer-events: none;}
+	}
+	&wavesMount #{&}waveContainer #{&}wave{
+		@media(min-width: 0px){pointer-events: none;}
+	}
+	&wavesMount #{&}waveContainer #{&}wavePath{
+		@media(min-width: 0px){pointer-events: none;}
+	}
+	&graphContainer#{&}graphGrayMode{
+		@media(min-width: 0px){filter: grayscale(1);}
+	}
+	&graphContainer#{&}graphGrayMode #{&}waveLabel{
+		@media(min-width: 0px){filter: grayscale(1) !important;}
+	}
+	&graphContainer#{&}graphGrayMode #{&}waveAxisXPoint{
+		@media(min-width: 0px){filter: grayscale(1) !important;}
+	}
+	&graphContainer#{&}graphGrayMode #{&}axis{
+		@media(min-width: 0px){filter: none;}
+	}
+	&graphContainer#{&}graphGrayMode #{&}gridLine{
+		@media(min-width: 0px){filter: none;}
+	}
+	&graphContainer#{&}graphGrayMode #{&}gridLineInner{
+		@media(min-width: 0px){filter: none;}
+	}
+	&graphContainer#{&}graphGrayMode #{&}wavePath{
+		@media(min-width: 0px){filter: none;}
+	}
+	&waveLabelsContainer{
+		@media(min-width: 0px){position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; overflow: visible; }
+	}
+	&waveLabelsContainer #{&}waveLabelsSide{
+		@media(min-width: 0px){position: absolute; top: 0; height: 100%; width: 200px;}
+	}
+	&waveLabelsLeft{
+		@media(min-width: 0px){left: -200px; text-align: right;}
+	}
+	&waveLabelsRight{
+		@media(min-width: 0px){right: -200px; text-align: left;}
+	}
+	&waveLabelsVerticalContainer{
+		@media(min-width: 0px){position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; overflow: visible; }
+	}
+	&waveLabelsVerticalContainer #{&}waveLabelsSide{
+		@media(min-width: 0px){position: absolute; width: 100%; height: 30px;}
+	}
+	&waveLabelsTop{
+		@media(min-width: 0px){top: -30px;}
+	}
+	&waveLabelsBottom{
+		@media(min-width: 0px){bottom: -30px;}
+	}
+	&waveLabelsContainer.sun-hidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&waveLabelsVerticalContainer.sun-hidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&waveAxisXPoints{
+		@media(min-width: 0px){position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 8;}
+	}
+	&waveAxisXPoints.sun-hidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&waveAxisXPoint{
+		@media(min-width: 0px){position: absolute; width: 6px; height: 6px; border: 1px solid #fff; box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); cursor: pointer; pointer-events: auto; z-index: 9; transition: transform 0.2s, box-shadow 0.2s; transform: translate(-50%, -50%);}
+	}
+	&waveAxisXPoint:hover{
+		@media(min-width: 0px){transform: translate(-50%, -50%) scale(1.3); z-index: 10; box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);}
+	}
+	&waveLabel{
+		@media(min-width: 0px){position: absolute; display: inline-flex; align-items: center; width: max-content; max-width: 100%; box-sizing: border-box; white-space: nowrap; font-size: #{$font-size-sm}; font-weight: 400; pointer-events: auto; cursor: default; padding: 2px 8px; color: #fff; opacity: 0.5; z-index: 1;}
+	}
+	&waveLabel:hover{
+		@media(min-width: 0px){opacity: 1; z-index: 10; filter: brightness(1.2);}
+	}
+	&waveLabelsContainer #{&}waveLabel#{&}horizontal{
+		@media(min-width: 0px){transform: translateY(-50%); height: 20px;}
+	}
+	&waveLabelsLeft #{&}waveLabel{
+		@media(min-width: 0px){flex-direction: row-reverse; right: 0; margin-right: #{$sun-wave-label-edge-gap};}
+	}
+	&waveLabelsRight #{&}waveLabel{
+		@media(min-width: 0px){flex-direction: row; left: 0; margin-left: #{$sun-wave-label-edge-gap};}
+	}
+	&waveLabelsVerticalContainer #{&}waveLabel#{&}vertical{
+		@media(min-width: 0px){transform: translateX(-50%); height: 20px;}
+	}
+	&waveLabelsTop #{&}waveLabel{
+		@media(min-width: 0px){top: auto; bottom: 0; margin-top: 0; margin-bottom: #{$sun-wave-label-edge-gap};}
+	}
+	&waveLabelsBottom #{&}waveLabel{
+		@media(min-width: 0px){bottom: auto; top: 0; margin-bottom: 0; margin-top: #{$sun-wave-label-edge-gap};}
+	}
+	&waveLabelText{
+		@media(min-width: 0px){white-space: nowrap; font-weight: 400; font-size: 11px; position: relative; z-index: 2;}
+	}
+	&waveLabelName{
+		@media(min-width: 0px){font-family: inherit; letter-spacing: normal;}
+	}
+	&waveLabelExtremum{
+		@media(min-width: 0px){font-family: monospace; letter-spacing: 0.5px;}
+	}
+	&waveLabelArrow{
+		@media(min-width: 0px){position: absolute; width: 0; height: 0; border-style: solid; z-index: 1;}
+	}
+	&waveLabelsContainer #{&}waveLabelArrow{
+		@media(min-width: 0px){top: 50%; transform: translateY(-50%);}
+	}
+	&waveLabelsVerticalContainer #{&}waveLabelArrow{
+		@media(min-width: 0px){left: 50%; transform: translateX(-50%);}
+	}
+	&graph{
+		@media(min-width: 0px){position: relative; width: 100%; height: 100%;}
+	}
+	&graph > #{&}wavesTransformLayer{
+		@media(min-width: 0px){position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; transform-origin: 50% 50%;}
+	}
+	&graph > #{&}gridStaticContainer{
+		@media(min-width: 0px){z-index: 4; pointer-events: none;}
+	}
+	&graph > #{&}gridAbsoluteContainer{
+		@media(min-width: 0px){z-index: 4; pointer-events: none;}
+	}
+	&graph > #{&}gridAbsoluteContainer #{&}gridWrapper{
+		@media(min-width: 0px){pointer-events: auto;}
+	}
+	&graph#{&}graphAxisSwapped #{&}xAxis.sun-active{
+		@media(min-width: 0px){background-color: #{$cp} !important; z-index: 6;}
+	}
+	&axis{
+		@media(min-width: 0px){position: absolute; background-color: #c9c9c9; z-index: 5; cursor: pointer; pointer-events: none;}
+	}
+	&xAxis{
+		@media(min-width: 0px){width: 100%; height: 1px; bottom: 50%; left: 0;}
+	}
+	&yAxis{
+		@media(min-width: 0px){width: 1px; height: 100%; left: 50%; top: 0;}
+	}
+	&gridWrapper{
+		@media(min-width: 0px){position: absolute;  height: 100%; cursor: pointer; z-index: 4;}
+	}
+	&gridWrapper:hover #{&}gridLineInner{
+		@media(min-width: 0px){background-color: #ccc;}
+	}
+	&gridLineInner{
+		@media(min-width: 0px){position: absolute; left: 50%; width: 1px; height: 100%; background-color: #eee; z-index: 5;}
+	}
+	&gridLineInner.sun-active{
+		@media(min-width: 0px){background-color: #{$cp} !important; z-index: 6 !important;}
+	}
+	&gridLineInner.sun-hasNotes{
+		@media(min-width: 0px){background-color: #{$danger-color};}
+	}
+	&gridWrapper:hover #{&}gridLineInner.sun-hasNotes{
+		@media(min-width: 0px){background-color: #ff4444;}
+	}
+	&gridLineInner.sun-active:hover{
+		@media(min-width: 0px){background-color: #{$cp} !important;}
+	}
+	&gridWrapper:hover #{&}gridLineInner.sun-active{
+		@media(min-width: 0px){background-color: #{$cp} !important;}
+	}
+	&gridLineInner.sun-active.sun-hasNotes{
+		@media(min-width: 0px){background-color: #{$danger-color} !important;}
+	}
+	&gridWrapper:hover #{&}gridLineInner.sun-active.sun-hasNotes{
+		@media(min-width: 0px){background-color: #{$danger-color} !important;}
+	}
+	&gridLine{
+		@media(min-width: 0px){position: absolute; background-color: #eee; z-index: 1;}
+	}
+	&gridLine#{&}gridLineX{
+		@media(min-width: 0px){width: 100%; height: 1px; left: 0;}
+	}
+	&gridLine#{&}gridLineY{
+		@media(min-width: 0px){width: 1px; height: 100%; top: 0; cursor: pointer; z-index: 6; background-color: #eee; transition: width 0.2s, background-color 0.2s;}
+	}
+	&gridLine#{&}gridLineY.sun-active{
+		@media(min-width: 0px){background-color: #{$cp}; width: 1px; z-index: 7;}
+	}
+	&gridLine#{&}gridLineY.sun-active:hover{
+		@media(min-width: 0px){background-color: #{$cp}; width: 1px;}
+	}
+	&gridLine#{&}gridLineY.sun-hasNotes{
+		@media(min-width: 0px){background-color: #{$danger-color};}
+	}
+	&gridLine#{&}gridLineY.sun-hasNotes:hover{
+		@media(min-width: 0px){background-color: #ff4444; width: 3px;}
+	}
+	&gridLine#{&}gridLineY.sun-active.sun-hasNotes{
+		@media(min-width: 0px){background-color: #{$danger-color};}
+	}
+	&gridLine#{&}gridLineY.sun-active.sun-hasNotes:hover{
+		@media(min-width: 0px){background-color: #{$danger-color}; width: 1px;}
+	}
+	&xLabels{
+		@media(min-width: 0px){bottom: 10px; transform: translateX(-50%); color: #{$text-secondary};}
+	}
+	&dateLabels{
+		@media(min-width: 0px){bottom: 30px; transform: translateX(-50%); color: #{$text-secondary};}
+	}
+	&dateRow{
+		@media(min-width: 0px){color: #{$text-secondary}; white-space: nowrap; font-size: inherit;}
+	}
+	&dateRow #{&}dateLabels{
+		@media(min-width: 0px){position: static; transform: none; bottom: auto; left: auto;}
+	}
+	&dateRow #{&}weekdayLabel{
+		@media(min-width: 0px){position: static; transform: none; bottom: auto; left: auto;}
+	}
+	&yLabels{
+		@media(min-width: 0px){left: 10px; transform: translateY(-50%); color: #{$text-secondary};}
+	}
+	&stateLabels{
+		@media(min-width: 0px){color: #{$text-secondary};}
+	}
+	&gridLine#{&}stateV{
+		@media(min-width: 0px){background-color: #eee; z-index: 1;}
+	}
+	&gridLine#{&}dayH{
+		@media(min-width: 0px){background-color: #eee; z-index: 1;}
+	}
+	&gridLine#{&}dayH.sun-active{
+		@media(min-width: 0px){background-color: #{$cp} !important; z-index: 6 !important;}
+	}
+	&centerDateLabel{
+		@media(min-width: 0px){position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); user-select: none; background: rgba(255, 255, 255, 0.9); padding: #{$spacing-xs} #{$spacing-sm}; z-index: 20; color: #{$text-color}; text-align: center; pointer-events: none; font-weight: 400; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2; font-size: #{$font-size-md}; min-height: auto;}
+	}
+	&centerDateTime{
+		@media(min-width: 0px){font-size: #{$font-size-md}; color: #{$text-secondary}; margin: 2px 0;}
+	}
+	&centerDateFractional{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; color: #{$text-secondary}; margin: 2px 0; opacity: 0.7;}
+	}
+	&centerDateName{
+		@media(min-width: 0px){font-size: #{$font-size-md}; color: #{$text-color}; margin-top: 2px;}
+	}
+	&centerDateMain{
+		@media(min-width: 0px){display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; margin-bottom: 4px;}
+	}
+	&centerDateDatetime{
+		@media(min-width: 0px){font-size: #{$font-size-md}; color: #{$text-color}; font-weight: 400; white-space: nowrap;}
+	}
+	&centerNameContainer{
+		@media(min-width: 0px){display: flex; align-items: center; gap: 4px; margin-top: 2px;}
+	}
+	&centerDateWeekday{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; color: #{$text-secondary}; margin-top: 4px; font-weight: 400;}
+	}
+	&centerDateStar{
+		@media(min-width: 0px){font-size: 22px;}
+	}
+	&waveIntersectionPoints{
+		@media(min-width: 0px){position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9;}
+	}
+	&waveIntersectionPoint{
+		@media(min-width: 0px){position: absolute; width: 6px; height: 6px; border: 2px solid #fff; background-color: #ff0000; cursor: pointer; pointer-events: auto; z-index: 10; transform: translate(-50%, -50%); transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);}
+	}
+	&waveIntersectionPoint:hover{
+		@media(min-width: 0px){transform: translate(-50%, -50%) scale(1.3); z-index: 11; box-shadow: 0 0 6px rgba(255, 0, 0, 0.7);}
+	}
+	&extremumLabel{
+		@media(min-width: 0px){position: absolute; font-size: 10px; font-family: #{$font-family}; white-space: nowrap; padding: 2px 6px; text-align: center; font-weight: 400; z-index: 9; pointer-events: none; transform: translateX(-50%); transition: transform 0.15s ease; background-color: rgb(192, 192, 192); color: #ffffff; border: 1px solid rgb(192, 192, 192);}
+	}
+	&extremumLabelTop{
+		@media(min-width: 0px){bottom: 100%; margin-bottom: 5px;}
+	}
+	&extremumLabelBottom{
+		@media(min-width: 0px){top: 100%; margin-top: 5px;}
+	}
+	&extremumLabelText{
+		@media(min-width: 0px){text-align: center; font-weight: 400; color: #000;}
+	}
+	&extremumLabelArrow{
+		@media(min-width: 0px){position: absolute; width: 0; height: 0; border-style: solid; z-index: 1; left: 50%; transform: translateX(-50%);}
+	}
+	&extremumLabelTop #{&}extremumLabelArrow{
+		@media(min-width: 0px){bottom: -6px; border-width: 6px 4px 0 4px; border-color: rgb(192, 192, 192) transparent transparent transparent;}
+	}
+	&extremumLabelBottom #{&}extremumLabelArrow{
+		@media(min-width: 0px){top: -6px; border-width: 0 4px 6px 4px; border-color: transparent transparent rgb(192, 192, 192) transparent;}
+	}
+	&extremumMarker{
+		@media(min-width: 0px){position: absolute; width: 1px; height: 15px; opacity: 0.7; z-index: 8; pointer-events: none;}
+	}
+	&extremumMarkerTop{
+		@media(min-width: 0px){top: 0;}
+	}
+	&extremumMarkerBottom{
+		@media(min-width: 0px){bottom: 0;}
+	}
+	&extremumWaveName{
+		@media(min-width: 0px){cursor: pointer; pointer-events: auto;}
+	}
+	&extremumLabel:hover{
+		@media(min-width: 0px){border-color: #000; z-index: 20; pointer-events: auto;}
+	}
+	&timeBarSegment #{&}extremumLabelTop #{&}extremumLabelArrow{
+		@media(min-width: 0px){position: absolute; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-style: solid; z-index: 1;}
+	}
+	&timeBarSegment #{&}extremumLabelTop #{&}extremumLabelArrowTop{
+		@media(min-width: 0px){top: -6px; bottom: auto; border-width: 0 4px 6px 4px; border-color: transparent transparent rgb(192, 192, 192) transparent;}
+	}
+	&timeBarSegment #{&}extremumLabelTop #{&}extremumLabelArrowBottom{
+		@media(min-width: 0px){top: auto; bottom: -6px; border-width: 6px 4px 0 4px; border-color: rgb(192, 192, 192) transparent transparent transparent;}
+	}
+	&timeBarSegment #{&}extremumLabelTop:hover #{&}extremumLabelArrowTop{
+		@media(min-width: 0px){border-top-color: transparent; border-right-color: transparent; border-left-color: transparent; border-bottom-color: #000;}
+	}
+	&timeBarSegment #{&}extremumLabelTop:hover #{&}extremumLabelArrowBottom{
+		@media(min-width: 0px){border-top-color: #000; border-right-color: transparent; border-left-color: transparent; border-bottom-color: transparent;}
+	}
+	&waveContainer{
+		@media(min-width: 0px){position: absolute; width: 3600px; height: 100%; left: 0; top: 0; z-index: 1; pointer-events: none;}
+	}
+	&waveContainerSwapped{
+		@media(min-width: 0px){width: 100%; height: auto;}
+	}
+	&wave{
+		@media(min-width: 0px){position: absolute; width: 100%; height: 100%; left: 0; top: 50%; transform: translateY(-50%);}
+	}
+	&waveContainerSwapped #{&}wave{
+		@media(min-width: 0px){top: 0; transform: none;}
+	}
+	&wavePath{
+		@media(min-width: 0px){fill: none; stroke-width: 1.5px; stroke-linecap: round;}
+	}
+	&wavePath#{&}bold{
+		@media(min-width: 0px){stroke-width: 3px;}
+	}
+	&waveSvgLayerB{
+		@media(min-width: 0px){opacity: 0.45;}
+	}
+	&wavePathPersonB{
+		@media(min-width: 0px){pointer-events: none;}
+	}
+	&waveLabel#{&}waveLabelPersonB{
+		@media(min-width: 0px){opacity: 0.5; font-style: italic; font-weight: 400; outline: 1px dashed rgba(255, 255, 255, 0.42); outline-offset: -1px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);}
+	}
+	&waveLabel#{&}waveLabelPersonB:hover{
+		@media(min-width: 0px){opacity: 0.88;}
+	}
+	&waveLabel#{&}waveLabelPersonB #{&}waveLabelText{
+		@media(min-width: 0px){letter-spacing: 0.35px;}
+	}
+	&waveLabel#{&}waveLabelPersonB{
+		@media(min-width: 0px){overflow: visible;}
+	}
+	&waveLabelsLeft #{&}waveLabel#{&}horizontal#{&}waveLabelPersonB[data-logical-edge]::before{
+		@media(min-width: 0px){content: ""; position: absolute; top: 50%; width: 12px; height: 2px; margin-top: -1px; background-color: inherit; opacity: 0.95; pointer-events: none; z-index: 0;}
+	}
+	&waveLabelsRight #{&}waveLabel#{&}horizontal#{&}waveLabelPersonB[data-logical-edge]::before{
+		@media(min-width: 0px){content: ""; position: absolute; top: 50%; width: 12px; height: 2px; margin-top: -1px; background-color: inherit; opacity: 0.95; pointer-events: none; z-index: 0;}
+	}
+	&waveLabelsLeft #{&}waveLabel#{&}horizontal#{&}waveLabelPersonB[data-logical-edge]::before{
+		@media(min-width: 0px){left: 0; right: auto; transform: translateX(-100%);}
+	}
+	&waveLabelsRight #{&}waveLabel#{&}horizontal#{&}waveLabelPersonB[data-logical-edge]::before{
+		@media(min-width: 0px){right: 0; left: auto; transform: translateX(100%);}
+	}
+	&waveLabelsTop #{&}waveLabel#{&}vertical#{&}waveLabelPersonB[data-logical-edge]::before{
+		@media(min-width: 0px){content: ""; position: absolute; left: 50%; width: 2px; height: 10px; margin-left: -1px; background-color: inherit; opacity: 0.95; pointer-events: none; z-index: 0;}
+	}
+	&waveLabelsBottom #{&}waveLabel#{&}vertical#{&}waveLabelPersonB[data-logical-edge]::before{
+		@media(min-width: 0px){content: ""; position: absolute; left: 50%; width: 2px; height: 10px; margin-left: -1px; background-color: inherit; opacity: 0.95; pointer-events: none; z-index: 0;}
+	}
+	&waveLabelsTop #{&}waveLabel#{&}vertical#{&}waveLabelPersonB[data-logical-edge]::before{
+		@media(min-width: 0px){top: 0; bottom: auto; transform: translate(-50%, -100%);}
+	}
+	&waveLabelsBottom #{&}waveLabel#{&}vertical#{&}waveLabelPersonB[data-logical-edge]::before{
+		@media(min-width: 0px){bottom: 0; top: auto; transform: translate(-50%, 100%);}
+	}
+	&waveAxisXPoint#{&}waveAxisXPointPersonB{
+		@media(min-width: 0px){opacity: 0.45; border-style: dashed;}
+	}
+	&waveAxisXPoint#{&}waveAxisXPointPersonB:hover{
+		@media(min-width: 0px){opacity: 0.85;}
+	}
+	&wavePath#{&}solid{
+		@media(min-width: 0px){stroke-dasharray: none;}
+	}
+	&wavePath#{&}dashed{
+		@media(min-width: 0px){stroke-dasharray: 5px;}
+	}
+	&wavePath#{&}dotted{
+		@media(min-width: 0px){stroke-dasharray: 2px;}
+	}
+	&wavePath#{&}zigzag{
+		@media(min-width: 0px){stroke-linecap: butt; stroke-dasharray: 3px;}
+	}
+	&wavePath#{&}dashDot{
+		@media(min-width: 0px){stroke-dasharray: 8px 2px 2px 2px;}
+	}
+	&wavePath#{&}longDash{
+		@media(min-width: 0px){stroke-dasharray: 12px 3px;}
+	}
+	&cornerSquare{
+		@media(min-width: 0px){position: fixed; width: #{$spacing-lg}; height: #{$spacing-lg}; background-color: red; z-index: #{$z-corner}; cursor: pointer;}
+	}
+	&cornerSquare#{&}cornerPosTl{
+		@media(min-width: 0px){top: 0; left: 0;}
+	}
+	&cornerSquare#{&}cornerPosTr{
+		@media(min-width: 0px){top: 0; right: 0;}
+	}
+	&cornerSquare#{&}cornerPosBl{
+		@media(min-width: 0px){bottom: 0; left: 0;}
+	}
+	&cornerSquare#{&}cornerPosBr{
+		@media(min-width: 0px){bottom: 0; right: 0;}
+	}
+	&cornerSquare#{&}cornerPosTc{
+		@media(min-width: 0px){top: 0; left: 50%; transform: translateX(-50%);}
+	}
+	&cornerSquare#{&}cornerPosBc{
+		@media(min-width: 0px){bottom: 0; left: 50%; transform: translateX(-50%);}
+	}
+	&cornerSquare#{&}cornerPosLc{
+		@media(min-width: 0px){left: 0; top: 50%; transform: translateY(-50%);}
+	}
+	&cornerSquare#{&}cornerPosRc{
+		@media(min-width: 0px){right: 0; top: 50%; transform: translateY(-50%);}
+	}
+	&cornerSquare#{&}cornerPosMt{
+		@media(min-width: 0px){top: 0; left: 25%;}
+	}
+	&cornerSquare#{&}cornerPosMb{
+		@media(min-width: 0px){bottom: 0; left: 25%;}
+	}
+	&cornerSquare#{&}cornerPosMl{
+		@media(min-width: 0px){left: 0; top: 25%;}
+	}
+	&cornerSquare#{&}cornerPosMr{
+		@media(min-width: 0px){right: 0; top: 25%;}
+	}
+	&cornerSquare#{&}cornerPosMt2{
+		@media(min-width: 0px){top: 0; left: 75%;}
+	}
+	&cornerSquare#{&}cornerPosMb2{
+		@media(min-width: 0px){bottom: 0; left: 75%;}
+	}
+	&cornerSquare#{&}cornerPosMl2{
+		@media(min-width: 0px){left: 0; top: 75%;}
+	}
+	&cornerSquare#{&}cornerPosMr2{
+		@media(min-width: 0px){right: 0; top: 75%;}
+	}
+	&panelSection{
+		@media(min-width: 0px){background: #fff; padding: #{$spacing-md}; overflow: visible; min-width: 0; outline: 1px solid #{$clg};}
+	}
+	&analysisEmpty{
+		@media(min-width: 0px){padding: #{$spacing-lg}; text-align: center; color: #999; font-style: italic; font-size: #{$font-size-sm}; background: #f9f9f9; border: 1px dashed #{$clg};}
+	}
+	&panelSection#{&}buttonsPanel{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs};}
+	}
+	&panelSection#{&}pagelImage{
+		@media(min-width: 0px){align-self: center;}
+	}
+	&panelSection#{&}pagelImage img{
+		@media(min-width: 0px){display: block; margin: 0 auto;}
+	}
+	&wavesListContainer{
+		@media(min-width: 0px){overflow: hidden; display: flex; flex-direction: column; flex: 1; min-height: 0;}
+	}
+	&wavesList{
+		@media(min-width: 0px){height: 100%; background: #fff; overflow-y: auto;}
+	}
+	&notesPanelLayout{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-lg};}
+	}
+	&notesListContainer{
+		@media(min-width: 0px){flex: 1; min-width: 200px;}
+	}
+	&noteEditorContainer{
+		@media(min-width: 0px){flex: 2; min-width: 300px;}
+	}
+	&warningOverlay{
+		@media(min-width: 0px){position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #{$cbg}; z-index: #{$z-overlay}; display: flex; justify-content: center; align-items: center; flex-direction: column; padding: #{$spacing-lg};}
+	}
+	&warningOverlay.sun-hidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&warningBox{
+		@media(min-width: 0px){background: #fff; padding: #{$spacing-xl}; border: 1px solid #{$clg}; max-width: 525px; text-align: center; display: block;}
+	}
+	&warningBox.sun-hidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&tabContainer{
+		@media(min-width: 0px){display: flex; flex-direction: column;}
+	}
+	&tabButtons{
+		@media(min-width: 0px){display: flex; padding: 0; gap: 0; flex-wrap: wrap;}
+	}
+	&tabButton{
+		@media(min-width: 0px){padding: 0 16px; background: none; border: none; cursor: pointer; color: #495057; font-size: #{$font-size-sm}; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400;}
+	}
+	&tabButton:last-child{
+		@media(min-width: 0px){border-right: none;}
+	}
+	&tabButton.sun-active{
+		@media(min-width: 0px){background: #{$cp}; color: #fff;}
+	}
+	&tabContent{
+		@media(min-width: 0px){display: none;}
+	}
+	&tabContent.sun-active{
+		@media(min-width: 0px){display: block;}
+	}
+	&inputGroup{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; margin-bottom: #{$spacing-sm};}
+	}
+	&inputRow{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center;}
+	}
+	&addCustomWaveForm{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; margin-bottom: #{$spacing-sm}; flex-wrap: wrap; font-size: #{$font-size-sm};}
+	}
+	&addGroupForm{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; margin-bottom: #{$spacing-md}; align-items: center; width: 100%;}
+	}
+	&formRow{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; height: 25px;}
+	}
+	&formLabel{
+		@media(min-width: 0px){width: 70px; font-weight: 400; flex-shrink: 0; font-size: #{$font-size-sm};}
+	}
+	&addCustomWaveForm#{&}compact{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; font-size: #{$font-size-sm};}
+	}
+	&addCustomWaveForm#{&}compact #{&}addGroupForm{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; width: 100%; align-items: center; margin-bottom: 0;}
+	}
+	&addCustomWaveForm#{&}compact #{&}addGroupInput{
+		@media(min-width: 0px){flex: 1; height: 25px; padding: 3px 5px; font-size: #{$font-size-sm}; min-width: 0;}
+	}
+	&addCustomWaveForm#{&}compact #{&}addGroupBtn{
+		@media(min-width: 0px){height: 25px; flex-shrink: 0; white-space: nowrap;}
+	}
+	&addCustomWaveForm#{&}compact #{&}waveInputsRow{
+		@media(min-width: 0px){display: flex; flex-direction: row; gap: #{$spacing-xs}; align-items: center; width: 100%;}
+	}
+	&addCustomWaveForm#{&}compact #{&}waveInputsRow #{&}formInput{
+		@media(min-width: 0px){height: 25px; padding: 3px 5px; font-size: #{$font-size-sm}; min-width: 120px;}
+	}
+	&addCustomWaveForm#{&}compact #{&}waveInputsRow #{&}customWaveName{
+		@media(min-width: 0px){flex: 2; min-width: 150px;}
+	}
+	&addCustomWaveForm#{&}compact #{&}waveInputsRow #{&}customWavePeriod{
+		@media(min-width: 0px){flex: 1; min-width: 100px;}
+	}
+	&addCustomWaveForm#{&}compact #{&}waveInputsRow select{
+		@media(min-width: 0px){flex: 1; min-width: 120px; height: 25px;}
+	}
+	&addCustomWaveForm#{&}compact #{&}waveInputsRow #{&}colorInput{
+		@media(min-width: 0px){width: 40px; height: 25px; padding: 0; margin: 0; align-self: center; cursor: pointer; flex-shrink: 0; box-sizing: border-box; display: block; border: 1px solid #{$clg};}
+	}
+	&addCustomWaveForm#{&}compact #{&}waveInputsRow #{&}btnAddCustomWave{
+		@media(min-width: 0px){height: 25px; flex-shrink: 0; white-space: nowrap; margin-top: 0;}
+	}
+	&displayViewTemplatesBar#{&}compact{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; font-size: #{$font-size-sm};}
+	}
+	&displayViewTemplatesSeparator{
+		@media(min-width: 0px){display: block; width: 100%; height: 1px; margin-top: #{$spacing-md}; margin-bottom: #{$spacing-md}; background-color: #{$clg}; border: none; flex-shrink: 0;}
+	}
+	&displayViewTemplatesLabel{
+		@media(min-width: 0px){font-weight: 400; color: #{$text-color};}
+	}
+	&displayViewTemplatesRow{
+		@media(min-width: 0px){display: flex; flex-wrap: wrap; gap: #{$spacing-xs}; align-items: center; width: 100%;}
+	}
+	&displayViewTemplatesRow #{&}displayViewTemplateSelect{
+		@media(min-width: 0px){flex: 1; min-width: 160px; height: 25px; font-size: #{$font-size-sm};}
+	}
+	&displayViewTemplatesRow #{&}newDisplayViewTemplateName{
+		@media(min-width: 0px){flex: 1; min-width: 140px; height: 25px; padding: 3px 5px; font-size: #{$font-size-sm};}
+	}
+	&displayViewTemplatesRow #{&}btnDeleteDisplayViewTemplate{
+		@media(min-width: 0px){height: 25px; flex-shrink: 0; white-space: nowrap;}
+	}
+	&displayViewTemplatesDescriptionRow{
+		@media(min-width: 0px){width: 100%;}
+	}
+	&displayViewTemplatesDescriptionInput{
+		@media(min-width: 0px){width: 100%; min-height: 44px; max-height: 160px; resize: vertical; font-size: #{$font-size-sm}; padding: 6px 8px; box-sizing: border-box; line-height: 1.35;}
+	}
+	&notesSection{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-sm};}
+	}
+	&dbImportSection{
+		@media(min-width: 0px){border: 1px solid #{$clg}; padding: #{$spacing-md};}
+	}
+	&dbImportTextarea{
+		@media(min-width: 0px){width: 100%; height: 200px; font-family: monospace; font-size: #{$font-size-sm};}
+	}
+	&dbImportControls{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; margin-bottom: #{$spacing-sm}; align-items: center;}
+	}
+	&intersectionResults{
+		@media(min-width: 0px){display: flex; flex-direction: column; min-height: 0;}
+	}
+	&intersectionItem{
+		@media(min-width: 0px){padding: #{$spacing-sm}; border-bottom: 1px solid #{$clg}; display: flex; justify-content: space-between; align-items: center;}
+	}
+	&intersectionInfo{
+		@media(min-width: 0px){flex: 1;}
+	}
+	&intersectionPeriod{
+		@media(min-width: 0px){font-weight: 400; color: #{$text-color};}
+	}
+	&intersectionMatchType{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; color: #{$text-secondary}; margin-top: 2px;}
+	}
+	&intersectionValue{
+		@media(min-width: 0px){color: #{$text-secondary}; margin: 0 #{$spacing-sm}; white-space: nowrap;}
+	}
+	&intersectionControls{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center;}
+	}
+	&exactMatch{
+		@media(min-width: 0px){background-color: #e6f7e6;}
+	}
+	&closeMatch{
+		@media(min-width: 0px){background-color: #fffbe6;}
+	}
+	&intersectionForm{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs};}
+	}
+	&intersectionFormRow{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center;}
+	}
+	&intersectionFormLabel{
+		@media(min-width: 0px){width: 100px; font-weight: 400; flex-shrink: 0; user-select: none; white-space: nowrap;}
+	}
+	&intersectionFormInput{
+		@media(min-width: 0px){flex: 1; padding: #{$spacing-xs}; border: 1px solid #{$clg}; min-width: 0; height: 25px;}
+	}
+	&intersectionFormActions{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; justify-content: flex-start;}
+	}
+	&intersectionStats{
+		@media(min-width: 0px){margin: #{$spacing-sm} 0; padding: #{$spacing-sm}; background: #f5f5f5; border: 1px solid #{$clg}; font-size: #{$font-size-sm};}
+	}
+	&flex1{
+		@media(min-width: 0px){flex: 1; min-width: 0;}
+	}
+	&flex2{
+		@media(min-width: 0px){flex: 2; min-width: 0;}
+	}
+	&addGroupFormMb{
+		@media(min-width: 0px){margin-bottom: #{$spacing-xs};}
+	}
+	&uHidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&intersectionLabelSpaced{
+		@media(min-width: 0px){margin-left: 10px;}
+	}
+	&warningDonateRow{
+		@media(min-width: 0px){height: 32px; /*display: flex;*/ display: none; justify-content: center; margin-top: 20px; max-width: 100%; overflow: hidden;}
+	}
+	&warningDonateFrame{
+		@media(min-width: 0px){width: 216px;}
+	}
+	&warningInfoStretch{
+		@media(min-width: 0px){flex: 1; border-bottom: 1px dotted; align-self: stretch;}
+	}
+	&hiddenColorPickerPos{
+		@media(min-width: 0px){position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;}
+	}
+	&intersectionEmpty{
+		@media(min-width: 0px){text-align: center; padding: 20px;}
+	}
+	&intersectionEmptyIcon{
+		@media(min-width: 0px){font-size: 32px; margin-bottom: 10px;}
+	}
+	&intersectionEmptyHint{
+		@media(min-width: 0px){font-size: 11px; color: #666; margin-top: 8px;}
+	}
+	&intersectionEmptyHintTight{
+		@media(min-width: 0px){font-size: 11px; color: #666; margin-top: 4px;}
+	}
+	&topControls{
+		@media(min-width: 0px){display: flex; align-items: center; justify-content: center; gap: #{$spacing-xs}; flex-wrap: wrap; width: 100%; min-width: 0; overflow: visible;}
+	}
+	&topControls > *{
+		@media(min-width: 0px){display: flex; align-items: center; min-height: 25px; overflow: visible;}
+	}
+	&transformControls{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; width: 100%;}
+	}
+	&transformRow{
+		@media(min-width: 0px){display: flex; justify-content: center; gap: #{$spacing-xs}; flex-wrap: wrap;}
+	}
+	&cornerControls{
+		@media(min-width: 0px){display: flex; flex-wrap: wrap; gap: #{$spacing-xs}; justify-content: center;}
+	}
+	&dateAddForm{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; margin-bottom: #{$spacing-sm};}
+	}
+	&dateControlsButtons{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; flex-wrap: wrap;}
+	}
+	&dateGenderSelect{
+		@media(min-width: 0px){flex: 0 0 auto; width: 42px; min-width: 42px; max-width: 42px; height: 25px; padding: 2px 4px; font-size: #{$font-size-sm}; text-align: center; text-align-last: center;}
+	}
+	&dateAddDescriptionRow{
+		@media(min-width: 0px){width: 100%;}
+	}
+	&dateAddDescriptionInput{
+		@media(min-width: 0px){width: 100%; min-height: 44px; max-height: 160px; resize: vertical; font-size: #{$font-size-sm}; padding: 6px 8px; box-sizing: border-box; line-height: 1.35;}
+	}
+	&dateTimeInputGroup{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; flex: 1; min-width: 0; align-items: center; overflow: visible;}
+	}
+	&topControls #{&}dateTimeInputGroup #{&}dateInput{
+		@media(min-width: 0px){overflow: visible;}
+	}
+	&groupChildren[style*="display: block"]{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&groupChildren[style*="display:block"]{
+		@media(min-width: 0px){display: block !important;}
+	}
+	&groupChildren > *{
+		@media(min-width: 0px){display: flex !important; visibility: visible !important; opacity: 1 !important;}
+	}
+	&summaryPanel{
+		@media(min-width: 0px){width: 100%; max-width: 100%; margin-top: 0; padding: #{$spacing-md}; background: #fff; border: 1px solid #{$clg}; box-sizing: border-box; min-width: 0;}
+	}
+	&summaryHeader{
+		@media(min-width: 0px){margin-bottom: #{$spacing-md}; padding-bottom: #{$spacing-xs}; border-bottom: 1px solid #{$clg};}
+	}
+	&summaryHeader h3{
+		@media(min-width: 0px){margin: 0; font-size: #{$font-size-lg}; font-weight: 400; color: #{$text-color};}
+	}
+	&summaryControls{
+		@media(min-width: 0px){margin-bottom: #{$spacing-md}; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box;}
+	}
+	&summarySelectRow{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; margin-bottom: #{$spacing-md}; align-items: center; flex-wrap: wrap; width: 100%; max-width: 100%; min-width: 0;}
+	}
+	&summarySelectGroup{
+		@media(min-width: 0px){display: flex; align-items: center; gap: #{$spacing-xs}; min-width: 0; flex: 1 1 100%; max-width: 100%; flex-wrap: wrap;}
+	}
+	&summaryLabel{
+		@media(min-width: 0px){font-weight: 400; color: #{$text-color}; font-size: #{$font-size-sm}; white-space: nowrap;}
+	}
+	&summarySelect{
+		@media(min-width: 0px){flex: 1 1 10em; min-width: 0; max-width: 100%; padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-size: #{$font-size-sm}; height: 25px; box-sizing: border-box;}
+	}
+	&summarySelectGroup #{&}summarySelect{
+		@media(min-width: 0px){flex: 1 1 140px; max-width: min(100%, 320px);}
+	}
+	&intersectionSelectGroup #{&}summarySelect{
+		@media(min-width: 0px){flex: 0 0 auto; width: 100%; max-width: 100%; height: 25px;}
+	}
+	&dateComparisonSelects #{&}summarySelect{
+		@media(min-width: 0px){flex: 0 0 auto; width: 100%; max-width: 100%; height: 25px;}
+	}
+	&summaryDuplicateButtons{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs};}
+	}
+	&summaryDuplicateButtons #{&}uiBtn{
+		@media(min-width: 0px){height: 25px; padding: #{$spacing-xs} #{$spacing-sm}; font-size: #{$font-size-sm}; white-space: nowrap;}
+	}
+	&summaryResultsContainer{
+		@media(min-width: 0px){max-height: 400px; min-height: 200px; overflow-y: auto; border: 1px solid #{$clg}; background: #fff;}
+	}
+	&summaryResultsContainer #{&}summaryResults{
+		@media(min-width: 0px){overflow: visible; max-height: none;}
+	}
+	&summaryResultsContainer #{&}intersectionResults{
+		@media(min-width: 0px){overflow: visible; max-height: none;}
+	}
+	&summaryResults{
+		@media(min-width: 0px){display: flex; flex-direction: column;}
+	}
+	&summaryEmpty{
+		@media(min-width: 0px){padding: #{$spacing-lg}; text-align: center; color: #999; font-style: italic; font-size: #{$font-size-sm};}
+	}
+	&summaryItem{
+		@media(min-width: 0px){display: flex; align-items: center; justify-content: space-between; padding: #{$spacing-sm}; border-bottom: 1px solid #eee; background: #fff; gap: #{$spacing-sm}; cursor: pointer; transition: background-color 0.2s;}
+	}
+	&summaryItem:hover{
+		@media(min-width: 0px){background-color: #f5f5f5;}
+	}
+	&summaryItemInfo{
+		@media(min-width: 0px){flex: 1; min-width: 0;}
+	}
+	&summaryItemName{
+		@media(min-width: 0px){font-weight: 400; margin-bottom: #{$spacing-xs}; display: flex; align-items: center; gap: #{$spacing-xs}; flex-wrap: wrap;}
+	}
+	&summaryItemIndex{
+		@media(min-width: 0px){color: #{$text-secondary}; font-size: #{$font-size-sm}; font-weight: 400;}
+	}
+	&summaryItemDetails{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-md}; font-size: #{$font-size-sm}; color: #{$text-secondary}; flex-wrap: wrap;}
+	}
+	&summaryItemState{
+		@media(min-width: 0px){font-weight: 400; color: #{$text-color};}
+	}
+	&summaryItemDifference{
+		@media(min-width: 0px){color: #666;}
+	}
+	&summaryItemCloseness{
+		@media(min-width: 0px){padding: 1px 6px; font-size: #{$font-size-xs}; font-weight: 400; outline: 1px solid #000;}
+	}
+	&summaryItemActions{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; flex-shrink: 0;}
+	}
+	&summaryItemActions #{&}uiBtn{
+		@media(min-width: 0px){height: 25px; padding: #{$spacing-xs} #{$spacing-sm}; font-size: #{$font-size-sm}; white-space: nowrap;}
+	}
+	&summaryItemColor{
+		@media(min-width: 0px){width: 25px; height: 25px; flex-shrink: 0;}
+	}
+	&summaryItemExact #{&}summaryItemCloseness{
+		@media(min-width: 0px){background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;}
+	}
+	&summaryItemVeryClose #{&}summaryItemCloseness{
+		@media(min-width: 0px){background: #4caf50; color: white;}
+	}
+	&summaryItemClose #{&}summaryItemCloseness{
+		@media(min-width: 0px){background: #8bc34a; color: black;}
+	}
+	&summaryItemFairlyClose #{&}summaryItemCloseness{
+		@media(min-width: 0px){background: #ffc107; color: black;}
+	}
+	&summaryItemNearby #{&}summaryItemCloseness{
+		@media(min-width: 0px){background: #ff9800; color: black;}
+	}
+	&wavePeriodBadge{
+		@media(min-width: 0px){background: #e0e0e0; padding: 2px 6px; font-size: 10px; font-weight: 400;}
+	}
+	&intersectionControls{
+		@media(min-width: 0px){margin-bottom: #{$spacing-md};}
+	}
+	&intersectionForm{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs};}
+	}
+	&intersectionFormRow{
+		@media(min-width: 0px){display: flex; align-items: center; flex-wrap: wrap; gap: #{$spacing-xs};}
+	}
+	&intersectionSelect{
+		@media(min-width: 0px){width: 100%; padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-size: #{$font-size-sm}; height: 25px; background: #fff;}
+	}
+	&intersectionFormLabel{
+		@media(min-width: 0px){display: flex; align-items: center; gap: #{$spacing-xs}; font-size: #{$font-size-sm}; cursor: pointer; white-space: nowrap;}
+	}
+	&intersectionResultsContainer{
+		@media(min-width: 0px){max-height: 400px; min-height: 200px; overflow-y: auto; border: 1px solid #{$clg}; background: #fff;}
+	}
+	&intersectionResults{
+		@media(min-width: 0px){display: flex; flex-direction: column;}
+	}
+	&intersectionResultItem{
+		@media(min-width: 0px){display: flex; align-items: center; justify-content: space-between; padding: #{$spacing-sm}; border-bottom: 1px solid #eee; background: #fff; gap: #{$spacing-sm}; cursor: pointer; transition: background-color 0.2s;}
+	}
+	&intersectionResultItem:hover{
+		@media(min-width: 0px){background-color: #f5f5f5;}
+	}
+	&intersectionResultInfo{
+		@media(min-width: 0px){flex: 1; min-width: 0;}
+	}
+	&intersectionResultName{
+		@media(min-width: 0px){font-weight: 400; margin-bottom: #{$spacing-xs}; display: flex; align-items: center; gap: #{$spacing-xs}; flex-wrap: wrap;}
+	}
+	&intersectionResultIndex{
+		@media(min-width: 0px){color: #{$text-secondary}; font-size: #{$font-size-sm}; font-weight: 400;}
+	}
+	&waveName{
+		@media(min-width: 0px){font-weight: 400;}
+	}
+	&wavePeriodBadge{
+		@media(min-width: 0px){background: #e0e0e0; padding: 2px 6px; font-size: 10px; font-weight: 400;}
+	}
+	&pastWaveMarker{
+		@media(min-width: 0px){color: #999; font-style: italic; font-size: 10px;}
+	}
+	&intersectionResultDetails{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-md}; font-size: #{$font-size-sm}; color: #{$text-secondary}; flex-wrap: wrap;}
+	}
+	&intersectionResultState{
+		@media(min-width: 0px){font-weight: 400; color: #{$text-color};}
+	}
+	&intersectionResultDifference{
+		@media(min-width: 0px){color: #666;}
+	}
+	&intersectionResultCloseness{
+		@media(min-width: 0px){padding: 1px 6px; font-size: 10px; font-weight: 400;}
+	}
+	&intersectionResultCloseness#{&}intersectionItemExact{
+		@media(min-width: 0px){background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;}
+	}
+	&intersectionResultCloseness#{&}intersectionItemVeryClose{
+		@media(min-width: 0px){background: #4caf50; color: white;}
+	}
+	&intersectionResultCloseness#{&}intersectionItemClose{
+		@media(min-width: 0px){background: #8bc34a; color: black;}
+	}
+	&intersectionResultCloseness#{&}intersectionItemFairlyClose{
+		@media(min-width: 0px){background: #ffc107; color: black;}
+	}
+	&intersectionResultCloseness#{&}intersectionItemNearby{
+		@media(min-width: 0px){background: #ff9800; color: black;}
+	}
+	&intersectionResultCloseness#{&}intersectionItemWithinTolerance{
+		@media(min-width: 0px){background: #f44336; color: white;}
+	}
+	&intersectionResultColor{
+		@media(min-width: 0px){width: 25px; height: 25px; flex-shrink: 0;}
+	}
+	&intersectionResultActions{
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; flex-shrink: 0;}
+	}
+	&intersectionResultActions #{&}uiBtn{
+		@media(min-width: 0px){height: 25px; padding: #{$spacing-xs} #{$spacing-sm}; font-size: #{$font-size-sm}; white-space: nowrap;}
+	}
+	&intersectionStats{
+		@media(min-width: 0px){margin: #{$spacing-sm} 0; padding: #{$spacing-md}; background: #e9f7ef; border: 1px solid #c3e6cb; font-size: #{$font-size-sm}; line-height: 1.4; color: #155724;}
+	}
+	&intersectionStats strong{
+		@media(min-width: 0px){font-weight: 400; color: #0c4121;}
+	}
+	&intersectionStatsContent{
+		@media(min-width: 0px){line-height: 1.5;}
+	}
+	&listEmpty{
+		@media(min-width: 0px){padding: #{$spacing-lg}; text-align: center; color: #999; font-style: italic; font-size: #{$font-size-sm};}
+	}
+	&intersectionFormRowActions{
+		@media(min-width: 0px){display: flex; flex-wrap: wrap; align-items: center; gap: #{$spacing-xs}; margin-left: auto;}
+	}
+	&intersectionForm > #{&}intersectionFormRowActions{
+		@media(min-width: 0px){justify-content: flex-end; margin-left: 0; margin-top: #{$spacing-xs};}
+	}
+	&dateComparisonViewTabs{
+		@media(min-width: 0px){border: 1px solid #{$clg}; overflow: hidden; background: #fff; margin-top: #{$spacing-sm}; margin-bottom: #{$spacing-md};}
+	}
+	&dateComparisonViewTabs + #{&}summaryResultsContainer{
+		@media(min-width: 0px){margin-top: #{$spacing-sm};}
+	}
+	&tabContainer:has(> #{&}tabButtonsFramed){
+		@media(min-width: 0px){gap: #{$spacing-sm};}
+	}
+	&dateComparisonViewTabs #{&}tabButton{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; padding: 6px 10px; flex: 1 1 0; font-weight: 400; display: flex; align-items: center; justify-content: center;}
+	}
+	&dateComparisonViewTabs #{&}tabButton.sun-active{
+		@media(min-width: 0px){font-weight: 400;}
+	}
+	&dateComparisonIntro{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; color: #{$text-secondary}; margin: 0 0 #{$spacing-md}; line-height: 1.4;}
+	}
+	&dateComparisonSelects{
+		@media(min-width: 0px){gap: #{$spacing-xs}; align-items: flex-end;}
+	}
+	&dateComparisonSelects #{&}intersectionSelectGroup{
+		@media(min-width: 0px){flex: 1; min-width: 140px; display: flex; flex-direction: column; gap: #{$spacing-xs};}
+	}
+	&intersectionSelectGroup{
+		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs};}
+	}
+	&intersectionToolbarOneRow{
+		@media(min-width: 0px){margin-bottom: #{$spacing-sm};}
+	}
+	&intersectionToolbarOneRow #{&}intersectionSelectGroup{
+		@media(min-width: 0px){flex: 1 1 130px; min-width: 0; max-width: min(100%, 220px);}
+	}
+	&dateComparisonSelects #{&}intersectionFormLabel{
+		@media(min-width: 0px){cursor: default;}
+	}
+	&dateComparisonTable{
+		@media(min-width: 0px){width: 100%; border-collapse: collapse; font-size: #{$font-size-sm}; border: 1px solid #{$clg};}
+	}
+	&dateComparisonTable th{
+		@media(min-width: 0px){text-align: left; padding: #{$spacing-xs} #{$spacing-sm}; border: 1px solid #{$clg}; background: #f8f9fa; font-weight: 400; white-space: nowrap;}
+	}
+	&dateComparisonTable td{
+		@media(min-width: 0px){padding: #{$spacing-xs} #{$spacing-sm}; border: 1px solid #{$clg}; vertical-align: middle;}
+	}
+	&dateComparisonTable tbody tr:hover{
+		@media(min-width: 0px){background-color: #f0f4f8;}
+	}
+	&dateComparisonTable td#{&}dateComparisonState{
+		@media(min-width: 0px){width: 1%; white-space: nowrap;}
+	}
+	&waveDirectionLabel{
+		@media(min-width: 0px){margin-left: 0.15em;}
+	}
+	&dateComparisonName{
+		@media(min-width: 0px){font-weight: 400;}
+	}
+	&dateComparisonPeriod{
+		@media(min-width: 0px){font-weight: 400; color: #{$text-secondary}; font-size: 11px;}
+	}
+	&dateComparisonColor{
+		@media(min-width: 0px){display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: middle; flex-shrink: 0;}
+	}
+	&dateComparisonActions{
+		@media(min-width: 0px){white-space: nowrap; width: 1%;}
+	}
+	&dateComparisonTable #{&}dateComparisonActions #{&}uiBtn{
+		@media(min-width: 0px){font-size: 11px; padding: 4px 8px;}
+	}
+	&intersectionTimeRail{
+		@media(min-width: 0px){position: fixed; inset: 0; z-index: 950; display: none; font-family: #{$font-family}; color: #{$text-color};}
+	}
+	&intersectionTimeRail#{&}intersectionTimeRailOpen{
+		@media(min-width: 0px){display: block;}
+	}
+	&intersectionTimeRailBackdrop{
+		@media(min-width: 0px){position: absolute; inset: 0; background: #{$cbg}; cursor: pointer;}
+	}
+	&intersectionTimeRailPanel{
+		@media(min-width: 0px){position: absolute; inset: 0; overflow: hidden; pointer-events: none;}
+	}
+	&intersectionTimeRailClose{
+		@media(min-width: 0px){position: absolute; top: 14px; left: 50%; transform: translateX(-50%); z-index: 960; pointer-events: auto; padding: 6px 14px; font-size: #{$font-size-sm};}
+	}
+	&intersectionTimeRailNowLine{
+		@media(min-width: 0px){position: absolute; left: 0; right: 0; top: 50%; height: 1px; margin-top: -0.5px; background: #{$cp}; pointer-events: none; z-index: 4;}
+	}
+	&intersectionTimeRailPersonRow{
+		@media(min-width: 0px){position: absolute; left: 25%; top: calc(50% - clamp(2.6rem, 7.5vw, 3.35rem)); transform: translate(-50%, -100%); z-index: 5; width: min(92vw, 640px); max-width: 100%; box-sizing: border-box; pointer-events: auto; display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 8px 10px;}
+	}
+	&intersectionTimeRailPersonField{
+		@media(min-width: 0px){flex: 1 1 140px; min-width: 0; display: flex; flex-direction: column; align-items: stretch; gap: 4px;}
+	}
+	&intersectionTimeRailPersonLabel{
+		@media(min-width: 0px){justify-content: center; width: auto; margin: 0; padding: 0; cursor: default; font-size: #{$font-size-xs}; color: #{$text-secondary}; font-weight: 400;}
+	}
+	&intersectionTimeRailPersonField #{&}summarySelect{
+		@media(min-width: 0px){flex: 0 0 auto; width: 100%; max-width: 100%; height: 25px; min-height: 25px; box-sizing: border-box;}
+	}
+	&intersectionTimeRailPersonField #{&}intersectionTimeRailPersonSelect{
+		@media(min-width: 0px){flex: 0 0 auto; width: 100%; max-width: 100%; height: 25px; min-height: 25px; box-sizing: border-box;}
+	}
+	&intersectionTimeRailNowIndicator{
+		@media(min-width: 0px){position: absolute; left: 25%; top: 50%; transform: translate(-50%, -50%); z-index: 5; border: 1px solid #{$cp}; background: #{$cbg}; box-sizing: border-box; pointer-events: none;}
+	}
+	&intersectionTimeRailNowIndicator::after{
+		@media(min-width: 0px){content: ""; position: absolute; left: 7px; right: 7px; height: 5px; background: #{$cbg}; pointer-events: none; z-index: 1;}
+	}
+	&intersectionTimeRailNowIndicator::before{
+		@media(min-width: 0px){top: -3px;}
+	}
+	&intersectionTimeRailNowIndicator::after{
+		@media(min-width: 0px){bottom: -3px;}
+	}
+	&intersectionTimeRailNowLabel{
+		@media(min-width: 0px){position: relative; z-index: 2; display: block; padding: 8px 12px; font-size: clamp(1.125rem, 3.2vw, 1.5rem); font-weight: 400; font-variant-numeric: tabular-nums; line-height: 1.15; white-space: nowrap; color: #{$text-color}; background: transparent;}
+	}
+	&intersectionTimeRailMirror{
+		@media(min-width: 0px){position: absolute; left: 25%; top: calc(50% + clamp(2.5rem, 8vh, 4rem)); transform: translateX(-50%); z-index: 6; max-width: min(92vw, 520px); width: max(240px, 70vw); padding: 10px 12px 12px; box-sizing: border-box; text-align: center; color: #{$text-color}; background: #{$cbg}; border: 1px solid #{$clg}; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06); pointer-events: none;}
+	}
+	&intersectionTimeRailMirrorTitle{
+		@media(min-width: 0px){font-size: #{$font-size-sm}; font-weight: 400; color: #{$text-secondary}; margin-bottom: 8px; letter-spacing: 0.02em;}
+	}
+	&intersectionTimeRailMirrorRow{
+		@media(min-width: 0px){display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 6px; font-size: #{$font-size-xs}; font-weight: 400; line-height: 1.25;}
+	}
+	&intersectionTimeRailMirrorPrev{
+		@media(min-width: 0px){flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; text-align: center; font-variant-numeric: tabular-nums;}
+	}
+	&intersectionTimeRailMirrorHead{
+		@media(min-width: 0px){flex: 0 0 auto; font-size: 1.35rem; line-height: 1; opacity: 0.9;}
+	}
+	&intersectionTimeRailMirrorSep{
+		@media(min-width: 0px){margin: 6px 0 6px; font-family: ui-monospace, monospace; font-size: 10px; color: #{$text-secondary}; letter-spacing: 0.05em;}
+	}
+	&intersectionTimeRailMirrorStats{
+		@media(min-width: 0px){margin: 0; padding: 0;}
+	}
+	&intersectionTimeRailMirrorStats > #{&}intersectionTimeRailMirrorCountdown{
+		@media(min-width: 0px){margin: 6px 0 0; padding: 0; font-size: #{$font-size-xs}; font-weight: 400; line-height: 1.35; color: #{$text-color}; font-variant-numeric: tabular-nums;}
+	}
+	&intersectionTimeRailMirrorStats > #{&}intersectionTimeRailMirrorDuration{
+		@media(min-width: 0px){margin-top: 0;}
+	}
+	&intersectionTimeRailWaveAxis{
+		@media(min-width: 0px){position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; margin-left: -0.5px; pointer-events: none; z-index: 3;}
+	}
+	&intersectionTimeRailViewport{
+		@media(min-width: 0px){position: absolute; inset: 0; overflow: hidden;}
+	}
+	&intersectionTimeRailTrack{
+		@media(min-width: 0px){position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+	}
+	&intersectionTimeRailHour{
+		@media(min-width: 0px){position: absolute; left: 10%; right: 10%; height: 1px; background: #{$clg}; pointer-events: none;}
+	}
+	&intersectionTimeRailCrossWindow{
+		@media(min-width: 0px){position: absolute; left: 0; right: 0; top: 0; transform: translateY(-50%); min-height: 1.1em; pointer-events: none; z-index: 0;}
+	}
+	&intersectionTimeRailCrossWindowBar{
+		@media(min-width: 0px){position: absolute; left: 50%; top: 50%; width: calc(#{$cross-window-half} * 2); height: 1px; transform: translate(-50%, -50%); z-index: 1;}
+	}
+	&intersectionTimeRailCrossWindowTime{
+		@media(min-width: 0px){position: absolute; left: max(2%, 8px); right: calc(50% + #{$cross-window-half} + 8px); top: 50%; transform: translateY(-50%); font-size: #{$font-size-xs}; font-weight: 400; color: #{$text-color}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; font-variant-numeric: tabular-nums; z-index: 2;}
+	}
+	&intersectionTimeRailHourLabel{
+		@media(min-width: 0px){position: absolute; font-size: 10px; color: #{$text-secondary}; white-space: nowrap;}
+	}
+	&intersectionTimeRailHourLabelStart{
+		@media(min-width: 0px){left: 10%; transform: translate(calc(-100% - 6px), -50%); text-align: right;}
+	}
+	&intersectionTimeRailHourLabelEnd{
+		@media(min-width: 0px){left: 90%; transform: translate(6px, -50%); text-align: left;}
+	}
+	&intersectionTimeRailCross{
+		@media(min-width: 0px){position: absolute; left: 0; right: 0; top: 0; transform: translateY(-50%); min-height: 1.4em; pointer-events: none; z-index: 1;}
+	}
+	&intersectionTimeRailCrossBar{
+		@media(min-width: 0px){position: absolute; left: 50%; top: 50%; width: calc(#{$cross-bar-half} * 2); height: 1px; transform: translate(-50%, -50%); z-index: 2;}
+	}
+	&intersectionTimeRailCrossTime{
+		@media(min-width: 0px){position: absolute; left: max(2%, 8px); right: calc(50% + #{$cross-bar-half} + 10px); top: 50%; transform: translateY(-50%); font-size: #{$font-size-sm}; font-weight: 400; color: #{$text-color}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; font-variant-numeric: tabular-nums;}
+	}
+	&intersectionTimeRailCrossNames{
+		@media(min-width: 0px){position: absolute; left: calc(50% + #{$cross-bar-half} + 10px); right: max(2%, 8px); top: 50%; transform: translateY(-50%); font-size: #{$font-size-sm}; font-weight: 400; color: #{$text-color}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;}
+	}
+	&gridAbsoluteContainer{
+		@media(min-width: 0px){position: absolute; width: 100%; height: 100%; top: 0; left: 0;}
+	}
+	&gridStaticContainer{
+		@media(min-width: 0px){position: absolute; width: 100%; height: 100%; top: 0; left: 0;}
+	}
+	&labels{
+		@media(min-width: 0px){position: absolute;}
+	}
+	&dateLabels{
+		@media(min-width: 0px){bottom: 30px; transform: translateX(-50%);}
+	}
+	&weekdayLabel{
+		@media(min-width: 0px){bottom: #{$spacing-sm}; transform: translateX(-50%);}
+	}
+	&yLabels{
+		@media(min-width: 0px){left: #{$spacing-sm}; transform: translateY(-50%);}
+	}
+	&waveLabel#{&}horizontal{
+		@media(min-width: 0px){position: absolute; background-color: #666; color: #fff; opacity: 0.5; z-index: 1; padding: 2px 6px; font-size: #{$font-size-sm}; transform: translateY(-50%); cursor: pointer;}
+	}
+	&waveLabel#{&}horizontal:hover{
+		@media(min-width: 0px){opacity: 1; z-index: 10;}
+	}
+	&waveLabel#{&}horizontal#{&}left{
+		@media(min-width: 0px){right: 0; margin-right: #{$sun-wave-label-edge-gap};}
+	}
+	&waveLabel#{&}horizontal#{&}right{
+		@media(min-width: 0px){left: 0; margin-left: #{$sun-wave-label-edge-gap};}
+	}
+	&waveLabelArrow{
+		@media(min-width: 0px){position: absolute; width: 0; height: 0; border-style: solid; z-index: 1;}
+	}
+	&waveLabel#{&}vertical{
+		@media(min-width: 0px){position: absolute; background-color: #666; color: #fff; opacity: 0.5; z-index: 1; padding: 2px 6px; font-size: #{$font-size-sm}; transform: translateX(-50%); cursor: pointer;}
+	}
+	&waveLabel#{&}vertical#{&}waveLabelExtremum{
+		@media(min-width: 0px){font-family: monospace; letter-spacing: 0.5px;}
+	}
+	&waveLabel#{&}vertical#{&}waveLabelName{
+		@media(min-width: 0px){font-family: inherit; letter-spacing: normal;}
+	}
+
+	/* --- migration blocks from HEAD --- */
+
+	&dateComparisonActionsBtn{
+		@media(min-width: 0px){font-size: 11px; padding: 4px 8px;}
+	}
+	&dateComparisonState{
+		@media(min-width: 0px){width: 1%; white-space: nowrap;}
+	}
+	&dateComparisonTableCell{
+		@media(min-width: 0px){padding: #{$spacing-xs} #{$spacing-sm}; border: 1px solid #{$clg}; vertical-align: middle;}
+	}
+	&dateComparisonTableHeadCell{
+		@media(min-width: 0px){text-align: left; padding: #{$spacing-xs} #{$spacing-sm}; border: 1px solid #{$clg}; background: #f8f9fa; font-weight: 400; white-space: nowrap;}
+	}
+	&dateComparisonTableRow{
+		&:hover{
+			@media(min-width: 0px){background-color: #f0f4f8;}
+		}
+	}
+	&dateDescriptionEdit{
+		@media(min-width: 0px){width: 100%; min-height: 44px; max-height: 160px; resize: vertical; height: auto; padding: 6px 8px; box-sizing: border-box; line-height: 1.35; font-family: #{$font-family}; font-size: #{$font-size-sm};}
+	}
+	&dateEditForm{
+		@media(min-width: 0px){flex-direction: column; align-items: stretch; gap: #{$spacing-xs};}
+	}
+	&dateGenderBadge{
+		@media(min-width: 0px){margin: 0 0.15em;}
+	}
+	&dateInPersonGroup{
+		@media(min-width: 0px){background: #fafafa;}
+		&:hover{
+			@media(min-width: 0px){background: #f0f0f0;}
+		}
+	}
+	&dateInputInListEdit{
+		@media(min-width: 0px){flex: 0 1 auto; min-width: 140px;}
+	}
+	&dateNameEdit{
+		@media(min-width: 0px){flex: 1; min-width: 120px;}
+	}
+	&dateSelectionChecks{
+		@media(min-width: 0px){pointer-events: auto; display: flex; align-items: center; gap: 6px;}
+	}
+	&datesPanelInControl{
+		@media(min-width: 0px){grid-column: 1;}
+	}
+	&extremumLabelArrowBottomInSegment{
+		@media(min-width: 0px){top: auto; bottom: -6px; border-width: 6px 4px 0 4px; border-color: rgb(192, 192, 192) transparent transparent transparent;}
+	}
+	&extremumLabelArrowInSegment{
+		@media(min-width: 0px){position: absolute; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-style: solid; z-index: 1;}
+	}
+	&extremumLabelArrowTopInSegment{
+		@media(min-width: 0px){top: -6px; bottom: auto; border-width: 0 4px 6px 4px; border-color: transparent transparent rgb(192, 192, 192) transparent;}
+	}
+	&extremumLabelTextInSegment{
+		@media(min-width: 0px){overflow: visible; text-overflow: clip;}
+	}
+	&extremumWaveNameInSegment{
+		@media(min-width: 0px){cursor: pointer; pointer-events: auto; text-decoration: none;}
+	}
+	&extremumWaveNameOnVizor{
+		@media(min-width: 0px){text-decoration: underline; text-underline-offset: 2px;}
+	}
+	&gridWrapperInAbsolute{
+		@media(min-width: 0px){pointer-events: auto;}
+	}
+	&groupChildrenItem{
+		@media(min-width: 0px){display: flex !important; visibility: visible !important; opacity: 1 !important;}
+	}
+	&groupChildrenOpen{
+		@media(min-width: 0px){display: block;}
+	}
+	&hourLabelInTimeBar{
+		@media(min-width: 0px){font-size: 10px;}
+	}
+	&hourLabelMidnight{
+		@media(min-width: 0px){color: #{$danger-color}; font-weight: 400;}
+	}
+	&hourMarkerInTimeBar{
+		@media(min-width: 0px){min-height: 100%; box-sizing: border-box;}
+	}
+	&intersectionFormRowActionsInForm{
+		@media(min-width: 0px){justify-content: flex-end; margin-left: 0; margin-top: #{$spacing-xs};}
+	}
+	&intersectionTimeRailMirrorCountdownInStats{
+		@media(min-width: 0px){margin: 6px 0 0; padding: 0; font-size: #{$font-size-xs}; font-weight: 400; line-height: 1.35; color: #{$text-color}; font-variant-numeric: tabular-nums;}
+	}
+	&intersectionTimeRailMirrorDurationInStats{
+		@media(min-width: 0px){margin-top: 0;}
+	}
+	&listItemDragHandleMuted{
+		@media(min-width: 0px){opacity: 0.3; cursor: default;}
+	}
+	&listItemEditRowDateActions{
+		@media(min-width: 0px){display: flex; width: 100%; justify-content: flex-end;}
+	}
+	&listItemEditRowDateMain{
+		@media(min-width: 0px){display: flex; flex-wrap: wrap; gap: #{$spacing-xs}; align-items: center; width: 100%;}
+	}
+	&listItemEditRowFull{
+		@media(min-width: 0px){width: 100%;}
+	}
+	&listItemSaveFlash{
+		&::before{
+			@media(min-width: 0px){content: ""; position: absolute; inset: 1px; z-index: 0; pointer-events: none; animation: list-item-save-flash 0.85s ease-out forwards;}
+		}
+	}
+	&listItemSaveFlashChild{
+		@media(min-width: 0px){position: relative; z-index: 1;}
+	}
+	&listItemViewForceShown{
+		@media(min-width: 0px){display: flex !important;}
+	}
+	&listItemViewHidden{
+		@media(min-width: 0px){display: none !important;}
+	}
+	&listItemViewShown{
+		@media(min-width: 0px){display: flex !important;}
+	}
+	&secretSchemeCell{
+		@media(min-width: 0px){display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; width: 100%; height: 100%; padding: 0; box-sizing: border-box; background: #fff; outline: 1px solid #{$clg}; transition: background-color 0.15s ease, color 0.15s ease; font-size: #{$font-size-sm}; font-variant-numeric: tabular-nums; color: #{$text-color};}
+	}
+	&tabButtonsTimeBarControls{
+		@media(min-width: 0px){justify-content: flex-start;}
+	}
+	&tabContainerInTabs{
+		@media(min-width: 0px){width: 100%; max-width: 100%; min-width: 0;}
+	}
+	&tabContainerTimeBarControls{
+		@media(min-width: 0px){align-items: flex-start;}
+	}
+	&tabContainerWithFramedButtons{
+		@media(min-width: 0px){gap: #{$spacing-sm};}
+	}
+	&tabContentInTabs{
+		@media(min-width: 0px){max-width: 100%; min-width: 0; overflow-x: hidden; overflow-y: visible; box-sizing: border-box;}
+	}
+	&tabPanelInner{
+		@media(min-width: 0px){width: 100%; max-width: 100%; min-width: 0; margin: 0; padding: 0; border: none; background: transparent; box-sizing: border-box; overflow: visible; outline: none;}
+	}
+	&timeBarContainerInWrap{
+		@media(min-width: 0px){width: 100%; min-height: 0; height: auto; background-color: #fff; outline: 1px solid #{$clg}; position: relative; user-select: none; margin: 0;}
+	}
+	&timeBarControlLabelInGroups{
+		@media(min-width: 0px){white-space: nowrap;}
+	}
+	&timeBarControlsInSection{
+		@media(min-width: 0px){outline: none;}
+	}
+	&timeBarControlsSectionLayout{
+		@media(min-width: 0px){margin-bottom: 0; display: flex; flex-direction: column; gap: #{$spacing-sm};}
+	}
+	&timeBarNowLabel{
+		@media(min-width: 0px){position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; padding: 2px 6px; font-size: 10px; white-space: nowrap; font-weight: 400; font-family: monospace; background-color: #{$danger-color}; color: #fff;}
+		&::before{
+			@media(min-width: 0px){content: ""; display: block; position: absolute; left: 50%; top: -4px; transform: translateX(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 4px solid #{$danger-color};}
+		}
+		&::after{
+			@media(min-width: 0px){display: none;}
+		}
+	}
+	&timeBarNowRowWhenStackEmpty{
+		@media(min-width: 0px){border-top: none;}
+	}
+	&timeBarSegmentLabel{
+		@media(min-width: 0px){position: relative; transform: none; bottom: auto; top: auto; margin: 0; max-width: none; pointer-events: auto; z-index: 1;}
+		&:hover{
+			@media(min-width: 0px){border-color: #000; pointer-events: auto;}
+		}
+	}
+	&timeBarStateRowLastVisible{
+		@media(min-width: 0px){border-bottom: none;}
+	}
+	&timeLabelsInHoursTrack{
+		@media(min-width: 0px){position: absolute; inset: 0; pointer-events: none;}
+	}
+	&timeScaleInHoursTrack{
+		@media(min-width: 0px){position: absolute; inset: 0; width: 100%; height: 100%; display: flex;}
+	}
+	&topControlsItem{
+		@media(min-width: 0px){display: flex; align-items: center; min-height: 25px; overflow: visible;}
+	}
+	&waveColorPreviewSmall{
+		@media(min-width: 0px){width: 14px; height: 14px; border: 1px solid #ccc; cursor: pointer; flex-shrink: 0; align-self: center; margin: 0;}
+	}
+	&waveControlsInline{
+		@media(min-width: 0px){display: flex; align-items: center; gap: #{$spacing-xs}; margin-right: 8px;}
+	}
+	&waveInGroup{
+		@media(min-width: 0px){cursor: default; background: #fafafa;}
+		&:hover{
+			@media(min-width: 0px){background: #f0f0f0;}
+		}
+		&:last-child{
+			@media(min-width: 0px){margin-bottom: 0;}
+		}
+	}
+	&wavesPanelInControl{
+		@media(min-width: 0px){grid-column: 2;}
+	}
+	&wavesTransformLayer{
+		@media(min-width: 0px){position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; transform-origin: 50% 50%;}
+	}
+	&waveInGroup#{&}listItemDragging{
+		@media(min-width: 0px){opacity: 0.5;background-color: #f0f0f0;z-index: 10;}
+	}
+	&waveInGroup#{&}listItemDragOverTop::before{
+		@media(min-width: 0px){content: "";position: absolute;left: -5px;top: -5px;width: 10px;height: 10px;background: #{$cp};transform: rotate(45deg);z-index: 10;}
+	}
+	&waveInGroup#{&}listItemDragOverBottom::after{
+		@media(min-width: 0px){content: "";position: absolute;left: -5px;bottom: -5px;width: 10px;height: 10px;background: #{$cp};transform: rotate(45deg);z-index: 10;}
+	}
+	&waveInGroup#{&}listItemDragOverTop{
+		@media(min-width: 0px){border-top: 2px solid #{$cp};}
+	}
+	&waveInGroup#{&}listItemDragOverBottom{
+		@media(min-width: 0px){border-bottom: 2px solid #{$cp};}
+	}
+	&groupChildren#{&}groupChildrenDragOver{
+		@media(min-width: 0px){background: rgba(0, 102, 204, 0.06);outline: 2px dashed #{$cp};outline-offset: -2px;}
+	}
+	&personGroupChildren#{&}groupChildrenDragOver{
+		@media(min-width: 0px){background: rgba(0, 102, 204, 0.06);outline: 2px dashed #{$cp};outline-offset: -2px;}
+	}
+	&dateInPersonGroup#{&}listItemDragOverTop{
+		@media(min-width: 0px){border-top: 2px solid #{$cp};}
+	}
+	&dateInPersonGroup#{&}listItemDragOverBottom{
+		@media(min-width: 0px){border-bottom: 2px solid #{$cp};}
+	}
+	@media(max-width: 768px){
+		&controlPanel{
+			@media(min-width: 0px){grid-template-columns: 1fr;}
+		}
+		&topControls{
+			@media(min-width: 0px){flex-direction: column; height: auto;}
+		}
+		&topControls > *{
+			@media(min-width: 0px){height: auto; width: 100%;}
+		}
+		&transformControls{
+			@media(min-width: 0px){flex-wrap: wrap;}
+		}
+		&formRow{
+			@media(min-width: 0px){flex-direction: column; align-items: flex-start;}
+		}
+		&editFormRow{
+			@media(min-width: 0px){flex-direction: column; align-items: flex-start;}
+		}
+		&formLabel{
+			@media(min-width: 0px){width: auto;}
+		}
+		&editFormLabel{
+			@media(min-width: 0px){width: auto;}
+		}
+		&inputRow{
+			@media(min-width: 0px){flex-direction: column; align-items: flex-start;}
+		}
+		&inputLabel{
+			@media(min-width: 0px){width: auto;}
+		}
+		&tabButtons{
+			@media(min-width: 0px){flex-direction: column;}
+		}
+		&tabButton{
+			@media(min-width: 0px){text-align: center; border-right: none; border-bottom: 1px solid #dee2e6;}
+		}
+		&tabButton:last-child{
+			@media(min-width: 0px){border-bottom: none;}
+		}
+		&waveControl{
+			@media(min-width: 0px){flex-wrap: wrap;}
+		}
+		&dateItem{
+			@media(min-width: 0px){flex-wrap: wrap;}
+		}
+		&dateName{
+			@media(min-width: 0px){min-width: 100%; margin-bottom: #{$spacing-xs};}
+		}
+		&customWaveItemControls{
+			@media(min-width: 0px){flex-wrap: wrap;}
+		}
+		&cornerSquare#{&}cornerPosTc{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosBc{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosLc{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosRc{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosMt{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosMb{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosMl{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosMr{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosMt2{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosMb2{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosMl2{
+			@media(min-width: 0px){display: none;}
+		}
+		&cornerSquare#{&}cornerPosMr2{
+			@media(min-width: 0px){display: none;}
+		}
+		&addCustomWaveForm{
+			@media(min-width: 0px){flex-direction: column;}
+		}
+		&addCustomWaveForm#{&}compact{
+			@media(min-width: 0px){flex-direction: column; gap: #{$spacing-xs};}
+		}
+		&addCustomWaveForm#{&}compact #{&}addGroupForm{
+			@media(min-width: 0px){flex-direction: column; gap: #{$spacing-xs};}
+		}
+		&addCustomWaveForm#{&}compact #{&}addGroupInput{
+			@media(min-width: 0px){width: 100%; min-width: 0;}
+		}
+		&addCustomWaveForm#{&}compact #{&}waveInputsRow #{&}formInput{
+			@media(min-width: 0px){width: 100%; min-width: 0;}
+		}
+		&addCustomWaveForm#{&}compact #{&}waveInputsRow select{
+			@media(min-width: 0px){width: 100%; min-width: 0;}
+		}
+		&addCustomWaveForm#{&}compact #{&}waveInputsRow #{&}colorInput{
+			@media(min-width: 0px){width: 100%; min-width: 0;}
+		}
+		&addCustomWaveForm#{&}compact #{&}addGroupBtn{
+			@media(min-width: 0px){width: 100%;}
+		}
+		&addCustomWaveForm#{&}compact #{&}waveInputsRow #{&}btnAddCustomWave{
+			@media(min-width: 0px){width: 100%;}
+		}
+		&addCustomWaveForm#{&}compact #{&}waveInputsRow{
+			@media(min-width: 0px){flex-direction: column; gap: #{$spacing-xs};}
+		}
+		&displayViewTemplatesRow{
+			@media(min-width: 0px){flex-direction: column; align-items: stretch;}
+		}
+		&displayViewTemplatesRow #{&}newDisplayViewTemplateName{
+			@media(min-width: 0px){width: 100%; min-width: 0;}
+		}
+		&displayViewTemplatesRow #{&}btnDeleteDisplayViewTemplate{
+			@media(min-width: 0px){width: 100%;}
+		}
+		&displayViewTemplatesDescriptionInput{
+			@media(min-width: 0px){min-height: 56px;}
+		}
+		&dateControlsButtons{
+			@media(min-width: 0px){flex-direction: column;}
+		}
+		&dateAddDescriptionInput{
+			@media(min-width: 0px){min-height: 56px;}
+		}
+		&notesPanelLayout{
+			@media(min-width: 0px){flex-direction: column;}
+		}
+		&addGroupForm{
+			@media(min-width: 0px){flex-direction: column;}
+		}
+		&dbImportControls{
+			@media(min-width: 0px){flex-direction: column;}
+		}
+		&intersectionFormRow{
+			@media(min-width: 0px){flex-direction: column;}
+		}
+		&intersectionFormLabel{
+			@media(min-width: 0px){width: auto;}
+		}
+		&cornerControls{
+			@media(min-width: 0px){flex-direction: column;}
+		}
+		&waveGroupHeader{
+			@media(min-width: 0px){flex-direction: column; align-items: flex-start; gap: #{$spacing-sm};}
+		}
+		&waveGroupRight{
+			@media(min-width: 0px){margin-left: 0; width: 100%; justify-content: space-between;}
+		}
+		&waveGroupCount{
+			@media(min-width: 0px){display: none;}
+		}
+		&dateNormalView{
+			@media(min-width: 0px){flex-direction: column; align-items: stretch; gap: 8px;}
+		}
+		&editDateForm{
+			@media(min-width: 0px){flex-direction: column; align-items: stretch; gap: 8px;}
+		}
+		&waveGroupChildren{
+			@media(min-width: 0px){padding: #{$spacing-xs} #{$spacing-sm};}
+		}
+		&waveGroupLeft{
+			@media(min-width: 0px){flex-wrap: wrap;}
+		}
+		&waveGroupTitle{
+			@media(min-width: 0px){font-size: #{$font-size-sm};}
+		}
+	}
+	@media(max-width: 480px){
+		&mobileWarningOverlay #{&}warningBox{
+			@media(min-width: 0px){max-width: 95%; padding: #{$spacing-md};}
+		}
+		&mobileWarningBox #{&}warningTitle{
+			@media(min-width: 0px){font-size: #{$font-size-md};}
+		}
+		&mobileWarningBox #{&}warningText{
+			@media(min-width: 0px){font-size: #{$font-size-sm};}
+		}
+		&warningInfo{
+			@media(min-width: 0px){font-size: #{$font-size-sm};}
+		}
+	}
+	}
+
+/* Маркеры часов: алиасы без sun- у модификаторов (устаревший styles.css / кэш) */
+.sun-hourMarker.clickable{
+	cursor: pointer;
+}
+.sun-hourMarker.sun-clickable{
+	cursor: pointer;
+}
+.sun-hourMarker.midnight{
+	border-left-color: #{$danger-color};
+}
+.sun-hourMarker.sun-midnight{
+	border-left-color: #{$danger-color};
+}
+.sun-hourMarker.midnight .sun-hourLabel{
+	color: #{$danger-color};
+	font-weight: 400;
+}
+.sun-hourMarker.sun-midnight .sun-hourLabel{
+	color: #{$danger-color};
+	font-weight: 400;
+}
+
+/* Venus prototype — layout helpers (sun tokens) */
+
+/* Вкладки: без моргания — data-venus-tab выставляется в <head> до отрисовки */
+html.venus-app-root[data-venus-tab] .sun-tabsSection .sun-tabContent.sun-tabContentInTabs{
+	@media(min-width: 0px){display: none !important;}
+}
+html.venus-app-root[data-venus-tab="accounts"] .sun-tabsSection .sun-tabContent[data-tab-panel="accounts"],
+html.venus-app-root[data-venus-tab="expenses"] .sun-tabsSection .sun-tabContent[data-tab-panel="expenses"],
+html.venus-app-root[data-venus-tab="incomes"] .sun-tabsSection .sun-tabContent[data-tab-panel="incomes"]{
+	@media(min-width: 0px){display: block !important;}
+}
+html.venus-app-root[data-venus-tab] .sun-tabsSection .sun-tabButtonsFramed .sun-tabButton{
+	@media(min-width: 0px){background: #f0f0f0; color: #{$text-color}; border-color: #{$clg};}
+}
+html.venus-app-root[data-venus-tab="accounts"] .sun-tabsSection .sun-tabButtonsFramed .sun-tabButton[data-tab="accounts"],
+html.venus-app-root[data-venus-tab="expenses"] .sun-tabsSection .sun-tabButtonsFramed .sun-tabButton[data-tab="expenses"],
+html.venus-app-root[data-venus-tab="incomes"] .sun-tabsSection .sun-tabButtonsFramed .sun-tabButton[data-tab="incomes"]{
+	@media(min-width: 0px){background: #{$cp}; color: #fff; border-color: #{$cp};}
+}
+
+.venus-accountsSection{
+	@media(min-width: 0px){
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+}
+.venus-accountsSubTabButtons{
+	@media(min-width: 0px){margin-bottom: 0;}
+}
+.venus-accountsSubPanel{
+	@media(min-width: 0px){display: none;}
+}
+.venus-accountsSubPanel.sun-active{
+	@media(min-width: 0px){display: block;}
+}
+
+/* Один скролл страницы: в sun скроллятся и html.sun-root, и body.sun-app */
+html.sun-root.venus-app-root{
+	@media(min-width: 0px){overflow-y: scroll; overflow-x: hidden; scrollbar-gutter: stable;}
+}
+body.sun-app.venus-app-body{
+	@media(min-width: 0px){overflow-y: visible; overflow-x: hidden;}
+}
+
+.sun-protoHeaderTitle{
+	@media(min-width: 0px){margin-bottom: 0; padding-bottom: 0; border-bottom: none;}
+}
+.sun-protoHeader{
+	@media(min-width: 0px){display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: #{$spacing-sm};}
+}
+.sun-protoHeaderMeta{
+	@media(min-width: 0px){margin: 0; font-size: #{$font-size-sm}; color: #{$text-secondary};}
+}
+.sun-protoHeaderMeta strong{
+	@media(min-width: 0px){color: #{$text-color};}
+}
+.sun-protoToolbar{
+	@media(min-width: 0px){display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: #{$spacing-sm}; margin-bottom: #{$spacing-sm};}
+}
+/* В sun transformRow центрирует кнопки; в тулбаре ДБ8 — блок слева, мета/чекбокс справа */
+.sun-protoToolbar .sun-transformRow{
+	@media(min-width: 0px){justify-content: flex-start; flex: 0 1 auto;}
+}
+.sun-protoToolbar > .sun-protoHeaderMeta,
+.sun-protoToolbar > .sun-intersectionFormLabel{
+	@media(min-width: 0px){
+		flex: 0 0 auto;
+		margin-left: auto;
+		width: auto;
+		min-width: 0;
+		display: flex;
+		align-items: center;
+		gap: #{$spacing-xs};
+		white-space: nowrap;
+	}
+}
+.sun-protoFooter{
+	@media(min-width: 0px){display: flex; flex-wrap: wrap; gap: #{$spacing-md}; justify-content: space-between; align-items: flex-start; margin-top: #{$spacing-md};}
+}
+.sun-protoTotals{
+	@media(min-width: 0px){padding: #{$spacing-sm}; border: 1px solid #{$clg}; background: #fffbe6; font-size: #{$font-size-sm}; min-width: 200px;}
+}
+.sun-protoTotalsTable{
+	@media(min-width: 0px){border-collapse: collapse; width: 100%; border: 1px solid #{$clg};}
+}
+.sun-protoTotalsTable th,
+.sun-protoTotalsTable td{
+	@media(min-width: 0px){padding: #{$spacing-xs} #{$spacing-sm}; border: 1px solid #{$clg}; text-align: right; font-variant-numeric: tabular-nums;}
+}
+.sun-protoTotalsTable th:first-child,
+.sun-protoTotalsTable td:first-child{
+	@media(min-width: 0px){text-align: left;}
+}
+.sun-protoTotalsTable thead th{
+	@media(min-width: 0px){background: #f8f9fa; font-weight: 400; color: #{$text-secondary};}
+}
+.sun-protoTotalsTable tbody tr:last-child td{
+	@media(min-width: 0px){font-weight: 400;}
+}
+.sun-protoRowSelected{
+	@media(min-width: 0px){background-color: #e8f4fe !important;}
+}
+.sun-protoMuted{
+	@media(min-width: 0px){color: #{$text-secondary};}
+}
+.sun-protoNumExpense{
+	@media(min-width: 0px){color: #{$danger-color}; font-weight: 400; text-align: right; font-variant-numeric: tabular-nums;}
+}
+.sun-protoNumIncome{
+	@media(min-width: 0px){color: #{$success-color}; font-weight: 400; text-align: right; font-variant-numeric: tabular-nums;}
+}
+.sun-protoNumBalance{
+	@media(min-width: 0px){color: #{$info-color}; font-weight: 400; text-align: right; font-variant-numeric: tabular-nums;}
+}
+.sun-protoNote{
+	@media(min-width: 0px){margin-top: #{$spacing-md}; text-align: center; color: #{$text-secondary}; font-size: #{$font-size-sm}; font-style: italic;}
+}
+.sun-summaryResultsContainer.sun-protoTableScroll{
+	@media(min-width: 0px){max-height: none; min-height: 220px; overflow: visible;}
+}
+.sun-summaryResultsContainer{
+	@media(min-width: 0px){overflow: visible;}
+}
+/* Контейнер со скроллом тела таблицы; шапка закреплена */
+.sun-summaryResultsContainer.sun-protoTableScroll.sun-protoTableScroll--stickyHead,
+.venus-categoriesList.sun-summaryResultsContainer{
+	@media(min-width: 0px){
+		max-height: 400px;
+		min-height: 120px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		border: 1px solid #{$clg};
+		background: #fff;
+	}
+}
+.venus-categoriesList.sun-summaryResultsContainer{
+	@media(min-width: 0px){max-height: 280px;}
+}
+.sun-summaryResultsContainer.sun-protoTableScroll.sun-protoTableScroll--stickyHead .sun-dateComparisonTable.sun-protoTable,
+.venus-categoriesList.sun-summaryResultsContainer .sun-dateComparisonTable.sun-protoTable{
+	@media(min-width: 0px){
+		margin-top: 0;
+		margin-right: -1px;
+		margin-bottom: -1px;
+		margin-left: -1px;
+		width: calc(100% + 2px);
+	}
+}
+.sun-summaryResultsContainer.sun-protoTableScroll.sun-protoTableScroll--stickyHead .sun-dateComparisonTable.sun-protoTable thead th,
+.venus-categoriesList.sun-summaryResultsContainer .sun-dateComparisonTable.sun-protoTable thead th{
+	@media(min-width: 0px){
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		background: #f8f9fa;
+	}
+}
+.sun-summaryResultsContainer.sun-protoTableScroll .sun-dateComparisonTable.sun-protoTable{
+	@media(min-width: 0px){
+		margin-top: -1px;
+		margin-right: -1px;
+		margin-bottom: -1px;
+		margin-left: -1px;
+		width: calc(100% + 2px);
+	}
+}
+.sun-dateComparisonTable.sun-protoTable td,
+.sun-dateComparisonTable.sun-protoTable th{
+	@media(min-width: 0px){font-variant-numeric: tabular-nums;}
+}
+.sun-dateComparisonTable.sun-protoTable td:not(:first-child):not(:nth-child(2)){
+	@media(min-width: 0px){text-align: right;}
+}
+
+/* xiermodal — контент в стиле sun */
+
+.venus-xierModalStore{
+	@media(min-width: 0px){display: none !important;}
+}
+.venus-xierModalBox{
+	@media(min-width: 0px){width: min(560px, calc(100vw - 80px)); padding: #{$spacing-md}; box-sizing: border-box;}
+}
+.venus-xierModalBox--wide{
+	@media(min-width: 0px){width: min(720px, calc(100vw - 48px));}
+}
+.venus-xierModalBox--categories{
+	@media(min-width: 0px){width: min(860px, calc(100vw - 40px));}
+}
+.venus-xierModalBox--compact{
+	@media(min-width: 0px){width: min(420px, calc(100vw - 48px));}
+}
+.venus-hidden{
+	@media(min-width: 0px){display: none !important;}
+}
+.venus-srOnly{
+	@media(min-width: 0px){
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+}
+.venus-settingsFields{
+	@media(min-width: 0px){gap: #{$spacing-md};}
+}
+.venus-settingsBlock{
+	@media(min-width: 0px){
+		display: flex;
+		flex-direction: column;
+		gap: #{$spacing-xs};
+		padding-bottom: #{$spacing-sm};
+		border-bottom: 1px solid #{$clg};
+	}
+}
+.venus-settingsBlock:last-child{
+	@media(min-width: 0px){border-bottom: none; padding-bottom: 0;}
+}
+.venus-settingsBlockTitle{
+	@media(min-width: 0px){margin: 0; font-size: #{$font-size-sm}; color: #{$text-color};}
+}
+.venus-settingsBlockActions{
+	@media(min-width: 0px){justify-content: flex-start; flex-wrap: wrap;}
+}
+.venus-categoriesPanel{
+	@media(min-width: 0px){display: block;}
+}
+.venus-categoriesTabs{
+	@media(min-width: 0px){flex-wrap: wrap; margin-bottom: #{$spacing-sm};}
+}
+.venus-categoriesSinglePane{
+	@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; min-width: 0;}
+}
+.venus-categoriesMasterDetail{
+	@media(min-width: 0px){display: grid; grid-template-columns: 1fr 1fr; gap: #{$spacing-md}; align-items: start;}
+}
+.venus-categoriesPane{
+	@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs}; min-width: 0;}
+}
+.venus-categoriesPaneTitle{
+	@media(min-width: 0px){margin: 0; font-size: #{$font-size-sm}; color: #{$text-color};}
+}
+.venus-categoriesPaneHead{
+	@media(min-width: 0px){
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: #{$spacing-xs} #{$spacing-sm};
+	}
+}
+.venus-categoriesPaneHead .sun-protoHeaderMeta{
+	@media(min-width: 0px){margin: 0; white-space: nowrap;}
+}
+.venus-categoriesPaneActions{
+	@media(min-width: 0px){justify-content: flex-start;}
+}
+.venus-xierModalBox--side{
+	@media(min-width: 0px){width: min(420px, calc(100vw - 40px)); min-height: 100%; height: 100%; box-sizing: border-box; overflow: visible;}
+}
+.venus-xierModalBox .sun-summaryHeader{
+	@media(min-width: 0px){margin-bottom: #{$spacing-md};}
+}
+.venus-formFields{
+	@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-sm};}
+}
+.venus-expenseMultiplyLabel{
+	@media(min-width: 0px){margin: 0; align-self: flex-start;}
+}
+.venus-expenseCalcHint{
+	@media(min-width: 0px){margin: -4px 0 0;}
+}
+.venus-expenseCalcRow .sun-formLabel{
+	@media(min-width: 0px){flex-shrink: 0;}
+}
+.venus-expenseCalcFieldWrap{
+	@media(min-width: 0px){
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: #{$spacing-xs};
+		flex: 1;
+		min-width: 0;
+	}
+}
+.venus-expenseCalcField{
+	@media(min-width: 0px){
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		flex: 1;
+		min-width: 120px;
+	}
+	.sun-summarySelect{
+		@media(min-width: 0px){flex: 1; min-width: 0;}
+	}
+}
+.venus-app-body .sun-warningBox{
+	@media(min-width: 0px){text-align: center;}
+}
+.venus-app-body .sun-warningText{
+	@media(min-width: 0px){text-align: center;}
+}
+.venus-app-body .sun-warningText p{
+	@media(min-width: 0px){margin: 0 0 0.75em; line-height: 1.5; text-align: center;}
+}
+.venus-app-body .sun-warningText p:last-child{
+	@media(min-width: 0px){margin-bottom: 0;}
+}
+.venus-app-body .sun-warningActions{
+	@media(min-width: 0px){justify-content: center;}
+}
+
+.venus-exp-lock{
+	@media(min-width: 0px){
+		flex-shrink: 0;
+		width: 28px;
+		height: 28px;
+		padding: 0;
+		line-height: 1;
+		font-size: 14px;
+		background: #f0f0f0;
+		color: #{$text-color};
+		border: 1px solid #{$clg};
+		opacity: 0.55;
+	}
+	&:disabled{
+		@media(min-width: 0px){cursor: not-allowed; opacity: 0.3;}
+	}
+	&.venus-exp-lock--active{
+		@media(min-width: 0px){
+			opacity: 1;
+			background: #{$cp};
+			color: #fff;
+			border-color: #{$cp};
+		}
+	}
+}
+.venus-xierModalActions{
+	@media(min-width: 0px){display: flex; flex-wrap: wrap; gap: #{$spacing-xs}; margin-top: #{$spacing-md};}
+}
+.sun-protoSettingsList{
+	@media(min-width: 0px){margin: #{$spacing-sm} 0 0; padding-left: 1.25em; font-size: #{$font-size-sm}; color: #{$text-color}; line-height: 1.6;}
+}
+
+/* Без жирного: единый normal (400) */
+.sun-root strong,
+.sun-root b,
+.sun-root h1,
+.sun-root h2,
+.sun-root h3,
+.sun-root h4,
+.sun-root h5,
+.sun-root h6{
+	font-weight: 400;
+}

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ru" class="sun-root venus-app-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Venus — домашняя бухгалтерия</title>
+    <link rel="stylesheet" href="vendor/xiermodal/jquery.xiermodal.css">
+    <link rel="stylesheet" href="styles/styles.min.css">
+    <script>
+        (function () {
+            var KEY = 'venus-active-tab';
+            var VALID = ['accounts', 'expenses', 'incomes'];
+            var tab = 'expenses';
+            try {
+                var stored = localStorage.getItem(KEY);
+                if (stored && VALID.indexOf(stored) !== -1) {
+                    tab = stored;
+                }
+            } catch (e) { /* ignore */ }
+            document.documentElement.setAttribute('data-venus-tab', tab);
+        })();
+    </script>
+</head>
+<body class="sun-app venus-app-body">
+    <div class="sun-warningOverlay" data-venus-warning-overlay role="dialog" aria-modal="true" aria-labelledby="venus-warning-title">
+        <div class="sun-warningBox sun-hidden" data-venus-warning-box>
+            <div class="sun-warningTitle" id="venus-warning-title">ПРЕДУПРЕЖДЕНИЕ</div>
+            <div class="sun-warningText">
+                <p>Инструмент в разработке. Это бесплатная веб-версия известной платной программы ведения семейного бюджета.</p>
+                <p>В дальнейшем интерфейс будет обёрнут в программную оболочку. Можно потыкаться и оценить возможности, но для реального учёта использовать в данный момент <strong>не рекомендуется</strong>.</p>
+            </div>
+            <div class="sun-parableBtnWrapper sun-warningActions">
+                <button type="button" class="sun-uiBtn js-venus-warning-continue">Продолжить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sun-interfaceContainer">
+        <div class="sun-container">
+
+            <div class="sun-panelSection">
+                <div class="sun-protoHeader">
+                    <div class="sun-summaryHeader sun-protoHeaderTitle">
+                        <h3>Venus — домашняя бухгалтерия</h3>
+                        <p class="sun-protoHeaderMeta">Пользователь: <strong data-venus-user-name>—</strong></p>
+                    </div>
+                    <div class="sun-transformRow">
+                        <button type="button" class="sun-uiBtn js-venus-modal-categories">Категории</button>
+                        <button type="button" class="sun-uiBtn js-venus-modal-settings">Настройки</button>
+                        <button type="button" class="sun-uiBtn js-venus-export">Экспорт</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sun-panelSection sun-tabsSection">
+                <div class="sun-tabContainer sun-tabContainerInTabs sun-tabContainerWithFramedButtons">
+                    <div class="sun-tabButtons sun-tabButtonsFramed" role="tablist" aria-label="Разделы учёта">
+                        <button type="button" class="sun-tabButton" data-tab="accounts" role="tab">Счета</button>
+                        <button type="button" class="sun-tabButton" data-tab="expenses" role="tab">Расходы</button>
+                        <button type="button" class="sun-tabButton" data-tab="incomes" role="tab">Доходы</button>
+                    </div>
+
+                    <div class="sun-tabContent sun-tabContentInTabs" data-tab-panel="accounts">
+                        <div class="sun-panelSection sun-tabPanelInner venus-accountsSection">
+                            <div class="sun-tabButtons sun-tabButtonsFramed venus-accountsSubTabButtons" role="tablist" aria-label="Счета — подразделы">
+                                <button type="button" class="sun-tabButton sun-active" data-accounts-subtab="brief" role="tab">Кратко</button>
+                                <button type="button" class="sun-tabButton" data-accounts-subtab="transfers" role="tab">Переносы</button>
+                            </div>
+
+                            <div class="venus-accountsSubPanel sun-active" data-accounts-subpanel="brief">
+                            <div class="sun-protoToolbar">
+                                <div class="sun-transformRow">
+                                    <button type="button" class="sun-uiBtn js-venus-account-add">Добавить</button>
+                                    <button type="button" class="sun-uiBtn js-venus-account-edit">Изменить</button>
+                                    <button type="button" class="sun-uiBtn js-venus-account-hide">Скрыть</button>
+                                    <button type="button" class="sun-uiBtn js-venus-account-delete">Удалить</button>
+                                </div>
+                                <label class="sun-intersectionFormLabel">
+                                    <input type="checkbox" data-venus-show-hidden autocomplete="off">
+                                    Показать скрытые счета
+                                </label>
+                            </div>
+
+                            <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead">
+                                <table class="sun-dateComparisonTable sun-protoTable">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">N</th>
+                                            <th rowspan="2">Счёт</th>
+                                            <th colspan="2">Расход</th>
+                                            <th colspan="2">Доход</th>
+                                            <th colspan="2">Прочие</th>
+                                            <th colspan="2">Остаток</th>
+                                        </tr>
+                                        <tr>
+                                            <th>₽</th>
+                                            <th>$</th>
+                                            <th>₽</th>
+                                            <th>$</th>
+                                            <th>₽</th>
+                                            <th>$</th>
+                                            <th>₽</th>
+                                            <th>$</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-venus-accounts-tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="sun-protoFooter">
+                                <span class="sun-protoHeaderMeta" data-venus-accounts-count>Счетов: 0</span>
+                                <div class="sun-protoTotals">
+                                    <table class="sun-protoTotalsTable">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>₽</th>
+                                                <th>$</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Остаток всего</td>
+                                                <td class="sun-protoNumBalance" data-venus-total-balance-rur>0,00</td>
+                                                <td data-venus-total-balance-usd>0,00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="venus-accountsSubPanel" data-accounts-subpanel="transfers">
+                                <div class="sun-protoToolbar">
+                                    <div class="sun-transformRow">
+                                        <button type="button" class="sun-uiBtn js-venus-transfer-add">Добавить</button>
+                                        <button type="button" class="sun-uiBtn js-venus-transfer-edit">Изменить</button>
+                                        <button type="button" class="sun-uiBtn js-venus-transfer-delete">Удалить</button>
+                                    </div>
+                                    <span class="sun-protoHeaderMeta" data-venus-transfers-count>Строк: 0</span>
+                                </div>
+
+                                <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead">
+                                    <table class="sun-dateComparisonTable sun-protoTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Дата</th>
+                                                <th>Со счета</th>
+                                                <th>На счет</th>
+                                                <th>₽</th>
+                                                <th>$</th>
+                                                <th>Примечание</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-venus-transfers-tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="sun-protoFooter">
+                                    <div class="sun-summaryControls">
+                                        <div class="sun-summarySelectRow">
+                                            <label class="sun-intersectionFormLabel">
+                                                <input type="checkbox" data-venus-transfer-filter checked autocomplete="off">
+                                                Фильтр
+                                            </label>
+                                            <div class="sun-intersectionSelectGroup">
+                                                <label class="sun-intersectionFormLabel" for="transfer-filter-from">с</label>
+                                                <input type="text" class="sun-summarySelect" id="transfer-filter-from" autocomplete="off">
+                                            </div>
+                                            <div class="sun-intersectionSelectGroup">
+                                                <label class="sun-intersectionFormLabel" for="transfer-filter-to">по</label>
+                                                <input type="text" class="sun-summarySelect" id="transfer-filter-to" autocomplete="off">
+                                            </div>
+                                            <div class="sun-intersectionSelectGroup">
+                                                <label class="sun-intersectionFormLabel" for="transfer-filter-from-account">Со счета</label>
+                                                <select class="sun-summarySelect" id="transfer-filter-from-account">
+                                                    <option value="">&lt;Все счета&gt;</option>
+                                                </select>
+                                            </div>
+                                            <div class="sun-intersectionSelectGroup">
+                                                <label class="sun-intersectionFormLabel" for="transfer-filter-to-account">На счет</label>
+                                                <select class="sun-summarySelect" id="transfer-filter-to-account">
+                                                    <option value="">&lt;Все счета&gt;</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="sun-protoTotals">
+                                        <table class="sun-protoTotalsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>₽</th>
+                                                    <th>$</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Итого</td>
+                                                    <td class="sun-protoNumBalance" data-venus-transfer-total-rur>0,00</td>
+                                                    <td data-venus-transfer-total-usd>0,00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sun-tabContent sun-tabContentInTabs" data-tab-panel="expenses">
+                        <div class="sun-panelSection sun-tabPanelInner">
+                            <div class="sun-protoToolbar">
+                                <div class="sun-transformRow">
+                                    <button type="button" class="sun-uiBtn js-venus-expense-add">Добавить</button>
+                                    <button type="button" class="sun-uiBtn js-venus-expense-edit">Изменить</button>
+                                    <button type="button" class="sun-uiBtn js-venus-expense-delete">Удалить</button>
+                                </div>
+                                <span class="sun-protoHeaderMeta" data-venus-expenses-count>Строк: 0</span>
+                            </div>
+
+                            <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead">
+                                <table class="sun-dateComparisonTable sun-protoTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Дата</th>
+                                            <th>Счёт</th>
+                                            <th>Категория</th>
+                                            <th>Подкатегория</th>
+                                            <th>Кол.</th>
+                                            <th>Ед.</th>
+                                            <th>₽</th>
+                                            <th>$</th>
+                                            <th>Курс</th>
+                                            <th>Примечание</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-venus-expenses-tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="sun-protoFooter">
+                                <div class="sun-summaryControls">
+                                    <div class="sun-summarySelectRow">
+                                        <label class="sun-intersectionFormLabel">
+                                            <input type="checkbox" data-venus-expense-filter checked autocomplete="off">
+                                            Фильтр
+                                        </label>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="filter-from">с</label>
+                                            <input type="text" class="sun-summarySelect" id="filter-from" autocomplete="off">
+                                        </div>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="filter-to">по</label>
+                                            <input type="text" class="sun-summarySelect" id="filter-to" autocomplete="off">
+                                        </div>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="filter-account">Счёт</label>
+                                            <select class="sun-summarySelect" id="filter-account">
+                                                <option value="">&lt;Все счета&gt;</option>
+                                            </select>
+                                        </div>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="filter-category">Категория</label>
+                                            <select class="sun-summarySelect" id="filter-category">
+                                                <option value="">&lt;Все категории&gt;</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sun-protoTotals">
+                                    <table class="sun-protoTotalsTable">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>₽</th>
+                                                <th>$</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Сегодня</td>
+                                                <td class="sun-protoNumExpense" data-venus-expense-total-today-rur>0,00</td>
+                                                <td data-venus-expense-total-today-usd>0,00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Неделя</td>
+                                                <td class="sun-protoNumExpense" data-venus-expense-total-week-rur>0,00</td>
+                                                <td data-venus-expense-total-week-usd>0,00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Месяц</td>
+                                                <td class="sun-protoNumExpense" data-venus-expense-total-month-rur>0,00</td>
+                                                <td data-venus-expense-total-month-usd>0,00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Всего</td>
+                                                <td class="sun-protoNumExpense" data-venus-expense-total-all-rur>0,00</td>
+                                                <td data-venus-expense-total-all-usd>0,00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sun-tabContent sun-tabContentInTabs" data-tab-panel="incomes">
+                        <div class="sun-panelSection sun-tabPanelInner">
+                            <div class="sun-protoToolbar">
+                                <div class="sun-transformRow">
+                                    <button type="button" class="sun-uiBtn js-venus-income-add">Добавить</button>
+                                    <button type="button" class="sun-uiBtn js-venus-income-edit">Изменить</button>
+                                    <button type="button" class="sun-uiBtn js-venus-income-delete">Удалить</button>
+                                </div>
+                                <span class="sun-protoHeaderMeta" data-venus-incomes-count>Строк: 0</span>
+                            </div>
+
+                            <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead">
+                                <table class="sun-dateComparisonTable sun-protoTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Дата</th>
+                                            <th>Счёт</th>
+                                            <th>Категория</th>
+                                            <th>Подкатегория</th>
+                                            <th>Кол.</th>
+                                            <th>Ед.</th>
+                                            <th>₽</th>
+                                            <th>$</th>
+                                            <th>Курс</th>
+                                            <th>Примечание</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-venus-incomes-tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="sun-protoFooter">
+                                <div class="sun-summaryControls">
+                                    <div class="sun-summarySelectRow">
+                                        <label class="sun-intersectionFormLabel">
+                                            <input type="checkbox" data-venus-income-filter checked autocomplete="off">
+                                            Фильтр
+                                        </label>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="inc-filter-from">с</label>
+                                            <input type="text" class="sun-summarySelect" id="inc-filter-from" autocomplete="off">
+                                        </div>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="inc-filter-to">по</label>
+                                            <input type="text" class="sun-summarySelect" id="inc-filter-to" autocomplete="off">
+                                        </div>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="inc-filter-account">Счёт</label>
+                                            <select class="sun-summarySelect" id="inc-filter-account">
+                                                <option value="">&lt;Все счета&gt;</option>
+                                            </select>
+                                        </div>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="inc-filter-category">Категория</label>
+                                            <select class="sun-summarySelect" id="inc-filter-category">
+                                                <option value="">&lt;Все категории&gt;</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sun-protoTotals">
+                                    <table class="sun-protoTotalsTable">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>₽</th>
+                                                <th>$</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Сегодня</td>
+                                                <td class="sun-protoNumIncome" data-venus-income-total-today-rur>0,00</td>
+                                                <td data-venus-income-total-today-usd>0,00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Неделя</td>
+                                                <td class="sun-protoNumIncome" data-venus-income-total-week-rur>0,00</td>
+                                                <td data-venus-income-total-week-usd>0,00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Месяц</td>
+                                                <td class="sun-protoNumIncome" data-venus-income-total-month-rur>0,00</td>
+                                                <td data-venus-income-total-month-usd>0,00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Всего</td>
+                                                <td class="sun-protoNumIncome" data-venus-income-total-all-rur>0,00</td>
+                                                <td data-venus-income-total-all-usd>0,00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="sun-protoNote">Прототип v1 · стили sun · модалки xiermodal</p>
+
+        </div>
+    </div>
+
+    <div class="venus-xierModalStore" aria-hidden="true">
+        <div id="venus-modal-expense" class="venus-xierModalBox">
+            <div class="sun-summaryHeader">
+                <h3 data-venus-expense-modal-title>Карточка расхода</h3>
+            </div>
+            <div class="venus-formFields">
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="exp-date">Дата</label>
+                    <input type="date" class="sun-summarySelect" id="exp-date">
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="exp-account">Списать со счёта</label>
+                    <select class="sun-summarySelect" id="exp-account"></select>
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="exp-category">Категория</label>
+                    <select class="sun-summarySelect" id="exp-category"></select>
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="exp-subcategory">Подкатегория</label>
+                    <select class="sun-summarySelect" id="exp-subcategory">
+                        <option value="">&lt;Без подкатегории&gt;</option>
+                    </select>
+                </div>
+                <div class="sun-formRow venus-expenseCalcRow">
+                    <label class="sun-formLabel" for="exp-qty">Количество</label>
+                    <div class="venus-expenseCalcFieldWrap">
+                        <div class="venus-expenseCalcField">
+                            <input type="text" class="sun-summarySelect" id="exp-qty" inputmode="decimal">
+                            <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="qty" aria-pressed="false" aria-label="Зафиксировать количество" title="Зафиксировать количество" disabled>🔒</button>
+                        </div>
+                        <select class="sun-summarySelect" id="exp-unit" aria-label="Ед. изм.">
+                            <option value="">&lt;Без ед. изм.&gt;</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sun-formRow venus-expenseCalcRow">
+                    <label class="sun-formLabel" for="exp-price">Цена</label>
+                    <div class="venus-expenseCalcField">
+                        <input type="text" class="sun-summarySelect" id="exp-price" value="0,00" inputmode="decimal">
+                        <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="price" aria-pressed="false" aria-label="Зафиксировать цену" title="Зафиксировать цену" disabled>🔒</button>
+                    </div>
+                </div>
+                <label class="sun-intersectionFormLabel venus-expenseMultiplyLabel">
+                    <input type="checkbox" id="exp-multiply" autocomplete="off">
+                    Умножить цену на количество
+                </label>
+                <p class="sun-protoHeaderMeta venus-expenseCalcHint">Замок фиксирует поле: при пересчёте оно не меняется, остальные подстраиваются.</p>
+                <div class="sun-formRow venus-expenseCalcRow">
+                    <label class="sun-formLabel" for="exp-amount">Сумма</label>
+                    <div class="venus-expenseCalcFieldWrap">
+                        <div class="venus-expenseCalcField">
+                            <input type="text" class="sun-summarySelect" id="exp-amount" value="0,00" inputmode="decimal">
+                            <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="amount" aria-pressed="false" aria-label="Зафиксировать сумму" title="Зафиксировать сумму" disabled>🔒</button>
+                        </div>
+                        <select class="sun-summarySelect" id="exp-currency" aria-label="Валюта"></select>
+                    </div>
+                </div>
+                <div class="sun-inputGroup">
+                    <label class="sun-formLabel" for="exp-note">Примечание</label>
+                    <textarea id="exp-note" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="venus-xierModalActions">
+                <button type="button" class="sun-uiBtn js-venus-expense-save">ОК</button>
+                <button type="button" class="sun-uiBtn js-xierModalClose">Отмена</button>
+            </div>
+        </div>
+
+        <div id="venus-modal-income" class="venus-xierModalBox">
+            <div class="sun-summaryHeader">
+                <h3 data-venus-income-modal-title>Карточка дохода</h3>
+            </div>
+            <div class="venus-formFields">
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="inc-date">Дата</label>
+                    <input type="date" class="sun-summarySelect" id="inc-date">
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="inc-account">Зачислить на счёт</label>
+                    <select class="sun-summarySelect" id="inc-account"></select>
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="inc-category">Категория дохода</label>
+                    <select class="sun-summarySelect" id="inc-category"></select>
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="inc-subcategory">Подкатегория</label>
+                    <select class="sun-summarySelect" id="inc-subcategory">
+                        <option value="">&lt;Без подкатегории&gt;</option>
+                    </select>
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="inc-amount">Сумма</label>
+                    <input type="text" class="sun-summarySelect" id="inc-amount" value="0,00" inputmode="decimal">
+                    <select class="sun-summarySelect" id="inc-currency" aria-label="Валюта"></select>
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="inc-qty">Количество</label>
+                    <input type="text" class="sun-summarySelect" id="inc-qty" inputmode="decimal">
+                    <select class="sun-summarySelect" id="inc-unit" aria-label="Ед. изм.">
+                        <option value="">&lt;Без ед. изм.&gt;</option>
+                    </select>
+                </div>
+                <div class="sun-inputGroup">
+                    <label class="sun-formLabel" for="inc-note">Примечание</label>
+                    <textarea id="inc-note" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="venus-xierModalActions">
+                <button type="button" class="sun-uiBtn js-venus-income-save">ОК</button>
+                <button type="button" class="sun-uiBtn js-xierModalClose">Отмена</button>
+            </div>
+        </div>
+
+        <div id="venus-modal-account" class="venus-xierModalBox">
+            <div class="sun-summaryHeader">
+                <h3 data-venus-account-modal-title>Счёт</h3>
+            </div>
+            <div class="venus-formFields">
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="acc-name">Название</label>
+                    <input type="text" class="sun-summarySelect" id="acc-name" autocomplete="off">
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="acc-currency">Валюта</label>
+                    <select class="sun-summarySelect" id="acc-currency"></select>
+                </div>
+                <div class="sun-inputGroup">
+                    <label class="sun-formLabel" for="acc-note">Примечание</label>
+                    <textarea id="acc-note" rows="2"></textarea>
+                </div>
+                <label class="sun-intersectionFormLabel">
+                    <input type="checkbox" id="acc-hidden" autocomplete="off">
+                    Скрыть из списка счетов
+                </label>
+            </div>
+            <div class="venus-xierModalActions">
+                <button type="button" class="sun-uiBtn js-venus-account-save">ОК</button>
+                <button type="button" class="sun-uiBtn js-xierModalClose">Отмена</button>
+            </div>
+        </div>
+
+        <div id="venus-modal-transfer" class="venus-xierModalBox">
+            <div class="sun-summaryHeader">
+                <h3 data-venus-transfer-modal-title>Перенос между счетами</h3>
+            </div>
+            <div class="venus-formFields">
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="trf-date">Дата</label>
+                    <input type="date" class="sun-summarySelect" id="trf-date">
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="trf-from">Со счета</label>
+                    <select class="sun-summarySelect" id="trf-from"></select>
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="trf-to">На счет</label>
+                    <select class="sun-summarySelect" id="trf-to"></select>
+                </div>
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="trf-amount">Сумма</label>
+                    <input type="text" class="sun-summarySelect" id="trf-amount" value="0,00" inputmode="decimal">
+                    <select class="sun-summarySelect" id="trf-currency" aria-label="Валюта"></select>
+                </div>
+                <div class="sun-inputGroup">
+                    <label class="sun-formLabel" for="trf-note">Примечание</label>
+                    <textarea id="trf-note" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="venus-xierModalActions">
+                <button type="button" class="sun-uiBtn js-venus-transfer-save">ОК</button>
+                <button type="button" class="sun-uiBtn js-xierModalClose">Отмена</button>
+            </div>
+        </div>
+
+        <div id="venus-modal-categories" class="venus-xierModalBox venus-xierModalBox--wide venus-xierModalBox--categories">
+            <div class="sun-summaryHeader">
+                <h3>Категории</h3>
+            </div>
+            <div class="sun-tabButtons sun-tabButtonsFramed venus-categoriesTabs" role="tablist" aria-label="Справочники">
+                <button type="button" class="sun-tabButton sun-active js-venus-cat-tab" data-venus-cat-tab="expense">Категории расходов</button>
+                <button type="button" class="sun-tabButton js-venus-cat-tab" data-venus-cat-tab="income">Категории доходов</button>
+                <button type="button" class="sun-tabButton js-venus-cat-tab" data-venus-cat-tab="units">Единицы измерения</button>
+                <button type="button" class="sun-tabButton js-venus-cat-tab" data-venus-cat-tab="creditors">Кредиторы</button>
+                <button type="button" class="sun-tabButton js-venus-cat-tab" data-venus-cat-tab="debtors">Должники</button>
+                <button type="button" class="sun-tabButton js-venus-cat-tab" data-venus-cat-tab="deposits">Названия вкладов</button>
+            </div>
+            <div class="venus-categoriesPanel" data-venus-cat-panel="expense">
+                <div class="venus-categoriesMasterDetail">
+                    <div class="venus-categoriesPane">
+                        <div class="venus-categoriesPaneHead">
+                            <p class="venus-categoriesPaneTitle">Категории расходов</p>
+                            <span class="sun-protoHeaderMeta" data-venus-cat-root-count="expense">Категорий расходов: 0</span>
+                        </div>
+                        <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
+                            <table class="sun-dateComparisonTable sun-protoTable">
+                                <thead>
+                                    <tr>
+                                        <th>Категория</th>
+                                        <th>Подкат.</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-venus-cat-roots="expense"></tbody>
+                            </table>
+                        </div>
+                        <div class="sun-transformRow venus-categoriesPaneActions">
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="add-root" data-venus-cat-type="expense">Добавить</button>
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="edit-root" data-venus-cat-type="expense">Изменить</button>
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="delete-root" data-venus-cat-type="expense">Удалить</button>
+                        </div>
+                    </div>
+                    <div class="venus-categoriesPane">
+                        <div class="venus-categoriesPaneHead">
+                            <p class="venus-categoriesPaneTitle">Подкатегории расходов</p>
+                            <span class="sun-protoHeaderMeta" data-venus-cat-sub-count="expense">Подкатегорий расходов: 0</span>
+                        </div>
+                        <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
+                            <table class="sun-dateComparisonTable sun-protoTable">
+                                <thead>
+                                    <tr>
+                                        <th>N</th>
+                                        <th>Подкатегория</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-venus-cat-subs="expense"></tbody>
+                            </table>
+                        </div>
+                        <div class="sun-transformRow venus-categoriesPaneActions">
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="add-sub" data-venus-cat-type="expense">Добавить</button>
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="edit-sub" data-venus-cat-type="expense">Изменить</button>
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="delete-sub" data-venus-cat-type="expense">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="venus-categoriesPanel venus-hidden" data-venus-cat-panel="income">
+                <div class="venus-categoriesMasterDetail">
+                    <div class="venus-categoriesPane">
+                        <div class="venus-categoriesPaneHead">
+                            <p class="venus-categoriesPaneTitle">Категории доходов</p>
+                            <span class="sun-protoHeaderMeta" data-venus-cat-root-count="income">Категорий доходов: 0</span>
+                        </div>
+                        <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
+                            <table class="sun-dateComparisonTable sun-protoTable">
+                                <thead>
+                                    <tr>
+                                        <th>Категория</th>
+                                        <th>Подкат.</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-venus-cat-roots="income"></tbody>
+                            </table>
+                        </div>
+                        <div class="sun-transformRow venus-categoriesPaneActions">
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="add-root" data-venus-cat-type="income">Добавить</button>
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="edit-root" data-venus-cat-type="income">Изменить</button>
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="delete-root" data-venus-cat-type="income">Удалить</button>
+                        </div>
+                    </div>
+                    <div class="venus-categoriesPane">
+                        <div class="venus-categoriesPaneHead">
+                            <p class="venus-categoriesPaneTitle">Подкатегории доходов</p>
+                            <span class="sun-protoHeaderMeta" data-venus-cat-sub-count="income">Подкатегорий доходов: 0</span>
+                        </div>
+                        <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
+                            <table class="sun-dateComparisonTable sun-protoTable">
+                                <thead>
+                                    <tr>
+                                        <th>N</th>
+                                        <th>Подкатегория</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-venus-cat-subs="income"></tbody>
+                            </table>
+                        </div>
+                        <div class="sun-transformRow venus-categoriesPaneActions">
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="add-sub" data-venus-cat-type="income">Добавить</button>
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="edit-sub" data-venus-cat-type="income">Изменить</button>
+                            <button type="button" class="sun-uiBtn" data-venus-cat-action="delete-sub" data-venus-cat-type="income">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="venus-categoriesPanel venus-hidden" data-venus-cat-panel="units">
+                <div class="venus-categoriesSinglePane">
+                    <div class="venus-categoriesPaneHead">
+                        <p class="venus-categoriesPaneTitle">Единицы измерения</p>
+                        <span class="sun-protoHeaderMeta" data-venus-cat-list-count="units">Единиц измерения: 0</span>
+                    </div>
+                    <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
+                        <table class="sun-dateComparisonTable sun-protoTable">
+                            <thead>
+                                <tr>
+                                    <th>N</th>
+                                    <th>Единица</th>
+                                </tr>
+                            </thead>
+                            <tbody data-venus-cat-list="units"></tbody>
+                        </table>
+                    </div>
+                    <div class="sun-transformRow venus-categoriesPaneActions">
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="add" data-venus-cat-tab="units">Добавить</button>
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="edit" data-venus-cat-tab="units">Изменить</button>
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="delete" data-venus-cat-tab="units">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="venus-categoriesPanel venus-hidden" data-venus-cat-panel="creditors">
+                <div class="venus-categoriesSinglePane">
+                    <div class="venus-categoriesPaneHead">
+                        <p class="venus-categoriesPaneTitle">Кредиторы</p>
+                        <span class="sun-protoHeaderMeta" data-venus-cat-list-count="creditors">Кредиторов: 0</span>
+                    </div>
+                    <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
+                        <table class="sun-dateComparisonTable sun-protoTable">
+                            <thead>
+                                <tr>
+                                    <th>N</th>
+                                    <th>Кредитор</th>
+                                </tr>
+                            </thead>
+                            <tbody data-venus-cat-list="creditors"></tbody>
+                        </table>
+                    </div>
+                    <div class="sun-transformRow venus-categoriesPaneActions">
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="add" data-venus-cat-tab="creditors">Добавить</button>
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="edit" data-venus-cat-tab="creditors">Изменить</button>
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="delete" data-venus-cat-tab="creditors">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="venus-categoriesPanel venus-hidden" data-venus-cat-panel="debtors">
+                <div class="venus-categoriesSinglePane">
+                    <div class="venus-categoriesPaneHead">
+                        <p class="venus-categoriesPaneTitle">Должники</p>
+                        <span class="sun-protoHeaderMeta" data-venus-cat-list-count="debtors">Должников: 0</span>
+                    </div>
+                    <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
+                        <table class="sun-dateComparisonTable sun-protoTable">
+                            <thead>
+                                <tr>
+                                    <th>N</th>
+                                    <th>Должник</th>
+                                </tr>
+                            </thead>
+                            <tbody data-venus-cat-list="debtors"></tbody>
+                        </table>
+                    </div>
+                    <div class="sun-transformRow venus-categoriesPaneActions">
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="add" data-venus-cat-tab="debtors">Добавить</button>
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="edit" data-venus-cat-tab="debtors">Изменить</button>
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="delete" data-venus-cat-tab="debtors">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="venus-categoriesPanel venus-hidden" data-venus-cat-panel="deposits">
+                <div class="venus-categoriesSinglePane">
+                    <div class="venus-categoriesPaneHead">
+                        <p class="venus-categoriesPaneTitle">Названия вкладов</p>
+                        <span class="sun-protoHeaderMeta" data-venus-cat-list-count="deposits">Названий вкладов: 0</span>
+                    </div>
+                    <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
+                        <table class="sun-dateComparisonTable sun-protoTable">
+                            <thead>
+                                <tr>
+                                    <th>N</th>
+                                    <th>Название вклада</th>
+                                </tr>
+                            </thead>
+                            <tbody data-venus-cat-list="deposits"></tbody>
+                        </table>
+                    </div>
+                    <div class="sun-transformRow venus-categoriesPaneActions">
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="add" data-venus-cat-tab="deposits">Добавить</button>
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="edit" data-venus-cat-tab="deposits">Изменить</button>
+                        <button type="button" class="sun-uiBtn" data-venus-cat-action="delete" data-venus-cat-tab="deposits">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="venus-xierModalActions">
+                <button type="button" class="sun-uiBtn js-xierModalClose">Закрыть</button>
+            </div>
+        </div>
+
+        <div id="venus-modal-catalog-edit" class="venus-xierModalBox venus-xierModalBox--compact">
+            <div class="sun-summaryHeader">
+                <h3 data-venus-catalog-edit-title>Название</h3>
+            </div>
+            <div class="venus-formFields">
+                <div class="sun-formRow">
+                    <label class="sun-formLabel" for="venus-catalog-edit-name">Название</label>
+                    <input type="text" class="sun-summarySelect" id="venus-catalog-edit-name" autocomplete="off">
+                </div>
+            </div>
+            <div class="venus-xierModalActions">
+                <button type="button" class="sun-uiBtn js-venus-catalog-edit-save">ОК</button>
+                <button type="button" class="sun-uiBtn js-xierModalClose">Отмена</button>
+            </div>
+        </div>
+
+        <div id="venus-modal-settings" class="venus-xierModalBox venus-xierModalBox--side">
+            <div class="sun-summaryHeader">
+                <h3>Настройки</h3>
+            </div>
+            <p class="sun-protoHeaderMeta" data-venus-settings-meta>Обновлено: —</p>
+            <div class="venus-formFields venus-settingsFields">
+                <div class="venus-settingsBlock">
+                    <p class="venus-settingsBlockTitle">Пользователь</p>
+                    <div class="sun-formRow">
+                        <label class="sun-formLabel" for="settings-user-name">Имя</label>
+                        <input type="text" class="sun-summarySelect" id="settings-user-name" autocomplete="off">
+                    </div>
+                    <div class="sun-transformRow venus-settingsBlockActions">
+                        <button type="button" class="sun-uiBtn js-venus-settings-save-user">Сохранить имя</button>
+                    </div>
+                </div>
+                <div class="venus-settingsBlock">
+                    <p class="venus-settingsBlockTitle">Валюты учёта</p>
+                    <p class="sun-protoHeaderMeta" data-venus-settings-currencies>RUR, USD</p>
+                </div>
+                <div class="venus-settingsBlock">
+                    <p class="venus-settingsBlockTitle">Резервная копия</p>
+                    <div class="sun-transformRow venus-settingsBlockActions">
+                        <button type="button" class="sun-uiBtn js-venus-settings-export">Экспорт JSON</button>
+                        <button type="button" class="sun-uiBtn js-venus-settings-import">Импорт JSON</button>
+                    </div>
+                    <input type="file" id="venus-import-file" class="venus-srOnly" accept=".json,application/json">
+                </div>
+                <div class="venus-settingsBlock">
+                    <p class="venus-settingsBlockTitle">Сброс данных</p>
+                    <div class="sun-transformRow venus-settingsBlockActions">
+                        <button type="button" class="sun-uiBtn js-venus-settings-reset-demo">Демо-данные</button>
+                        <button type="button" class="sun-uiBtn js-venus-settings-reset-empty">Очистить всё</button>
+                    </div>
+                </div>
+            </div>
+            <div class="venus-xierModalActions">
+                <button type="button" class="sun-uiBtn js-xierModalClose">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="vendor/jquery-3.7.1.min.js"></script>
+    <script src="vendor/xiermodal/jquery.xiermodal.js"></script>
+    <script src="modules/decimal-input.js"></script>
+    <script src="modules/warning.js"></script>
+    <script src="modules/storage.js"></script>
+    <script src="modules/accounts.js"></script>
+    <script src="modules/expenses.js"></script>
+    <script src="modules/incomes.js"></script>
+    <script src="modules/transfers.js"></script>
+    <script src="modules/categories.js"></script>
+    <script src="modules/settings.js"></script>
+    <script src="modules/modals.js"></script>
+    <script src="modules/main.js"></script>
+</body>
+</html>
