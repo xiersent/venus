@@ -10,6 +10,9 @@
     /** @type {string|null} */
     let editingIncomeId = null;
 
+    /** @type {ReturnType<typeof global.venusDatetime>} */
+    const dt = global.venusDatetime;
+
     /**
      * @param {number} amount
      * @returns {string}
@@ -35,11 +38,7 @@
      * @returns {string}
      */
     function formatDateDisplay(iso) {
-        const parts = iso.split('-');
-        if (parts.length !== 3) {
-            return iso;
-        }
-        return parts[2] + '.' + parts[1] + '.' + parts[0];
+        return dt.formatDateDisplay(iso);
     }
 
     /**
@@ -103,6 +102,7 @@
         const toIso = parseDateInput(document.getElementById('inc-filter-to')?.value || '');
         const accountId = document.getElementById('inc-filter-account')?.value || '';
         const categoryId = document.getElementById('inc-filter-category')?.value || '';
+        const subcategoryId = document.getElementById('inc-filter-subcategory')?.value || '';
 
         return incomes.filter((transaction) => {
             if (fromIso && transaction.date < fromIso) {
@@ -114,7 +114,17 @@
             if (accountId && transaction.account_id !== accountId) {
                 return false;
             }
-            if (categoryId && !incomeCategoryMatchesFilter(db, transaction.category_id, categoryId)) {
+            if (
+                subcategoryId &&
+                transaction.category_id !== subcategoryId
+            ) {
+                return false;
+            }
+            if (
+                !subcategoryId &&
+                categoryId &&
+                !incomeCategoryMatchesFilter(db, transaction.category_id, categoryId)
+            ) {
                 return false;
             }
             return true;
@@ -226,7 +236,7 @@
         }
 
         return {
-            date: formatDateDisplay(transaction.date),
+            date: dt.formatDateTimeDisplay(transaction.date, transaction.time),
             account: transaction.account_id ? accounts[transaction.account_id]?.name || '—' : '—',
             category: categoryName,
             subcategory: subcategoryName,
@@ -250,12 +260,7 @@
             return;
         }
 
-        const sorted = incomes.slice().sort((a, b) => {
-            if (a.date !== b.date) {
-                return a.date < b.date ? 1 : -1;
-            }
-            return a.created_at < b.created_at ? 1 : -1;
-        });
+        const sorted = incomes.slice().sort((a, b) => dt.compareTransactionsByDateTime(a, b));
 
         if (sorted.length === 0) {
             tbody.innerHTML =
@@ -505,6 +510,52 @@
     }
 
     /**
+     * @param {HTMLSelectElement|null} select
+     * @param {import('./storage').VenusDatabase} db
+     * @param {string} rootCategoryId
+     */
+    function populateSubcategoryFilterSelect(select, db, rootCategoryId) {
+        if (!select) {
+            return;
+        }
+
+        const prev = select.value;
+
+        if (!rootCategoryId) {
+            select.innerHTML = '<option value="">&lt;Все подкатегории&gt;</option>';
+            select.value = '';
+            select.disabled = true;
+            return;
+        }
+
+        const subs = incomeSubcategories(db, rootCategoryId);
+        if (subs.length === 0) {
+            select.innerHTML = '<option value="">&lt;Без подкатегорий&gt;</option>';
+            select.value = '';
+            select.disabled = true;
+            return;
+        }
+
+        let options = '<option value="">&lt;Все подкатегории&gt;</option>';
+        subs.forEach((category) => {
+            options +=
+                '<option value="' +
+                category.id +
+                '">' +
+                escapeHtml(category.name) +
+                '</option>';
+        });
+
+        select.disabled = false;
+        select.innerHTML = options;
+        if (prev && select.querySelector('option[value="' + prev + '"]')) {
+            select.value = prev;
+        } else {
+            select.value = '';
+        }
+    }
+
+    /**
      * @param {import('./storage').VenusDatabase} db
      */
     function initFilterDateRange(db) {
@@ -567,6 +618,11 @@
             db,
             '<Все категории>',
             'category',
+        );
+        populateSubcategoryFilterSelect(
+            document.getElementById('inc-filter-subcategory'),
+            db,
+            document.getElementById('inc-filter-category')?.value || '',
         );
     }
 
@@ -705,6 +761,7 @@
         const db = global.venusStorage.load();
         const title = document.querySelector('[data-venus-income-modal-title]');
         const dateInput = document.getElementById('inc-date');
+        const timeInput = document.getElementById('inc-time');
         const accountSelect = document.getElementById('inc-account');
         const categorySelect = document.getElementById('inc-category');
         const subSelect = document.getElementById('inc-subcategory');
@@ -717,9 +774,7 @@
         if (title) {
             title.textContent = 'Карточка дохода';
         }
-        if (dateInput) {
-            dateInput.value = toIsoDate(new Date());
-        }
+        dt.setDateTimeFields(dateInput, timeInput, toIsoDate(new Date()), '');
         if (accountSelect) {
             populateAccountSelect(accountSelect, db, null);
         }
@@ -768,9 +823,8 @@
         }
 
         const dateInput = document.getElementById('inc-date');
-        if (dateInput) {
-            dateInput.value = transaction.date;
-        }
+        const timeInput = document.getElementById('inc-time');
+        dt.setDateTimeFields(dateInput, timeInput, transaction.date, transaction.time);
 
         populateAccountSelect(
             document.getElementById('inc-account'),
@@ -819,6 +873,7 @@
      */
     function readIncomeForm() {
         const dateInput = document.getElementById('inc-date');
+        const timeInput = document.getElementById('inc-time');
         const accountSelect = document.getElementById('inc-account');
         const categorySelect = document.getElementById('inc-category');
         const subSelect = document.getElementById('inc-subcategory');
@@ -834,6 +889,7 @@
             dateInput?.focus();
             return null;
         }
+        const time = dt.readTimeInput(timeInput);
 
         const accountId = accountSelect?.value || '';
         if (!accountId) {
@@ -881,6 +937,7 @@
 
         return {
             date,
+            time,
             accountId,
             categoryId,
             amount,
@@ -911,6 +968,7 @@
             }
 
             transaction.date = form.date;
+            dt.applyTransactionTime(transaction, form.time);
             transaction.account_id = form.accountId;
             transaction.category_id = form.categoryId;
             transaction.amount = form.amount;
@@ -934,6 +992,7 @@
             id: transactionId,
             type: 'income',
             date: form.date,
+            ...(form.time ? { time: form.time } : {}),
             account_id: form.accountId,
             account_from_id: null,
             account_to_id: null,
@@ -970,7 +1029,7 @@
         const categories = categoryMapById(db);
         const accounts = accountMapById(db);
         const label =
-            formatDateDisplay(transaction.date) +
+            dt.formatDateTimeDisplay(transaction.date, transaction.time) +
             ', ' +
             (accounts[transaction.account_id]?.name || 'счёт') +
             ', ' +
@@ -1101,6 +1160,15 @@
             render(global.venusStorage.load());
         });
         document.getElementById('inc-filter-category')?.addEventListener('change', () => {
+            const db = global.venusStorage.load();
+            populateSubcategoryFilterSelect(
+                document.getElementById('inc-filter-subcategory'),
+                db,
+                document.getElementById('inc-filter-category')?.value || '',
+            );
+            render(db);
+        });
+        document.getElementById('inc-filter-subcategory')?.addEventListener('change', () => {
             render(global.venusStorage.load());
         });
     }

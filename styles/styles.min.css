@@ -63,7 +63,8 @@ button:hover {
   font-size: 11px;
 }
 
-[type=date] {
+[type=date],
+[type=time] {
   padding: 5px;
   border: 1px solid #ddd;
   font-family: Tahoma, sans-serif;
@@ -105,9 +106,6 @@ textarea {
   }
 }
 /* Блок .sun- */
-.sun- {
-  /* --- migration blocks from HEAD --- */
-}
 @media (min-width: 0px) {
   .sun-root {
     overflow-y: scroll;
@@ -2472,6 +2470,20 @@ textarea {
   }
 }
 @media (min-width: 0px) {
+  .sun-formCheckbox {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+  }
+}
+@media (min-width: 0px) {
   .sun-dateCheckbox[data-type=a]:checked {
     background-color: #2196f3;
   }
@@ -2508,6 +2520,11 @@ textarea {
 }
 @media (min-width: 0px) {
   .sun-timeBarGroupCheck:checked {
+    background-color: #2196f3;
+  }
+}
+@media (min-width: 0px) {
+  .sun-formCheckbox:checked {
     background-color: #2196f3;
   }
 }
@@ -2617,6 +2634,21 @@ textarea {
   }
 }
 @media (min-width: 0px) {
+  .sun-formCheckbox:checked::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 0px) {
   .sun-dateCheckbox:checked {
     border-color: transparent;
   }
@@ -2648,6 +2680,11 @@ textarea {
 }
 @media (min-width: 0px) {
   .sun-timeBarGroupCheck:checked {
+    border-color: transparent;
+  }
+}
+@media (min-width: 0px) {
+  .sun-formCheckbox:checked {
     border-color: transparent;
   }
 }
@@ -4983,6 +5020,7 @@ textarea {
     display: flex;
     gap: 5px;
     align-items: center;
+    margin-bottom: 15px;
   }
 }
 @media (min-width: 0px) {
@@ -5005,17 +5043,29 @@ textarea {
 @media (min-width: 0px) {
   .sun-intersectionFormRow {
     display: flex;
+    flex-wrap: wrap;
     gap: 5px;
     align-items: center;
   }
 }
 @media (min-width: 0px) {
   .sun-intersectionFormLabel {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     width: 100px;
+    min-width: 0;
     font-weight: 400;
+    font-size: 11px;
     flex-shrink: 0;
     user-select: none;
+    cursor: pointer;
     white-space: nowrap;
+  }
+}
+@media (min-width: 0px) {
+  .sun-intersectionFormLabel:has(> .sun-formCheckbox) {
+    width: auto;
   }
 }
 @media (min-width: 0px) {
@@ -5531,26 +5581,6 @@ textarea {
   }
 }
 @media (min-width: 0px) {
-  .sun-intersectionControls {
-    margin-bottom: 15px;
-  }
-}
-@media (min-width: 0px) {
-  .sun-intersectionForm {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-}
-@media (min-width: 0px) {
-  .sun-intersectionFormRow {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 5px;
-  }
-}
-@media (min-width: 0px) {
   .sun-intersectionSelect {
     width: 100%;
     padding: 5px;
@@ -5558,16 +5588,6 @@ textarea {
     font-size: 11px;
     height: 25px;
     background: #fff;
-  }
-}
-@media (min-width: 0px) {
-  .sun-intersectionFormLabel {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    cursor: pointer;
-    white-space: nowrap;
   }
 }
 @media (min-width: 0px) {
@@ -6454,6 +6474,9 @@ textarea {
     font-family: inherit;
     letter-spacing: normal;
   }
+}
+.sun- {
+  /* --- migration blocks from HEAD --- */
 }
 @media (min-width: 0px) {
   .sun-dateComparisonActionsBtn {
@@ -7461,8 +7484,8 @@ textarea {
   .venus-modalTitle {
     margin: 0 0 15px;
     padding-bottom: 5px;
-    border-bottom: 1px solid #ccc;
-    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
     font-weight: 400;
     color: #333;
   }
@@ -7517,11 +7540,6 @@ textarea {
     flex: 0 0 auto;
     margin-left: auto;
     width: auto;
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap;
   }
 }
 
@@ -7888,15 +7906,33 @@ textarea {
 }
 
 @media (min-width: 0px) {
-  .venus-expenseMultiplyLabel {
-    margin: 0;
-    align-self: flex-start;
+  .venus-datetimeFields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .venus-datetimeFields .sun-summarySelect[type=date] {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+@media (min-width: 0px) {
+  .venus-datetimeFields .venus-timeInput {
+    width: auto;
+    min-width: 5.5em;
+    flex: 0 0 auto;
   }
 }
 
 @media (min-width: 0px) {
-  .venus-expenseCalcHint {
-    margin: -4px 0 0;
+  .venus-expenseMultiplyLabel {
+    margin: 0;
+    align-self: flex-start;
   }
 }
 
@@ -7967,16 +8003,24 @@ textarea {
 
 @media (min-width: 0px) {
   .venus-exp-lock {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     padding: 0;
-    line-height: 1;
-    font-size: 14px;
+    line-height: 0;
     background: #f0f0f0;
     color: #333;
     border: 1px solid #ddd;
     opacity: 0.55;
+  }
+}
+@media (min-width: 0px) {
+  .venus-exp-lock__icon {
+    display: block;
+    flex-shrink: 0;
   }
 }
 @media (min-width: 0px) {

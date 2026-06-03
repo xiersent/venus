@@ -10,6 +10,9 @@
     /** @type {string|null} */
     let editingTransferId = null;
 
+    /** @type {ReturnType<typeof global.venusDatetime>} */
+    const dt = global.venusDatetime;
+
     /**
      * @param {number} amount
      * @returns {string}
@@ -35,11 +38,7 @@
      * @returns {string}
      */
     function formatDateDisplay(iso) {
-        const parts = iso.split('-');
-        if (parts.length !== 3) {
-            return iso;
-        }
-        return parts[2] + '.' + parts[1] + '.' + parts[0];
+        return dt.formatDateDisplay(iso);
     }
 
     /**
@@ -176,7 +175,7 @@
         const code = currencies[transaction.currency_id]?.code;
 
         return {
-            date: formatDateDisplay(transaction.date),
+            date: dt.formatDateTimeDisplay(transaction.date, transaction.time),
             fromName: transaction.account_from_id
                 ? accounts[transaction.account_from_id]?.name || '—'
                 : '—',
@@ -201,12 +200,7 @@
             return;
         }
 
-        const sorted = transfers.slice().sort((a, b) => {
-            if (a.date !== b.date) {
-                return a.date < b.date ? 1 : -1;
-            }
-            return a.created_at < b.created_at ? 1 : -1;
-        });
+        const sorted = transfers.slice().sort((a, b) => dt.compareTransactionsByDateTime(a, b));
 
         if (sorted.length === 0) {
             tbody.innerHTML =
@@ -431,6 +425,7 @@
         const db = global.venusStorage.load();
         const title = document.querySelector('[data-venus-transfer-modal-title]');
         const dateInput = document.getElementById('trf-date');
+        const timeInput = document.getElementById('trf-time');
         const fromSelect = document.getElementById('trf-from');
         const toSelect = document.getElementById('trf-to');
         const amountInput = document.getElementById('trf-amount');
@@ -440,9 +435,7 @@
         if (title) {
             title.textContent = 'Перенос между счетами';
         }
-        if (dateInput) {
-            dateInput.value = toIsoDate(new Date());
-        }
+        dt.setDateTimeFields(dateInput, timeInput, toIsoDate(new Date()), '');
         if (fromSelect && toSelect) {
             const accounts = visibleAccountsForSelect(db);
             populateAccountSelect(fromSelect, db, accounts[0]?.id ?? null, null);
@@ -477,9 +470,8 @@
         }
 
         const dateInput = document.getElementById('trf-date');
-        if (dateInput) {
-            dateInput.value = transaction.date;
-        }
+        const timeInput = document.getElementById('trf-time');
+        dt.setDateTimeFields(dateInput, timeInput, transaction.date, transaction.time);
 
         populateAccountSelect(
             document.getElementById('trf-from'),
@@ -515,6 +507,7 @@
      */
     function readTransferForm() {
         const dateInput = document.getElementById('trf-date');
+        const timeInput = document.getElementById('trf-time');
         const fromSelect = document.getElementById('trf-from');
         const toSelect = document.getElementById('trf-to');
         const amountInput = document.getElementById('trf-amount');
@@ -527,6 +520,7 @@
             dateInput?.focus();
             return null;
         }
+        const time = dt.readTimeInput(timeInput);
 
         const fromId = fromSelect?.value || '';
         const toId = toSelect?.value || '';
@@ -555,6 +549,7 @@
 
         return {
             date,
+            time,
             fromId,
             toId,
             amount,
@@ -583,6 +578,7 @@
             }
 
             transaction.date = form.date;
+            dt.applyTransactionTime(transaction, form.time);
             transaction.account_from_id = form.fromId;
             transaction.account_to_id = form.toId;
             transaction.account_id = null;
@@ -602,6 +598,7 @@
             id: transactionId,
             type: 'transfer',
             date: form.date,
+            ...(form.time ? { time: form.time } : {}),
             account_id: null,
             account_from_id: form.fromId,
             account_to_id: form.toId,
@@ -634,7 +631,7 @@
 
         const accounts = accountMapById(db);
         const label =
-            formatDateDisplay(transaction.date) +
+            dt.formatDateTimeDisplay(transaction.date, transaction.time) +
             ', ' +
             (accounts[transaction.account_from_id]?.name || '—') +
             ' → ' +

@@ -12,6 +12,9 @@
 
     const EXPENSE_LAST_FORM_KEY = 'venus-expense-last-form';
 
+    /** @type {ReturnType<typeof global.venusDatetime>} */
+    const dt = global.venusDatetime;
+
     /** @type {boolean} */
     let expenseCalcLock = false;
 
@@ -40,11 +43,7 @@
      * @returns {string}
      */
     function formatDateDisplay(iso) {
-        const parts = iso.split('-');
-        if (parts.length !== 3) {
-            return iso;
-        }
-        return parts[2] + '.' + parts[1] + '.' + parts[0];
+        return dt.formatDateDisplay(iso);
     }
 
     /**
@@ -320,6 +319,7 @@
         const toIso = parseDateInput(document.getElementById('filter-to')?.value || '');
         const accountId = document.getElementById('filter-account')?.value || '';
         const categoryId = document.getElementById('filter-category')?.value || '';
+        const subcategoryId = document.getElementById('filter-subcategory')?.value || '';
 
         return expenses.filter((transaction) => {
             if (fromIso && transaction.date < fromIso) {
@@ -331,7 +331,17 @@
             if (accountId && transaction.account_id !== accountId) {
                 return false;
             }
-            if (categoryId && !expenseCategoryMatchesFilter(db, transaction.category_id, categoryId)) {
+            if (
+                subcategoryId &&
+                transaction.category_id !== subcategoryId
+            ) {
+                return false;
+            }
+            if (
+                !subcategoryId &&
+                categoryId &&
+                !expenseCategoryMatchesFilter(db, transaction.category_id, categoryId)
+            ) {
                 return false;
             }
             return true;
@@ -443,7 +453,7 @@
         }
 
         return {
-            date: formatDateDisplay(transaction.date),
+            date: dt.formatDateTimeDisplay(transaction.date, transaction.time),
             account: transaction.account_id ? accounts[transaction.account_id]?.name || '—' : '—',
             category: categoryName,
             subcategory: subcategoryName,
@@ -467,12 +477,7 @@
             return;
         }
 
-        const sorted = expenses.slice().sort((a, b) => {
-            if (a.date !== b.date) {
-                return a.date < b.date ? 1 : -1;
-            }
-            return a.created_at < b.created_at ? 1 : -1;
-        });
+        const sorted = expenses.slice().sort((a, b) => dt.compareTransactionsByDateTime(a, b));
 
         if (sorted.length === 0) {
             tbody.innerHTML =
@@ -722,6 +727,52 @@
     }
 
     /**
+     * @param {HTMLSelectElement|null} select
+     * @param {import('./storage').VenusDatabase} db
+     * @param {string} rootCategoryId
+     */
+    function populateSubcategoryFilterSelect(select, db, rootCategoryId) {
+        if (!select) {
+            return;
+        }
+
+        const prev = select.value;
+
+        if (!rootCategoryId) {
+            select.innerHTML = '<option value="">&lt;Все подкатегории&gt;</option>';
+            select.value = '';
+            select.disabled = true;
+            return;
+        }
+
+        const subs = expenseSubcategories(db, rootCategoryId);
+        if (subs.length === 0) {
+            select.innerHTML = '<option value="">&lt;Без подкатегорий&gt;</option>';
+            select.value = '';
+            select.disabled = true;
+            return;
+        }
+
+        let options = '<option value="">&lt;Все подкатегории&gt;</option>';
+        subs.forEach((category) => {
+            options +=
+                '<option value="' +
+                category.id +
+                '">' +
+                escapeHtml(category.name) +
+                '</option>';
+        });
+
+        select.disabled = false;
+        select.innerHTML = options;
+        if (prev && select.querySelector('option[value="' + prev + '"]')) {
+            select.value = prev;
+        } else {
+            select.value = '';
+        }
+    }
+
+    /**
      * @param {import('./storage').VenusDatabase} db
      */
     function initFilterDateRange(db) {
@@ -784,6 +835,11 @@
             db,
             '<Все категории>',
             'category',
+        );
+        populateSubcategoryFilterSelect(
+            document.getElementById('filter-subcategory'),
+            db,
+            document.getElementById('filter-category')?.value || '',
         );
     }
 
@@ -963,6 +1019,7 @@
                         ? parsed.calcLockField
                         : null,
                 date: typeof parsed.date === 'string' ? parsed.date : '',
+                time: typeof parsed.time === 'string' ? parsed.time : '',
             };
         } catch (err) {
             console.warn('venus.expenses.loadLastExpenseFormDefaults:', err);
@@ -998,6 +1055,7 @@
                     multiplyPriceQty: form.multiplyPriceQty,
                     calcLockField: form.calcLockField,
                     date: form.date,
+                    time: form.time || '',
                 }),
             );
         } catch (err) {
@@ -1046,6 +1104,7 @@
      *   multiplyPriceQty: boolean;
      *   calcLockField: 'price'|'qty'|'amount'|null;
      *   date: string;
+     *   time: string;
      * }|null} last
      */
     function resolveLastExpenseDefaults(db, last) {
@@ -1089,6 +1148,8 @@
 
         const date =
             last.date && /^\d{4}-\d{2}-\d{2}$/.test(last.date) ? last.date : toIsoDate(new Date());
+        const time =
+            last.time && /^\d{2}:\d{2}$/.test(last.time) ? last.time : '';
 
         return {
             accountId: last.accountId,
@@ -1101,6 +1162,7 @@
             multiplyPriceQty: last.multiplyPriceQty,
             calcLockField: last.calcLockField,
             date,
+            time,
         };
     }
 
@@ -1110,6 +1172,7 @@
         const last = resolveLastExpenseDefaults(db, loadLastExpenseFormDefaults());
         const title = document.querySelector('[data-venus-expense-modal-title]');
         const dateInput = document.getElementById('exp-date');
+        const timeInput = document.getElementById('exp-time');
         const accountSelect = document.getElementById('exp-account');
         const categorySelect = document.getElementById('exp-category');
         const subSelect = document.getElementById('exp-subcategory');
@@ -1124,9 +1187,12 @@
         if (title) {
             title.textContent = 'Карточка расхода';
         }
-        if (dateInput) {
-            dateInput.value = last?.date || toIsoDate(new Date());
-        }
+        dt.setDateTimeFields(
+            dateInput,
+            timeInput,
+            last?.date || toIsoDate(new Date()),
+            last?.time || '',
+        );
         if (accountSelect) {
             populateAccountSelect(accountSelect, db, last?.accountId ?? null);
         }
@@ -1199,9 +1265,8 @@
         }
 
         const dateInput = document.getElementById('exp-date');
-        if (dateInput) {
-            dateInput.value = transaction.date;
-        }
+        const timeInput = document.getElementById('exp-time');
+        dt.setDateTimeFields(dateInput, timeInput, transaction.date, transaction.time);
 
         populateAccountSelect(
             document.getElementById('exp-account'),
@@ -1276,6 +1341,7 @@
      */
     function readExpenseForm() {
         const dateInput = document.getElementById('exp-date');
+        const timeInput = document.getElementById('exp-time');
         const accountSelect = document.getElementById('exp-account');
         const categorySelect = document.getElementById('exp-category');
         const subSelect = document.getElementById('exp-subcategory');
@@ -1293,6 +1359,7 @@
             dateInput?.focus();
             return null;
         }
+        const time = dt.readTimeInput(timeInput);
 
         const accountId = accountSelect?.value || '';
         if (!accountId) {
@@ -1361,6 +1428,7 @@
 
         return {
             date,
+            time,
             accountId,
             categoryId,
             amount,
@@ -1394,6 +1462,7 @@
             }
 
             transaction.date = form.date;
+            dt.applyTransactionTime(transaction, form.time);
             transaction.account_id = form.accountId;
             transaction.category_id = form.categoryId;
             transaction.amount = form.amount;
@@ -1418,6 +1487,7 @@
             id: transactionId,
             type: 'expense',
             date: form.date,
+            ...(form.time ? { time: form.time } : {}),
             account_id: form.accountId,
             account_from_id: null,
             account_to_id: null,
@@ -1457,7 +1527,7 @@
         const categories = categoryMapById(db);
         const accounts = accountMapById(db);
         const label =
-            formatDateDisplay(transaction.date) +
+            dt.formatDateTimeDisplay(transaction.date, transaction.time) +
             ', ' +
             (accounts[transaction.account_id]?.name || 'счёт') +
             ', ' +
@@ -1632,6 +1702,15 @@
             render(global.venusStorage.load());
         });
         document.getElementById('filter-category')?.addEventListener('change', () => {
+            const db = global.venusStorage.load();
+            populateSubcategoryFilterSelect(
+                document.getElementById('filter-subcategory'),
+                db,
+                document.getElementById('filter-category')?.value || '',
+            );
+            render(db);
+        });
+        document.getElementById('filter-subcategory')?.addEventListener('change', () => {
             render(global.venusStorage.load());
         });
     }

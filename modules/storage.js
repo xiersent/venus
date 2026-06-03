@@ -101,6 +101,7 @@
      * @property {VenusId} id
      * @property {VenusTransactionType} type
      * @property {string} date YYYY-MM-DD
+     * @property {string} [time] HH:MM — необязательное время операции
      * @property {VenusId|null} [account_id]
      * @property {VenusId|null} [account_from_id]
      * @property {VenusId|null} [account_to_id]

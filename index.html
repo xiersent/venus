@@ -76,7 +76,7 @@
                                     <button type="button" class="sun-uiBtn js-venus-account-delete">Удалить</button>
                                 </div>
                                 <label class="sun-intersectionFormLabel">
-                                    <input type="checkbox" data-venus-show-hidden autocomplete="off">
+                                    <input type="checkbox" class="sun-formCheckbox" data-venus-show-hidden autocomplete="off">
                                     Показать скрытые счета
                                 </label>
                             </div>
@@ -162,7 +162,7 @@
                                     <div class="sun-summaryControls">
                                         <div class="sun-summarySelectRow">
                                             <label class="sun-intersectionFormLabel">
-                                                <input type="checkbox" data-venus-transfer-filter checked autocomplete="off">
+                                                <input type="checkbox" class="sun-formCheckbox" data-venus-transfer-filter checked autocomplete="off">
                                                 Фильтр
                                             </label>
                                             <div class="sun-intersectionSelectGroup">
@@ -247,7 +247,7 @@
                                 <div class="sun-summaryControls">
                                     <div class="sun-summarySelectRow">
                                         <label class="sun-intersectionFormLabel">
-                                            <input type="checkbox" data-venus-expense-filter checked autocomplete="off">
+                                            <input type="checkbox" class="sun-formCheckbox" data-venus-expense-filter checked autocomplete="off">
                                             Фильтр
                                         </label>
                                         <div class="sun-intersectionSelectGroup">
@@ -268,6 +268,12 @@
                                             <label class="sun-intersectionFormLabel" for="filter-category">Категория</label>
                                             <select class="sun-summarySelect" id="filter-category">
                                                 <option value="">&lt;Все категории&gt;</option>
+                                            </select>
+                                        </div>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="filter-subcategory">Подкатегория</label>
+                                            <select class="sun-summarySelect" id="filter-subcategory" disabled>
+                                                <option value="">&lt;Все подкатегории&gt;</option>
                                             </select>
                                         </div>
                                     </div>
@@ -346,7 +352,7 @@
                                 <div class="sun-summaryControls">
                                     <div class="sun-summarySelectRow">
                                         <label class="sun-intersectionFormLabel">
-                                            <input type="checkbox" data-venus-income-filter checked autocomplete="off">
+                                            <input type="checkbox" class="sun-formCheckbox" data-venus-income-filter checked autocomplete="off">
                                             Фильтр
                                         </label>
                                         <div class="sun-intersectionSelectGroup">
@@ -367,6 +373,12 @@
                                             <label class="sun-intersectionFormLabel" for="inc-filter-category">Категория</label>
                                             <select class="sun-summarySelect" id="inc-filter-category">
                                                 <option value="">&lt;Все категории&gt;</option>
+                                            </select>
+                                        </div>
+                                        <div class="sun-intersectionSelectGroup">
+                                            <label class="sun-intersectionFormLabel" for="inc-filter-subcategory">Подкатегория</label>
+                                            <select class="sun-summarySelect" id="inc-filter-subcategory" disabled>
+                                                <option value="">&lt;Все подкатегории&gt;</option>
                                             </select>
                                         </div>
                                     </div>
@@ -418,9 +430,12 @@
         <div id="venus-modal-expense" class="venus-xierModalBox">
             <h3 class="venus-modalTitle" data-venus-expense-modal-title>Карточка расхода</h3>
             <div class="venus-formFields">
-                <div class="sun-formRow">
+                <div class="sun-formRow venus-datetimeRow">
                     <label class="sun-formLabel" for="exp-date">Дата</label>
-                    <input type="date" class="sun-summarySelect" id="exp-date">
+                    <div class="venus-datetimeFields">
+                        <input type="date" class="sun-summarySelect" id="exp-date">
+                        <input type="time" class="sun-summarySelect venus-timeInput" id="exp-time" step="60">
+                    </div>
                 </div>
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="exp-account">Списать со счёта</label>
@@ -441,7 +456,7 @@
                     <div class="venus-expenseCalcFieldWrap">
                         <div class="venus-expenseCalcField">
                             <input type="text" class="sun-summarySelect" id="exp-qty" inputmode="decimal">
-                            <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="qty" aria-pressed="false" aria-label="Зафиксировать количество" title="Зафиксировать количество" disabled>🔒</button>
+                            <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="qty" aria-pressed="false" aria-label="Зафиксировать количество" title="Зафиксировать количество" disabled><svg class="venus-exp-lock__icon" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6 7V5a2 2 0 1 1 4 0v2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1Zm2-2a1 1 0 0 0-1 1v2h2V6a1 1 0 0 0-1-1Z"/></svg></button>
                         </div>
                         <select class="sun-summarySelect" id="exp-unit" aria-label="Ед. изм.">
                             <option value="">&lt;Без ед. изм.&gt;</option>
@@ -452,20 +467,19 @@
                     <label class="sun-formLabel" for="exp-price">Цена</label>
                     <div class="venus-expenseCalcField">
                         <input type="text" class="sun-summarySelect" id="exp-price" value="0,00" inputmode="decimal">
-                        <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="price" aria-pressed="false" aria-label="Зафиксировать цену" title="Зафиксировать цену" disabled>🔒</button>
+                        <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="price" aria-pressed="false" aria-label="Зафиксировать цену" title="Зафиксировать цену" disabled><svg class="venus-exp-lock__icon" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6 7V5a2 2 0 1 1 4 0v2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1Zm2-2a1 1 0 0 0-1 1v2h2V6a1 1 0 0 0-1-1Z"/></svg></button>
                     </div>
                 </div>
                 <label class="sun-intersectionFormLabel venus-expenseMultiplyLabel">
-                    <input type="checkbox" id="exp-multiply" autocomplete="off">
+                    <input type="checkbox" class="sun-formCheckbox" id="exp-multiply" autocomplete="off">
                     Умножить цену на количество
                 </label>
-                <p class="sun-protoHeaderMeta venus-expenseCalcHint">Замок фиксирует поле: при пересчёте оно не меняется, остальные подстраиваются.</p>
                 <div class="sun-formRow venus-expenseCalcRow">
                     <label class="sun-formLabel" for="exp-amount">Сумма</label>
                     <div class="venus-expenseCalcFieldWrap">
                         <div class="venus-expenseCalcField">
                             <input type="text" class="sun-summarySelect" id="exp-amount" value="0,00" inputmode="decimal">
-                            <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="amount" aria-pressed="false" aria-label="Зафиксировать сумму" title="Зафиксировать сумму" disabled>🔒</button>
+                            <button type="button" class="venus-exp-lock js-venus-exp-lock" data-exp-lock="amount" aria-pressed="false" aria-label="Зафиксировать сумму" title="Зафиксировать сумму" disabled><svg class="venus-exp-lock__icon" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6 7V5a2 2 0 1 1 4 0v2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1Zm2-2a1 1 0 0 0-1 1v2h2V6a1 1 0 0 0-1-1Z"/></svg></button>
                         </div>
                         <select class="sun-summarySelect" id="exp-currency" aria-label="Валюта"></select>
                     </div>
@@ -484,9 +498,12 @@
         <div id="venus-modal-income" class="venus-xierModalBox">
             <h3 class="venus-modalTitle" data-venus-income-modal-title>Карточка дохода</h3>
             <div class="venus-formFields">
-                <div class="sun-formRow">
+                <div class="sun-formRow venus-datetimeRow">
                     <label class="sun-formLabel" for="inc-date">Дата</label>
-                    <input type="date" class="sun-summarySelect" id="inc-date">
+                    <div class="venus-datetimeFields">
+                        <input type="date" class="sun-summarySelect" id="inc-date">
+                        <input type="time" class="sun-summarySelect venus-timeInput" id="inc-time" step="60">
+                    </div>
                 </div>
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="inc-account">Зачислить на счёт</label>
@@ -541,7 +558,7 @@
                     <textarea id="acc-note" rows="2"></textarea>
                 </div>
                 <label class="sun-intersectionFormLabel">
-                    <input type="checkbox" id="acc-hidden" autocomplete="off">
+                    <input type="checkbox" class="sun-formCheckbox" id="acc-hidden" autocomplete="off">
                     Скрыть из списка счетов
                 </label>
             </div>
@@ -554,9 +571,12 @@
         <div id="venus-modal-transfer" class="venus-xierModalBox">
             <h3 class="venus-modalTitle" data-venus-transfer-modal-title>Перенос между счетами</h3>
             <div class="venus-formFields">
-                <div class="sun-formRow">
+                <div class="sun-formRow venus-datetimeRow">
                     <label class="sun-formLabel" for="trf-date">Дата</label>
-                    <input type="date" class="sun-summarySelect" id="trf-date">
+                    <div class="venus-datetimeFields">
+                        <input type="date" class="sun-summarySelect" id="trf-date">
+                        <input type="time" class="sun-summarySelect venus-timeInput" id="trf-time" step="60">
+                    </div>
                 </div>
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="trf-from">Со счета</label>
@@ -847,6 +867,7 @@
     <script src="modules/decimal-input.js"></script>
     <script src="modules/warning.js"></script>
     <script src="modules/storage.js"></script>
+    <script src="modules/datetime.js"></script>
     <script src="modules/accounts.js"></script>
     <script src="modules/expenses.js"></script>
     <script src="modules/incomes.js"></script>

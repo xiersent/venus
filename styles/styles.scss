@@ -99,7 +99,8 @@ button:hover{filter: brightness(0.9);}
 [type="checkbox"]{width: 16px; height: 16px; cursor: pointer; flex-shrink: 0;}
 [type="text"]{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
 [type="number"]{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
-[type="date"]{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
+[type="date"],
+[type="time"]{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
 select{padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-sm};}
 textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$font-family}; font-size: #{$font-size-md}; resize: vertical; min-height: 80px; width: 100%;}
 
@@ -1064,6 +1065,9 @@ textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$fon
 	&timeBarGroupCheck{
 		@include sun-custom-checkbox-base;
 	}
+	&formCheckbox{
+		@include sun-custom-checkbox-base;
+	}
 	&dateCheckbox[data-type="a"]:checked{
 		@media(min-width: 0px){background-color: #2196f3;}
 	}
@@ -1088,6 +1092,9 @@ textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$fon
 	&timeBarGroupCheck:checked{
 		@media(min-width: 0px){background-color: #2196f3;}
 	}
+	&formCheckbox:checked{
+		@media(min-width: 0px){background-color: #2196f3;}
+	}
 	&dateCheckbox:checked::after{
 		@include sun-checkbox-checked-mark;
 	}
@@ -1109,6 +1116,9 @@ textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$fon
 	&timeBarGroupCheck:checked::after{
 		@include sun-checkbox-checked-mark;
 	}
+	&formCheckbox:checked::after{
+		@include sun-checkbox-checked-mark;
+	}
 	&dateCheckbox:checked{
 		@media(min-width: 0px){border-color: transparent;}
 	}
@@ -1128,6 +1138,9 @@ textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$fon
 		@media(min-width: 0px){border-color: transparent;}
 	}
 	&timeBarGroupCheck:checked{
+		@media(min-width: 0px){border-color: transparent;}
+	}
+	&formCheckbox:checked{
 		@media(min-width: 0px){border-color: transparent;}
 	}
 	&listItemDate #{&}dateSelectionChecks{
@@ -2037,7 +2050,7 @@ textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$fon
 		@media(min-width: 0px){color: #{$text-secondary}; margin: 0 #{$spacing-sm}; white-space: nowrap;}
 	}
 	&intersectionControls{
-		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center;}
+		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center; margin-bottom: #{$spacing-md};}
 	}
 	&exactMatch{
 		@media(min-width: 0px){background-color: #e6f7e6;}
@@ -2049,10 +2062,25 @@ textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$fon
 		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs};}
 	}
 	&intersectionFormRow{
-		@media(min-width: 0px){display: flex; gap: #{$spacing-xs}; align-items: center;}
+		@media(min-width: 0px){display: flex; flex-wrap: wrap; gap: #{$spacing-xs}; align-items: center;}
 	}
 	&intersectionFormLabel{
-		@media(min-width: 0px){width: 100px; font-weight: 400; flex-shrink: 0; user-select: none; white-space: nowrap;}
+		@media(min-width: 0px){
+			display: flex;
+			align-items: center;
+			gap: #{$spacing-xs};
+			width: 100px;
+			min-width: 0;
+			font-weight: 400;
+			font-size: #{$font-size-sm};
+			flex-shrink: 0;
+			user-select: none;
+			cursor: pointer;
+			white-space: nowrap;
+		}
+		&:has(> .sun-formCheckbox){
+			@media(min-width: 0px){width: auto;}
+		}
 	}
 	&intersectionFormInput{
 		@media(min-width: 0px){flex: 1; padding: #{$spacing-xs}; border: 1px solid #{$clg}; min-width: 0; height: 25px;}
@@ -2255,20 +2283,8 @@ textarea{padding: #{$spacing-sm}; border: 1px solid #{$clg}; font-family: #{$fon
 	&wavePeriodBadge{
 		@media(min-width: 0px){background: #e0e0e0; padding: 2px 6px; font-size: 10px; font-weight: 400;}
 	}
-	&intersectionControls{
-		@media(min-width: 0px){margin-bottom: #{$spacing-md};}
-	}
-	&intersectionForm{
-		@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-xs};}
-	}
-	&intersectionFormRow{
-		@media(min-width: 0px){display: flex; align-items: center; flex-wrap: wrap; gap: #{$spacing-xs};}
-	}
 	&intersectionSelect{
 		@media(min-width: 0px){width: 100%; padding: #{$spacing-xs}; border: 1px solid #{$clg}; font-size: #{$font-size-sm}; height: 25px; background: #fff;}
-	}
-	&intersectionFormLabel{
-		@media(min-width: 0px){display: flex; align-items: center; gap: #{$spacing-xs}; font-size: #{$font-size-sm}; cursor: pointer; white-space: nowrap;}
 	}
 	&intersectionResultsContainer{
 		@media(min-width: 0px){max-height: 400px; min-height: 200px; overflow-y: auto; border: 1px solid #{$clg}; background: #fff;}
@@ -3100,16 +3116,7 @@ body.sun-app.venus-app-body{
 }
 .sun-protoToolbar > .sun-protoHeaderMeta,
 .sun-protoToolbar > .sun-intersectionFormLabel{
-	@media(min-width: 0px){
-		flex: 0 0 auto;
-		margin-left: auto;
-		width: auto;
-		min-width: 0;
-		display: flex;
-		align-items: center;
-		gap: #{$spacing-xs};
-		white-space: nowrap;
-	}
+	@media(min-width: 0px){flex: 0 0 auto; margin-left: auto; width: auto;}
 }
 .sun-protoFooter{
 	@media(min-width: 0px){display: flex; flex-wrap: wrap; gap: #{$spacing-md}; justify-content: space-between; align-items: flex-start; margin-top: #{$spacing-md};}
@@ -3302,11 +3309,24 @@ body.sun-app.venus-app-body{
 .venus-formFields{
 	@media(min-width: 0px){display: flex; flex-direction: column; gap: #{$spacing-sm};}
 }
+.venus-datetimeFields{
+	@media(min-width: 0px){
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: #{$spacing-xs};
+		flex: 1;
+		min-width: 0;
+	}
+	.sun-summarySelect[type="date"]{
+		@media(min-width: 0px){flex: 1; min-width: 120px;}
+	}
+	.venus-timeInput{
+		@media(min-width: 0px){width: auto; min-width: 5.5em; flex: 0 0 auto;}
+	}
+}
 .venus-expenseMultiplyLabel{
 	@media(min-width: 0px){margin: 0; align-self: flex-start;}
-}
-.venus-expenseCalcHint{
-	@media(min-width: 0px){margin: -4px 0 0;}
 }
 .venus-expenseCalcRow .sun-formLabel{
 	@media(min-width: 0px){flex-shrink: 0;}
@@ -3351,16 +3371,21 @@ body.sun-app.venus-app-body{
 
 .venus-exp-lock{
 	@media(min-width: 0px){
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		flex-shrink: 0;
-		width: 28px;
-		height: 28px;
+		width: 22px;
+		height: 22px;
 		padding: 0;
-		line-height: 1;
-		font-size: 14px;
+		line-height: 0;
 		background: #f0f0f0;
 		color: #{$text-color};
 		border: 1px solid #{$clg};
 		opacity: 0.55;
+	}
+	&__icon{
+		@media(min-width: 0px){display: block; flex-shrink: 0;}
 	}
 	&:disabled{
 		@media(min-width: 0px){cursor: not-allowed; opacity: 0.3;}
