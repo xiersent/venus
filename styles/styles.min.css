@@ -7458,10 +7458,13 @@ textarea {
 }
 
 @media (min-width: 0px) {
-  .sun-protoHeaderTitle {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
+  .venus-modalTitle {
+    margin: 0 0 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
   }
 }
 
@@ -7618,16 +7621,6 @@ textarea {
     font-weight: 400;
     text-align: right;
     font-variant-numeric: tabular-nums;
-  }
-}
-
-@media (min-width: 0px) {
-  .sun-protoNote {
-    margin-top: 15px;
-    text-align: center;
-    color: #666;
-    font-size: 11px;
-    font-style: italic;
   }
 }
 
@@ -7881,7 +7874,7 @@ textarea {
 }
 
 @media (min-width: 0px) {
-  .venus-xierModalBox .sun-summaryHeader {
+  .venus-xierModalBox .venus-modalTitle {
     margin-bottom: 15px;
   }
 }

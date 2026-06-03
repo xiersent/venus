@@ -28,10 +28,8 @@
 <body class="sun-app venus-app-body">
     <div class="sun-warningOverlay" data-venus-warning-overlay role="dialog" aria-modal="true" aria-labelledby="venus-warning-title">
         <div class="sun-warningBox sun-hidden" data-venus-warning-box>
-            <div class="sun-warningTitle" id="venus-warning-title">ПРЕДУПРЕЖДЕНИЕ</div>
             <div class="sun-warningText">
-                <p>Инструмент в разработке. Это бесплатная веб-версия известной платной программы ведения семейного бюджета.</p>
-                <p>В дальнейшем интерфейс будет обёрнут в программную оболочку. Можно потыкаться и оценить возможности, но для реального учёта использовать в данный момент <strong>не рекомендуется</strong>.</p>
+                <p id="venus-warning-title">В разработке</p>
             </div>
             <div class="sun-parableBtnWrapper sun-warningActions">
                 <button type="button" class="sun-uiBtn js-venus-warning-continue">Продолжить</button>
@@ -44,10 +42,7 @@
 
             <div class="sun-panelSection">
                 <div class="sun-protoHeader">
-                    <div class="sun-summaryHeader sun-protoHeaderTitle">
-                        <h3>Venus — домашняя бухгалтерия</h3>
-                        <p class="sun-protoHeaderMeta">Пользователь: <strong data-venus-user-name>—</strong></p>
-                    </div>
+                    <p class="sun-protoHeaderMeta">Пользователь: <strong data-venus-user-name>—</strong></p>
                     <div class="sun-transformRow">
                         <button type="button" class="sun-uiBtn js-venus-modal-categories">Категории</button>
                         <button type="button" class="sun-uiBtn js-venus-modal-settings">Настройки</button>
@@ -415,16 +410,12 @@
                 </div>
             </div>
 
-            <p class="sun-protoNote">Прототип v1 · стили sun · модалки xiermodal</p>
-
         </div>
     </div>
 
     <div class="venus-xierModalStore" aria-hidden="true">
         <div id="venus-modal-expense" class="venus-xierModalBox">
-            <div class="sun-summaryHeader">
-                <h3 data-venus-expense-modal-title>Карточка расхода</h3>
-            </div>
+            <h3 class="venus-modalTitle" data-venus-expense-modal-title>Карточка расхода</h3>
             <div class="venus-formFields">
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="exp-date">Дата</label>
@@ -490,9 +481,7 @@
         </div>
 
         <div id="venus-modal-income" class="venus-xierModalBox">
-            <div class="sun-summaryHeader">
-                <h3 data-venus-income-modal-title>Карточка дохода</h3>
-            </div>
+            <h3 class="venus-modalTitle" data-venus-income-modal-title>Карточка дохода</h3>
             <div class="venus-formFields">
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="inc-date">Дата</label>
@@ -536,9 +525,7 @@
         </div>
 
         <div id="venus-modal-account" class="venus-xierModalBox">
-            <div class="sun-summaryHeader">
-                <h3 data-venus-account-modal-title>Счёт</h3>
-            </div>
+            <h3 class="venus-modalTitle" data-venus-account-modal-title>Счёт</h3>
             <div class="venus-formFields">
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="acc-name">Название</label>
@@ -564,9 +551,7 @@
         </div>
 
         <div id="venus-modal-transfer" class="venus-xierModalBox">
-            <div class="sun-summaryHeader">
-                <h3 data-venus-transfer-modal-title>Перенос между счетами</h3>
-            </div>
+            <h3 class="venus-modalTitle" data-venus-transfer-modal-title>Перенос между счетами</h3>
             <div class="venus-formFields">
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="trf-date">Дата</label>
@@ -597,9 +582,7 @@
         </div>
 
         <div id="venus-modal-categories" class="venus-xierModalBox venus-xierModalBox--wide venus-xierModalBox--categories">
-            <div class="sun-summaryHeader">
-                <h3>Категории</h3>
-            </div>
+            <h3 class="venus-modalTitle">Категории</h3>
             <div class="sun-tabButtons sun-tabButtonsFramed venus-categoriesTabs" role="tablist" aria-label="Справочники">
                 <button type="button" class="sun-tabButton sun-active js-venus-cat-tab" data-venus-cat-tab="expense">Категории расходов</button>
                 <button type="button" class="sun-tabButton js-venus-cat-tab" data-venus-cat-tab="income">Категории доходов</button>
@@ -806,9 +789,7 @@
         </div>
 
         <div id="venus-modal-catalog-edit" class="venus-xierModalBox venus-xierModalBox--compact">
-            <div class="sun-summaryHeader">
-                <h3 data-venus-catalog-edit-title>Название</h3>
-            </div>
+            <h3 class="venus-modalTitle" data-venus-catalog-edit-title>Название</h3>
             <div class="venus-formFields">
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="venus-catalog-edit-name">Название</label>
@@ -822,9 +803,7 @@
         </div>
 
         <div id="venus-modal-settings" class="venus-xierModalBox venus-xierModalBox--side">
-            <div class="sun-summaryHeader">
-                <h3>Настройки</h3>
-            </div>
+            <h3 class="venus-modalTitle">Настройки</h3>
             <p class="sun-protoHeaderMeta" data-venus-settings-meta>Обновлено: —</p>
             <div class="venus-formFields venus-settingsFields">
                 <div class="venus-settingsBlock">
@@ -852,7 +831,6 @@
                 <div class="venus-settingsBlock">
                     <p class="venus-settingsBlockTitle">Сброс данных</p>
                     <div class="sun-transformRow venus-settingsBlockActions">
-                        <button type="button" class="sun-uiBtn js-venus-settings-reset-demo">Демо-данные</button>
                         <button type="button" class="sun-uiBtn js-venus-settings-reset-empty">Очистить всё</button>
                     </div>
                 </div>

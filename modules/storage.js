@@ -1156,100 +1156,6 @@
     }
 
     /**
-     * Демо-база как в HTML-прототипе (Налик, расход «Мебель» 12 ₽).
-     * @returns {VenusDatabase}
-     */
-    function createDemoDatabase() {
-        const db = createEmptyDatabase();
-        const now = nowIso();
-        const user = db.users[0];
-        user.name = 'Вячеслав';
-
-        const rur = db.currencies.find((c) => c.code === 'RUR');
-        const expenseCategory = db.categories.find(
-            (c) => c.type === 'expense' && c.name === 'Мебель',
-        );
-        const salaryRoot = db.categories.find(
-            (c) => c.type === 'income' && c.name === 'Зарплата',
-        );
-        const salarySub = salaryRoot
-            ? db.categories.find(
-                  (c) => c.type === 'income' && c.parent_id === salaryRoot.id && c.name === 'Оклад',
-              )
-            : null;
-
-        if (!rur || !expenseCategory) {
-            return db;
-        }
-
-        const accountId = createId();
-        db.accounts.push({
-            id: accountId,
-            name: 'Налик',
-            currency_id: rur.id,
-            note: '',
-            is_hidden: false,
-            sort_order: 0,
-            user_id: user.id,
-            created_at: now,
-            updated_at: now,
-        });
-
-        db.accounts.push({
-            id: createId(),
-            name: 'Карта',
-            currency_id: rur.id,
-            note: '',
-            is_hidden: false,
-            sort_order: 1,
-            user_id: user.id,
-            created_at: now,
-            updated_at: now,
-        });
-
-        db.transactions.push({
-            id: createId(),
-            type: 'expense',
-            date: '2020-06-02',
-            account_id: accountId,
-            account_from_id: null,
-            account_to_id: null,
-            category_id: expenseCategory.id,
-            amount: 12,
-            currency_id: rur.id,
-            quantity: null,
-            unit_id: null,
-            note: '',
-            user_id: user.id,
-            created_at: now,
-            updated_at: now,
-        });
-
-        if (salarySub) {
-            db.transactions.push({
-                id: createId(),
-                type: 'income',
-                date: '2020-06-02',
-                account_id: accountId,
-                account_from_id: null,
-                account_to_id: null,
-                category_id: salarySub.id,
-                amount: 45000,
-                currency_id: rur.id,
-                quantity: null,
-                unit_id: null,
-                note: '',
-                user_id: user.id,
-                created_at: now,
-                updated_at: now,
-            });
-        }
-
-        db.meta.updated_at = now;
-        return db;
-    }
-
-    /**
      * @param {unknown} value
      * @returns {value is VenusDatabase}
      */
@@ -1316,7 +1222,7 @@
             console.warn('venus.storage.load:', err);
         }
 
-        cache = createDemoDatabase();
+        cache = createEmptyDatabase();
         save(cache);
         return cache;
     }
@@ -1353,16 +1259,6 @@
     }
 
     /**
-     * Сброс к демо-данным прототипа.
-     * @returns {VenusDatabase}
-     */
-    function resetToDemo() {
-        cache = createDemoDatabase();
-        save(cache);
-        return cache;
-    }
-
-    /**
      * Полная очистка (онбординг с нуля).
      * @returns {VenusDatabase}
      */
@@ -1380,13 +1276,11 @@
         createId,
         toDateOnly,
         createEmptyDatabase,
-        createDemoDatabase,
         isDatabase,
         load,
         save,
         exportJson,
         importJson,
-        resetToDemo,
         resetToEmpty,
         SYSTEM_EXPENSE_CATEGORIES,
         SYSTEM_INCOME_CATEGORIES,

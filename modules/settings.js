@@ -121,20 +121,6 @@
         renderSettings(db);
     }
 
-    function resetDemo() {
-        if (
-            !global.confirm(
-                'Загрузить демо-данные прототипа? Текущие данные будут заменены.',
-            )
-        ) {
-            return;
-        }
-
-        const db = global.venusStorage.resetToDemo();
-        refreshAllUi(db);
-        renderSettings(db);
-    }
-
     function resetEmpty() {
         if (
             !global.confirm(
@@ -163,11 +149,6 @@
         $(document).on('click', '.js-venus-settings-import', (event) => {
             event.preventDefault();
             document.getElementById('venus-import-file')?.click();
-        });
-
-        $(document).on('click', '.js-venus-settings-reset-demo', (event) => {
-            event.preventDefault();
-            resetDemo();
         });
 
         $(document).on('click', '.js-venus-settings-reset-empty', (event) => {
