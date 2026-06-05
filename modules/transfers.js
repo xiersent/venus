@@ -766,9 +766,9 @@
             render(global.venusStorage.load());
         });
         ['transfer-filter-from', 'transfer-filter-to'].forEach((id) => {
-            const el = document.getElementById(id);
-            el?.addEventListener('change', () => render(global.venusStorage.load()));
-            el?.addEventListener('blur', () => render(global.venusStorage.load()));
+            document.getElementById(id)?.addEventListener('keyup', () => {
+                render(global.venusStorage.load());
+            });
         });
         document.getElementById('transfer-filter-from-account')?.addEventListener('change', () => {
             render(global.venusStorage.load());

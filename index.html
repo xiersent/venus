@@ -443,13 +443,19 @@
                 </div>
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="exp-category">Категория</label>
-                    <select class="sun-summarySelect" id="exp-category"></select>
+                    <div class="venus-comboboxSelect">
+                        <select class="sun-summarySelect venus-comboboxSelect__select" id="exp-category"></select>
+                        <input type="text" class="sun-summarySelect venus-comboboxSelect__input" id="exp-category-search" placeholder="Поиск или новая категория" autocomplete="off">
+                    </div>
                 </div>
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="exp-subcategory">Подкатегория</label>
-                    <select class="sun-summarySelect" id="exp-subcategory">
-                        <option value="">&lt;Без подкатегории&gt;</option>
-                    </select>
+                    <div class="venus-comboboxSelect">
+                        <select class="sun-summarySelect venus-comboboxSelect__select" id="exp-subcategory">
+                            <option value="">&lt;Без подкатегории&gt;</option>
+                        </select>
+                        <input type="text" class="sun-summarySelect venus-comboboxSelect__input" id="exp-subcategory-search" placeholder="Поиск или новая подкатегория" autocomplete="off">
+                    </div>
                 </div>
                 <div class="sun-formRow venus-expenseCalcRow">
                     <label class="sun-formLabel" for="exp-qty">Количество</label>
@@ -511,13 +517,19 @@
                 </div>
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="inc-category">Категория дохода</label>
-                    <select class="sun-summarySelect" id="inc-category"></select>
+                    <div class="venus-comboboxSelect">
+                        <select class="sun-summarySelect venus-comboboxSelect__select" id="inc-category"></select>
+                        <input type="text" class="sun-summarySelect venus-comboboxSelect__input" id="inc-category-search" placeholder="Поиск или новая категория" autocomplete="off">
+                    </div>
                 </div>
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="inc-subcategory">Подкатегория</label>
-                    <select class="sun-summarySelect" id="inc-subcategory">
-                        <option value="">&lt;Без подкатегории&gt;</option>
-                    </select>
+                    <div class="venus-comboboxSelect">
+                        <select class="sun-summarySelect venus-comboboxSelect__select" id="inc-subcategory">
+                            <option value="">&lt;Без подкатегории&gt;</option>
+                        </select>
+                        <input type="text" class="sun-summarySelect venus-comboboxSelect__input" id="inc-subcategory-search" placeholder="Поиск или новая подкатегория" autocomplete="off">
+                    </div>
                 </div>
                 <div class="sun-formRow">
                     <label class="sun-formLabel" for="inc-amount">Сумма</label>
@@ -868,6 +880,7 @@
     <script src="modules/warning.js"></script>
     <script src="modules/storage.js"></script>
     <script src="modules/datetime.js"></script>
+    <script src="modules/category-combobox.js"></script>
     <script src="modules/accounts.js"></script>
     <script src="modules/expenses.js"></script>
     <script src="modules/incomes.js"></script>

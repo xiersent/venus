@@ -7930,6 +7930,29 @@ textarea {
 }
 
 @media (min-width: 0px) {
+  .venus-comboboxSelect {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (min-width: 0px) {
+  .venus-comboboxSelect__select {
+    flex: 1;
+    min-width: 140px;
+  }
+}
+@media (min-width: 0px) {
+  .venus-comboboxSelect__input {
+    flex: 1;
+    min-width: 140px;
+  }
+}
+
+@media (min-width: 0px) {
   .venus-expenseMultiplyLabel {
     margin: 0;
     align-self: flex-start;
@@ -7956,7 +7979,7 @@ textarea {
 @media (min-width: 0px) {
   .venus-expenseCalcField {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 4px;
     flex: 1;
     min-width: 120px;
@@ -7966,6 +7989,7 @@ textarea {
   .venus-expenseCalcField .sun-summarySelect {
     flex: 1;
     min-width: 0;
+    height: 25px;
   }
 }
 
@@ -8007,8 +8031,10 @@ textarea {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    box-sizing: border-box;
+    width: 25px;
+    height: 25px;
+    min-height: 25px;
     padding: 0;
     line-height: 0;
     background: #f0f0f0;

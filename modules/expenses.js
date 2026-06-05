@@ -15,6 +15,15 @@
     /** @type {ReturnType<typeof global.venusDatetime>} */
     const dt = global.venusDatetime;
 
+    /** @type {ReturnType<typeof global.venusCategoryCombobox>} */
+    const cb = global.venusCategoryCombobox;
+
+    /** @type {ReturnType<typeof cb.bind>|null} */
+    let expenseCategoryCombo = null;
+
+    /** @type {ReturnType<typeof cb.bind>|null} */
+    let expenseSubcategoryCombo = null;
+
     /** @type {boolean} */
     let expenseCalcLock = false;
 
@@ -876,23 +885,29 @@
      */
     function populateCategorySelect(select, db, selectedId) {
         const categories = expenseRootCategories(db);
+        const createNew = cb.createNewOptionMarkup();
         if (categories.length === 0) {
-            select.innerHTML = '<option value="">— нет категорий —</option>';
+            select.innerHTML = createNew + '<option value="">— нет категорий —</option>';
             return;
         }
-        const value = selectedId || categories[0].id;
-        select.innerHTML = categories
-            .map(
-                (category) =>
-                    '<option value="' +
-                    category.id +
-                    '"' +
-                    (category.id === value ? ' selected' : '') +
-                    '>' +
-                    escapeHtml(category.name) +
-                    '</option>',
-            )
-            .join('');
+        const value =
+            selectedId && (categories.some((category) => category.id === selectedId) || cb.isCreateNewValue(selectedId)) ?
+                selectedId
+            :   categories[0].id;
+        select.innerHTML =
+            createNew +
+            categories
+                .map(
+                    (category) =>
+                        '<option value="' +
+                        category.id +
+                        '"' +
+                        (category.id === value ? ' selected' : '') +
+                        '>' +
+                        escapeHtml(category.name) +
+                        '</option>',
+                )
+                .join('');
     }
 
     /**
@@ -902,19 +917,36 @@
      * @param {string|null} selectedSubId
      */
     function populateSubcategorySelect(select, db, parentCategoryId, selectedSubId) {
-        const subs = expenseSubcategories(db, parentCategoryId);
-        let options = '<option value="">&lt;Без подкатегории&gt;</option>';
+        const subs =
+            parentCategoryId && !cb.isCreateNewValue(parentCategoryId) ?
+                expenseSubcategories(db, parentCategoryId)
+            :   [];
+        const value =
+            selectedSubId &&
+            (selectedSubId === '' ||
+                cb.isCreateNewValue(selectedSubId) ||
+                subs.some((category) => category.id === selectedSubId)) ?
+                selectedSubId
+            :   '';
+        let options =
+            '<option value="">&lt;Без подкатегории&gt;</option>' + cb.createNewOptionMarkup();
         subs.forEach((category) => {
             options +=
                 '<option value="' +
                 category.id +
                 '"' +
-                (category.id === selectedSubId ? ' selected' : '') +
+                (category.id === value ? ' selected' : '') +
                 '>' +
                 escapeHtml(category.name) +
                 '</option>';
         });
+        if (cb.isCreateNewValue(value)) {
+            select.innerHTML = options;
+            select.value = cb.CREATE_NEW_VALUE;
+            return;
+        }
         select.innerHTML = options;
+        select.value = value;
     }
 
     /**
@@ -971,6 +1003,53 @@
             return;
         }
         populateSubcategorySelect(subSelect, global.venusStorage.load(), categorySelect.value, null);
+        expenseSubcategoryCombo?.refreshOptions();
+        expenseSubcategoryCombo?.clearSearch();
+    }
+
+    /**
+     * @param {import('./storage').VenusDatabase} db
+     * @param {string} rootId
+     * @param {string} categoryId
+     */
+    function refreshExpenseCategoryFields(db, rootId, categoryId) {
+        const categorySelect = document.getElementById('exp-category');
+        const subSelect = document.getElementById('exp-subcategory');
+        const categories = categoryMapById(db);
+        const category = categories[categoryId];
+        let selectedRootId = rootId;
+        let selectedSubId = null;
+        if (category?.parent_id) {
+            selectedRootId = category.parent_id;
+            selectedSubId = categoryId;
+        }
+        if (categorySelect) {
+            populateCategorySelect(categorySelect, db, selectedRootId);
+        }
+        if (subSelect) {
+            populateSubcategorySelect(subSelect, db, selectedRootId, selectedSubId);
+        }
+        expenseCategoryCombo?.refreshOptions();
+        expenseSubcategoryCombo?.refreshOptions();
+        expenseCategoryCombo?.syncFromSelect();
+        expenseSubcategoryCombo?.syncFromSelect();
+    }
+
+    function initExpenseCategoryCombos() {
+        const categorySelect = document.getElementById('exp-category');
+        const subSelect = document.getElementById('exp-subcategory');
+        if (!categorySelect || !subSelect) {
+            return;
+        }
+        expenseCategoryCombo = cb.bind(
+            categorySelect,
+            document.getElementById('exp-category-search'),
+            { onSelectChange: refreshSubcategoriesFromForm },
+        );
+        expenseSubcategoryCombo = cb.bind(
+            subSelect,
+            document.getElementById('exp-subcategory-search'),
+        );
     }
 
     /**
@@ -1241,6 +1320,11 @@
         if (last?.multiplyPriceQty) {
             syncExpenseAmountFields('multiply');
         }
+        expenseCategoryCombo?.refreshOptions();
+        expenseSubcategoryCombo?.refreshOptions();
+        expenseCategoryCombo?.syncFromSelect();
+        expenseSubcategoryCombo?.clearSearch();
+        expenseSubcategoryCombo?.syncFromSelect();
     }
 
     /**
@@ -1334,6 +1418,10 @@
         if (noteInput) {
             noteInput.value = transaction.note || '';
         }
+        expenseCategoryCombo?.refreshOptions();
+        expenseSubcategoryCombo?.refreshOptions();
+        expenseCategoryCombo?.syncFromSelect();
+        expenseSubcategoryCombo?.syncFromSelect();
     }
 
     /**
@@ -1365,13 +1453,6 @@
         if (!accountId) {
             global.alert('Выберите счёт для списания.');
             accountSelect?.focus();
-            return null;
-        }
-
-        const categoryId = subSelect?.value || categorySelect?.value || '';
-        if (!categoryId) {
-            global.alert('Выберите категорию расхода.');
-            categorySelect?.focus();
             return null;
         }
 
@@ -1430,7 +1511,6 @@
             date,
             time,
             accountId,
-            categoryId,
             amount,
             currencyId,
             quantity,
@@ -1452,6 +1532,22 @@
         }
 
         const db = global.venusStorage.load();
+        const categoryResolved = cb.resolveFromForm(db, 'expense', {
+            categorySelect: document.getElementById('exp-category'),
+            categoryInput: document.getElementById('exp-category-search'),
+            subcategorySelect: document.getElementById('exp-subcategory'),
+            subcategoryInput: document.getElementById('exp-subcategory-search'),
+            emptyCategoryMessage: 'Выберите или введите категорию расхода.',
+        });
+        if (!categoryResolved.ok || !categoryResolved.categoryId || !categoryResolved.rootId) {
+            global.alert(categoryResolved.message || 'Выберите или введите категорию расхода.');
+            return false;
+        }
+        const categoryId = categoryResolved.categoryId;
+        if (categoryResolved.dbChanged) {
+            refreshExpenseCategoryFields(db, categoryResolved.rootId, categoryId);
+        }
+
         const user = db.users.find((item) => item.is_active) || db.users[0];
         const now = new Date().toISOString();
 
@@ -1464,7 +1560,7 @@
             transaction.date = form.date;
             dt.applyTransactionTime(transaction, form.time);
             transaction.account_id = form.accountId;
-            transaction.category_id = form.categoryId;
+            transaction.category_id = categoryId;
             transaction.amount = form.amount;
             transaction.currency_id = form.currencyId;
             transaction.quantity = form.quantity;
@@ -1491,7 +1587,7 @@
             account_id: form.accountId,
             account_from_id: null,
             account_to_id: null,
-            category_id: form.categoryId,
+            category_id: categoryId,
             amount: form.amount,
             currency_id: form.currencyId,
             quantity: form.quantity,
@@ -1504,7 +1600,7 @@
         });
 
         global.venusStorage.save(db);
-        saveLastExpenseFormDefaults(form, db);
+        saveLastExpenseFormDefaults({ ...form, categoryId }, db);
         ensureExpenseVisibleInFilter(db, transactionId);
         render(db, transactionId);
         if (global.venusAccounts) {
@@ -1637,7 +1733,7 @@
             }
         });
 
-        document.getElementById('exp-category')?.addEventListener('change', refreshSubcategoriesFromForm);
+        initExpenseCategoryCombos();
 
         document.getElementById('exp-price')?.addEventListener('input', () => {
             syncExpenseAmountFields('price');
@@ -1686,17 +1782,10 @@
         document.querySelector('[data-venus-expense-filter]')?.addEventListener('change', () => {
             render(global.venusStorage.load());
         });
-        document.getElementById('filter-from')?.addEventListener('change', () => {
-            render(global.venusStorage.load());
-        });
-        document.getElementById('filter-to')?.addEventListener('change', () => {
-            render(global.venusStorage.load());
-        });
-        document.getElementById('filter-from')?.addEventListener('blur', () => {
-            render(global.venusStorage.load());
-        });
-        document.getElementById('filter-to')?.addEventListener('blur', () => {
-            render(global.venusStorage.load());
+        ['filter-from', 'filter-to'].forEach((id) => {
+            document.getElementById(id)?.addEventListener('keyup', () => {
+                render(global.venusStorage.load());
+            });
         });
         document.getElementById('filter-account')?.addEventListener('change', () => {
             render(global.venusStorage.load());

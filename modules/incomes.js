@@ -13,6 +13,15 @@
     /** @type {ReturnType<typeof global.venusDatetime>} */
     const dt = global.venusDatetime;
 
+    /** @type {ReturnType<typeof global.venusCategoryCombobox>} */
+    const cb = global.venusCategoryCombobox;
+
+    /** @type {ReturnType<typeof cb.bind>|null} */
+    let incomeCategoryCombo = null;
+
+    /** @type {ReturnType<typeof cb.bind>|null} */
+    let incomeSubcategoryCombo = null;
+
     /**
      * @param {number} amount
      * @returns {string}
@@ -659,23 +668,29 @@
      */
     function populateCategorySelect(select, db, selectedId) {
         const categories = incomeRootCategories(db);
+        const createNew = cb.createNewOptionMarkup();
         if (categories.length === 0) {
-            select.innerHTML = '<option value="">— нет категорий —</option>';
+            select.innerHTML = createNew + '<option value="">— нет категорий —</option>';
             return;
         }
-        const value = selectedId || categories[0].id;
-        select.innerHTML = categories
-            .map(
-                (category) =>
-                    '<option value="' +
-                    category.id +
-                    '"' +
-                    (category.id === value ? ' selected' : '') +
-                    '>' +
-                    escapeHtml(category.name) +
-                    '</option>',
-            )
-            .join('');
+        const value =
+            selectedId && (categories.some((category) => category.id === selectedId) || cb.isCreateNewValue(selectedId)) ?
+                selectedId
+            :   categories[0].id;
+        select.innerHTML =
+            createNew +
+            categories
+                .map(
+                    (category) =>
+                        '<option value="' +
+                        category.id +
+                        '"' +
+                        (category.id === value ? ' selected' : '') +
+                        '>' +
+                        escapeHtml(category.name) +
+                        '</option>',
+                )
+                .join('');
     }
 
     /**
@@ -685,19 +700,36 @@
      * @param {string|null} selectedSubId
      */
     function populateSubcategorySelect(select, db, parentCategoryId, selectedSubId) {
-        const subs = incomeSubcategories(db, parentCategoryId);
-        let options = '<option value="">&lt;Без подкатегории&gt;</option>';
+        const subs =
+            parentCategoryId && !cb.isCreateNewValue(parentCategoryId) ?
+                incomeSubcategories(db, parentCategoryId)
+            :   [];
+        const value =
+            selectedSubId &&
+            (selectedSubId === '' ||
+                cb.isCreateNewValue(selectedSubId) ||
+                subs.some((category) => category.id === selectedSubId)) ?
+                selectedSubId
+            :   '';
+        let options =
+            '<option value="">&lt;Без подкатегории&gt;</option>' + cb.createNewOptionMarkup();
         subs.forEach((category) => {
             options +=
                 '<option value="' +
                 category.id +
                 '"' +
-                (category.id === selectedSubId ? ' selected' : '') +
+                (category.id === value ? ' selected' : '') +
                 '>' +
                 escapeHtml(category.name) +
                 '</option>';
         });
+        if (cb.isCreateNewValue(value)) {
+            select.innerHTML = options;
+            select.value = cb.CREATE_NEW_VALUE;
+            return;
+        }
         select.innerHTML = options;
+        select.value = value;
     }
 
     /**
@@ -754,6 +786,53 @@
             return;
         }
         populateSubcategorySelect(subSelect, global.venusStorage.load(), categorySelect.value, null);
+        incomeSubcategoryCombo?.refreshOptions();
+        incomeSubcategoryCombo?.clearSearch();
+    }
+
+    /**
+     * @param {import('./storage').VenusDatabase} db
+     * @param {string} rootId
+     * @param {string} categoryId
+     */
+    function refreshIncomeCategoryFields(db, rootId, categoryId) {
+        const categorySelect = document.getElementById('inc-category');
+        const subSelect = document.getElementById('inc-subcategory');
+        const categories = categoryMapById(db);
+        const category = categories[categoryId];
+        let selectedRootId = rootId;
+        let selectedSubId = null;
+        if (category?.parent_id) {
+            selectedRootId = category.parent_id;
+            selectedSubId = categoryId;
+        }
+        if (categorySelect) {
+            populateCategorySelect(categorySelect, db, selectedRootId);
+        }
+        if (subSelect) {
+            populateSubcategorySelect(subSelect, db, selectedRootId, selectedSubId);
+        }
+        incomeCategoryCombo?.refreshOptions();
+        incomeSubcategoryCombo?.refreshOptions();
+        incomeCategoryCombo?.syncFromSelect();
+        incomeSubcategoryCombo?.syncFromSelect();
+    }
+
+    function initIncomeCategoryCombos() {
+        const categorySelect = document.getElementById('inc-category');
+        const subSelect = document.getElementById('inc-subcategory');
+        if (!categorySelect || !subSelect) {
+            return;
+        }
+        incomeCategoryCombo = cb.bind(
+            categorySelect,
+            document.getElementById('inc-category-search'),
+            { onSelectChange: refreshSubcategoriesFromForm },
+        );
+        incomeSubcategoryCombo = cb.bind(
+            subSelect,
+            document.getElementById('inc-subcategory-search'),
+        );
     }
 
     function resetIncomeForm() {
@@ -799,6 +878,11 @@
         if (noteInput) {
             noteInput.value = '';
         }
+        incomeCategoryCombo?.refreshOptions();
+        incomeSubcategoryCombo?.refreshOptions();
+        incomeCategoryCombo?.syncFromSelect();
+        incomeSubcategoryCombo?.clearSearch();
+        incomeSubcategoryCombo?.syncFromSelect();
     }
 
     /**
@@ -866,6 +950,10 @@
         if (noteInput) {
             noteInput.value = transaction.note || '';
         }
+        incomeCategoryCombo?.refreshOptions();
+        incomeSubcategoryCombo?.refreshOptions();
+        incomeCategoryCombo?.syncFromSelect();
+        incomeSubcategoryCombo?.syncFromSelect();
     }
 
     /**
@@ -895,13 +983,6 @@
         if (!accountId) {
             global.alert('Выберите счёт для зачисления.');
             accountSelect?.focus();
-            return null;
-        }
-
-        const categoryId = subSelect?.value || categorySelect?.value || '';
-        if (!categoryId) {
-            global.alert('Выберите категорию дохода.');
-            categorySelect?.focus();
             return null;
         }
 
@@ -939,7 +1020,6 @@
             date,
             time,
             accountId,
-            categoryId,
             amount,
             currencyId,
             quantity,
@@ -958,6 +1038,22 @@
         }
 
         const db = global.venusStorage.load();
+        const categoryResolved = cb.resolveFromForm(db, 'income', {
+            categorySelect: document.getElementById('inc-category'),
+            categoryInput: document.getElementById('inc-category-search'),
+            subcategorySelect: document.getElementById('inc-subcategory'),
+            subcategoryInput: document.getElementById('inc-subcategory-search'),
+            emptyCategoryMessage: 'Выберите или введите категорию дохода.',
+        });
+        if (!categoryResolved.ok || !categoryResolved.categoryId || !categoryResolved.rootId) {
+            global.alert(categoryResolved.message || 'Выберите или введите категорию дохода.');
+            return false;
+        }
+        const categoryId = categoryResolved.categoryId;
+        if (categoryResolved.dbChanged) {
+            refreshIncomeCategoryFields(db, categoryResolved.rootId, categoryId);
+        }
+
         const user = db.users.find((item) => item.is_active) || db.users[0];
         const now = new Date().toISOString();
 
@@ -970,7 +1066,7 @@
             transaction.date = form.date;
             dt.applyTransactionTime(transaction, form.time);
             transaction.account_id = form.accountId;
-            transaction.category_id = form.categoryId;
+            transaction.category_id = categoryId;
             transaction.amount = form.amount;
             transaction.currency_id = form.currencyId;
             transaction.quantity = form.quantity;
@@ -996,7 +1092,7 @@
             account_id: form.accountId,
             account_from_id: null,
             account_to_id: null,
-            category_id: form.categoryId,
+            category_id: categoryId,
             amount: form.amount,
             currency_id: form.currencyId,
             quantity: form.quantity,
@@ -1139,22 +1235,15 @@
             }
         });
 
-        document.getElementById('inc-category')?.addEventListener('change', refreshSubcategoriesFromForm);
+        initIncomeCategoryCombos();
 
         document.querySelector('[data-venus-income-filter]')?.addEventListener('change', () => {
             render(global.venusStorage.load());
         });
-        document.getElementById('inc-filter-from')?.addEventListener('change', () => {
-            render(global.venusStorage.load());
-        });
-        document.getElementById('inc-filter-to')?.addEventListener('change', () => {
-            render(global.venusStorage.load());
-        });
-        document.getElementById('inc-filter-from')?.addEventListener('blur', () => {
-            render(global.venusStorage.load());
-        });
-        document.getElementById('inc-filter-to')?.addEventListener('blur', () => {
-            render(global.venusStorage.load());
+        ['inc-filter-from', 'inc-filter-to'].forEach((id) => {
+            document.getElementById(id)?.addEventListener('keyup', () => {
+                render(global.venusStorage.load());
+            });
         });
         document.getElementById('inc-filter-account')?.addEventListener('change', () => {
             render(global.venusStorage.load());

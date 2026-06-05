@@ -3325,6 +3325,22 @@ body.sun-app.venus-app-body{
 		@media(min-width: 0px){width: auto; min-width: 5.5em; flex: 0 0 auto;}
 	}
 }
+.venus-comboboxSelect{
+	@media(min-width: 0px){
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: #{$spacing-xs};
+		flex: 1;
+		min-width: 0;
+	}
+	&__select{
+		@media(min-width: 0px){flex: 1; min-width: 140px;}
+	}
+	&__input{
+		@media(min-width: 0px){flex: 1; min-width: 140px;}
+	}
+}
 .venus-expenseMultiplyLabel{
 	@media(min-width: 0px){margin: 0; align-self: flex-start;}
 }
@@ -3344,13 +3360,13 @@ body.sun-app.venus-app-body{
 .venus-expenseCalcField{
 	@media(min-width: 0px){
 		display: flex;
-		align-items: center;
+		align-items: stretch;
 		gap: 4px;
 		flex: 1;
 		min-width: 120px;
 	}
 	.sun-summarySelect{
-		@media(min-width: 0px){flex: 1; min-width: 0;}
+		@media(min-width: 0px){flex: 1; min-width: 0; height: 25px;}
 	}
 }
 .venus-app-body .sun-warningBox{
@@ -3375,8 +3391,10 @@ body.sun-app.venus-app-body{
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		width: 22px;
-		height: 22px;
+		box-sizing: border-box;
+		width: 25px;
+		height: 25px;
+		min-height: 25px;
 		padding: 0;
 		line-height: 0;
 		background: #f0f0f0;
