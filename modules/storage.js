@@ -47,9 +47,18 @@
      */
 
     /**
+     * @typedef {Object} VenusAccountCategory
+     * @property {VenusId} id
+     * @property {string} name
+     * @property {number} sort_order
+     * @property {boolean} is_system
+     */
+
+    /**
      * @typedef {Object} VenusAccount
      * @property {VenusId} id
      * @property {string} name
+     * @property {VenusId} category_id
      * @property {VenusId} currency_id
      * @property {string} note
      * @property {boolean} is_hidden
@@ -124,6 +133,7 @@
      * @property {VenusUser[]} users
      * @property {VenusCurrency[]} currencies
      * @property {VenusAccount[]} accounts
+     * @property {VenusAccountCategory[]} account_categories
      * @property {VenusCategory[]} categories
      * @property {VenusUnit[]} units
      * @property {VenusNamedRef[]} creditors
@@ -847,6 +857,9 @@
     ]);
 
     /** @type {readonly string[]} */
+    const SYSTEM_ACCOUNT_CATEGORIES = Object.freeze(['Наличные', 'Карты', 'Банк']);
+
+    /** @type {readonly string[]} */
     const SYSTEM_UNITS = Object.freeze([
         'батон',
         'билет',
@@ -923,6 +936,59 @@
     }
 
     /**
+     * @returns {VenusAccountCategory[]}
+     */
+    function buildAccountCategoriesFromSeed() {
+        return SYSTEM_ACCOUNT_CATEGORIES.map((name, index) => ({
+            id: createId(),
+            name,
+            sort_order: index,
+            is_system: true,
+        }));
+    }
+
+    /**
+     * @param {VenusDatabase} db
+     * @returns {boolean}
+     */
+    function ensureAccountCategories(db) {
+        let changed = false;
+
+        if (!Array.isArray(db.account_categories)) {
+            db.account_categories = buildAccountCategoriesFromSeed();
+            changed = true;
+        } else {
+            SYSTEM_ACCOUNT_CATEGORIES.forEach((name, index) => {
+                const exists = db.account_categories.some((category) => category.name === name);
+                if (!exists) {
+                    db.account_categories.push({
+                        id: createId(),
+                        name,
+                        sort_order: index,
+                        is_system: true,
+                    });
+                    changed = true;
+                }
+            });
+        }
+
+        const defaultCategory =
+            db.account_categories.find((category) => category.name === 'Наличные') ||
+            db.account_categories[0];
+
+        if (defaultCategory) {
+            db.accounts.forEach((account) => {
+                if (!account.category_id) {
+                    account.category_id = defaultCategory.id;
+                    changed = true;
+                }
+            });
+        }
+
+        return changed;
+    }
+
+    /**
      * @param {VenusDatabase} db
      * @param {VenusCategoryType} type
      * @param {string} name
@@ -968,6 +1034,9 @@
      */
     function ensureSystemCatalog(db) {
         let changed = ensureNamedLists(db);
+        if (ensureAccountCategories(db)) {
+            changed = true;
+        }
 
         /**
          * @param {VenusCategoryType} type
@@ -1127,6 +1196,7 @@
         const now = nowIso();
         const userId = createId();
         const { currencies, categories, units } = buildSeedCatalog();
+        const account_categories = buildAccountCategoriesFromSeed();
 
         return {
             schema_version: SCHEMA_VERSION,
@@ -1146,6 +1216,7 @@
             ],
             currencies,
             accounts: [],
+            account_categories,
             categories,
             units,
             creditors: [],
@@ -1285,6 +1356,7 @@
         resetToEmpty,
         SYSTEM_EXPENSE_CATEGORIES,
         SYSTEM_INCOME_CATEGORIES,
+        SYSTEM_ACCOUNT_CATEGORIES,
         SYSTEM_UNITS,
         ensureSystemCatalog,
     };

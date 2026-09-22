@@ -480,19 +480,21 @@
      * @param {string|null} selectedId
      */
     function renderExpensesTable(db, expenses, selectedId) {
-        const tbody = document.querySelector('[data-venus-expenses-tbody]');
+        const body = document.querySelector('[data-venus-expenses-body]');
         const countEl = document.querySelector('[data-venus-expenses-count]');
-        if (!tbody) {
+        const G = global.venusGrid;
+        if (!body || !G) {
             return;
         }
 
         const sorted = expenses.slice().sort((a, b) => dt.compareTransactionsByDateTime(a, b));
 
         if (sorted.length === 0) {
-            tbody.innerHTML =
-                '<tr><td colspan="10" class="sun-summaryEmpty">Нет записей. Нажмите «Добавить», чтобы внести расход.</td></tr>';
+            body.innerHTML = G.emptyRow(
+                'Нет записей. Нажмите «Добавить», чтобы внести расход.',
+            );
         } else {
-            tbody.innerHTML = sorted
+            body.innerHTML = sorted
                 .map((transaction, index) => {
                     const row = resolveExpenseRow(db, transaction);
                     const selectedClass =
@@ -511,41 +513,19 @@
                     const unitCell =
                         row.unit === '—' ? '<span class="sun-protoMuted">—</span>' : escapeHtml(row.unit);
 
-                    return (
-                        '<tr class="js-venus-expense-row' +
-                        selectedClass +
-                        '" data-expense-id="' +
-                        transaction.id +
-                        '">' +
-                        '<td>' +
-                        escapeHtml(row.date) +
-                        '</td>' +
-                        '<td>' +
-                        escapeHtml(row.account) +
-                        '</td>' +
-                        '<td>' +
-                        escapeHtml(row.category) +
-                        '</td>' +
-                        '<td>' +
-                        subCell +
-                        '</td>' +
-                        '<td>' +
-                        qtyCell +
-                        '</td>' +
-                        '<td>' +
-                        unitCell +
-                        '</td>' +
-                        '<td class="sun-protoNumExpense">' +
-                        formatMoney(row.amountRur) +
-                        '</td>' +
-                        '<td>' +
-                        formatMoney(row.amountUsd) +
-                        '</td>' +
-                        '<td class="sun-protoMuted">—</td>' +
-                        '<td>' +
-                        noteCell +
-                        '</td>' +
-                        '</tr>'
+                    return G.row(
+                        G.cell(escapeHtml(row.date)) +
+                            G.cell(escapeHtml(row.account)) +
+                            G.cell(escapeHtml(row.category)) +
+                            G.cell(subCell) +
+                            G.numCell(qtyCell) +
+                            G.cell(unitCell) +
+                            G.numCell(formatMoney(row.amountRur), 'sun-protoNumExpense') +
+                            G.numCell(formatMoney(row.amountUsd)) +
+                            G.cell('<span class="sun-protoMuted">—</span>', 'sun-protoMuted') +
+                            G.cell(noteCell),
+                        ' js-venus-expense-row' + selectedClass,
+                        'data-expense-id="' + transaction.id + '"',
                     );
                 })
                 .join('');

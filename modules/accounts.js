@@ -90,64 +90,43 @@
      * @param {string|null} selectedId
      */
     function renderAccountsTable(db, selectedId) {
-        const tbody = document.querySelector('[data-venus-accounts-tbody]');
+        const body = document.querySelector('[data-venus-accounts-body]');
         const countEl = document.querySelector('[data-venus-accounts-count]');
         const showHidden = document.querySelector('[data-venus-show-hidden]')?.checked ?? false;
         const accounts = visibleAccounts(db, showHidden);
+        const accountCategories = accountCategoryMapById(db);
+        const G = global.venusGrid;
 
-        if (!tbody) {
+        if (!body || !G) {
             return;
         }
 
         if (accounts.length === 0) {
-            tbody.innerHTML =
-                '<tr><td colspan="10" class="sun-summaryEmpty">Нет счетов. Нажмите «Добавить».</td></tr>';
+            body.innerHTML = G.emptyRow('Нет счетов. Нажмите «Добавить».');
         } else {
-            tbody.innerHTML = accounts
+            body.innerHTML = accounts
                 .map((account, index) => {
                     const totals = accountTotals(db, account.id);
+                    const categoryName = accountCategories[account.category_id]?.name || '—';
                     const selectedClass =
                         account.id === selectedId || (!selectedId && index === 0)
                             ? ' sun-protoRowSelected'
                             : '';
 
-                    return (
-                        '<tr class="js-venus-account-row' +
-                        selectedClass +
-                        '" data-account-id="' +
-                        account.id +
-                        '">' +
-                        '<td>' +
-                        (index + 1) +
-                        '</td>' +
-                        '<td class="sun-dateComparisonName">' +
-                        escapeHtml(account.name) +
-                        '</td>' +
-                        '<td class="sun-protoNumExpense">' +
-                        formatMoney(totals.expense.RUR) +
-                        '</td>' +
-                        '<td>' +
-                        formatMoney(totals.expense.USD) +
-                        '</td>' +
-                        '<td class="sun-protoNumIncome">' +
-                        formatMoney(totals.income.RUR) +
-                        '</td>' +
-                        '<td>' +
-                        formatMoney(totals.income.USD) +
-                        '</td>' +
-                        '<td>' +
-                        formatMoney(totals.other.RUR) +
-                        '</td>' +
-                        '<td>' +
-                        formatMoney(totals.other.USD) +
-                        '</td>' +
-                        '<td class="sun-protoNumBalance">' +
-                        formatMoney(totals.balance.RUR) +
-                        '</td>' +
-                        '<td>' +
-                        formatMoney(totals.balance.USD) +
-                        '</td>' +
-                        '</tr>'
+                    return G.row(
+                        G.cell(String(index + 1)) +
+                            G.cell(escapeHtml(account.name), 'sun-dateComparisonName') +
+                            G.cell(escapeHtml(categoryName), 'sun-dateComparisonName') +
+                            G.numCell(formatMoney(totals.expense.RUR), 'sun-protoNumExpense') +
+                            G.numCell(formatMoney(totals.expense.USD)) +
+                            G.numCell(formatMoney(totals.income.RUR), 'sun-protoNumIncome') +
+                            G.numCell(formatMoney(totals.income.USD)) +
+                            G.numCell(formatMoney(totals.other.RUR)) +
+                            G.numCell(formatMoney(totals.other.USD)) +
+                            G.numCell(formatMoney(totals.balance.RUR), 'sun-protoNumBalance') +
+                            G.numCell(formatMoney(totals.balance.USD)),
+                        ' js-venus-account-row' + selectedClass,
+                        'data-account-id="' + account.id + '"',
                     );
                 })
                 .join('');
@@ -195,6 +174,43 @@
         if (el && user) {
             el.textContent = user.name;
         }
+    }
+
+    /**
+     * @param {import('./storage').VenusDatabase} db
+     * @returns {Record<string, { name: string }>}
+     */
+    function accountCategoryMapById(db) {
+        /** @type {Record<string, { name: string }>} */
+        const map = {};
+        (db.account_categories || []).forEach((category) => {
+            map[category.id] = category;
+        });
+        return map;
+    }
+
+    /**
+     * @param {HTMLSelectElement} select
+     * @param {import('./storage').VenusDatabase} db
+     * @param {string|null} selectedId
+     */
+    function populateAccountCategorySelect(select, db, selectedId) {
+        const categories = (db.account_categories || []).slice().sort((a, b) => a.sort_order - b.sort_order);
+        const defaultCategory = categories.find((category) => category.name === 'Наличные') || categories[0];
+        const value = selectedId || defaultCategory?.id || '';
+
+        select.innerHTML = categories
+            .map(
+                (category) =>
+                    '<option value="' +
+                    category.id +
+                    '"' +
+                    (category.id === value ? ' selected' : '') +
+                    '>' +
+                    escapeHtml(category.name) +
+                    '</option>',
+            )
+            .join('');
     }
 
     /**
@@ -260,6 +276,7 @@
         const noteInput = document.getElementById('acc-note');
         const hiddenInput = document.getElementById('acc-hidden');
         const currencySelect = document.getElementById('acc-currency');
+        const categorySelect = document.getElementById('acc-category');
         const title = document.querySelector('[data-venus-account-modal-title]');
 
         if (nameInput) {
@@ -274,9 +291,13 @@
         if (title) {
             title.textContent = 'Новый счёт';
         }
+        const db = global.venusStorage.load();
+        if (categorySelect) {
+            populateAccountCategorySelect(categorySelect, db, null);
+        }
         if (currencySelect) {
             currencySelect.disabled = false;
-            populateCurrencySelect(currencySelect, global.venusStorage.load(), null);
+            populateCurrencySelect(currencySelect, db, null);
         }
     }
 
@@ -289,6 +310,7 @@
         const noteInput = document.getElementById('acc-note');
         const hiddenInput = document.getElementById('acc-hidden');
         const currencySelect = document.getElementById('acc-currency');
+        const categorySelect = document.getElementById('acc-category');
         const title = document.querySelector('[data-venus-account-modal-title]');
 
         editingAccountId = account.id;
@@ -305,6 +327,9 @@
         if (hiddenInput) {
             hiddenInput.checked = account.is_hidden;
         }
+        if (categorySelect) {
+            populateAccountCategorySelect(categorySelect, db, account.category_id);
+        }
         if (currencySelect) {
             populateCurrencySelect(currencySelect, db, account.currency_id);
             currencySelect.disabled = accountHasTransactions(db, account.id);
@@ -312,15 +337,16 @@
     }
 
     /**
-     * @returns {{ name: string, currencyId: string, note: string, isHidden: boolean }|null}
+     * @returns {{ name: string, categoryId: string, currencyId: string, note: string, isHidden: boolean }|null}
      */
     function readAccountForm() {
         const nameInput = document.getElementById('acc-name');
+        const categorySelect = document.getElementById('acc-category');
         const currencySelect = document.getElementById('acc-currency');
         const noteInput = document.getElementById('acc-note');
         const hiddenInput = document.getElementById('acc-hidden');
 
-        if (!nameInput || !currencySelect) {
+        if (!nameInput || !currencySelect || !categorySelect) {
             return null;
         }
 
@@ -332,6 +358,7 @@
 
         return {
             name,
+            categoryId: categorySelect.value,
             currencyId: currencySelect.value,
             note: noteInput ? noteInput.value.trim() : '',
             isHidden: hiddenInput ? hiddenInput.checked : false,
@@ -357,6 +384,7 @@
             }
 
             account.name = form.name;
+            account.category_id = form.categoryId;
             account.note = form.note;
             account.is_hidden = form.isHidden;
             if (!accountHasTransactions(db, account.id)) {
@@ -376,6 +404,7 @@
         db.accounts.push({
             id: accountId,
             name: form.name,
+            category_id: form.categoryId,
             currency_id: form.currencyId,
             note: form.note,
             is_hidden: form.isHidden,

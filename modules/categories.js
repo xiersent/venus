@@ -223,46 +223,38 @@
      * @param {string|null} rootId
      */
     function renderRoots(db, type, rootId) {
-        const tbody = document.querySelector('[data-venus-cat-roots="' + type + '"]');
+        const body = document.querySelector('[data-venus-cat-roots="' + type + '"]');
         const countEl = document.querySelector('[data-venus-cat-root-count="' + type + '"]');
         const roots = rootCategories(db, type);
         const labels = TYPE_LABELS[type];
+        const G = global.venusGrid;
 
-        if (!tbody) {
+        if (!body || !G) {
             return;
         }
 
         if (roots.length === 0) {
-            tbody.innerHTML =
-                '<tr><td colspan="2" class="sun-summaryEmpty">Нет категорий ' +
-                labels.root +
-                '.</td></tr>';
+            body.innerHTML = G.emptyRow('Нет категорий ' + labels.root + '.');
             selectedRootId[type] = null;
             selectedSubId[type] = null;
         } else {
             const activeId = rootId || selectedRootId[type] || roots[0].id;
             selectedRootId[type] = activeId;
 
-            tbody.innerHTML = roots
+            body.innerHTML = roots
                 .map((category) => {
                     const subCount = subcategories(db, type, category.id).length;
                     const selected =
                         category.id === activeId ? ' sun-protoRowSelected' : '';
-                    return (
-                        '<tr class="js-venus-cat-root' +
-                        selected +
-                        '" data-venus-cat-type="' +
-                        type +
-                        '" data-category-id="' +
-                        category.id +
-                        '">' +
-                        '<td class="sun-dateComparisonName">' +
-                        escapeHtml(category.name) +
-                        '</td>' +
-                        '<td>' +
-                        subCount +
-                        '</td>' +
-                        '</tr>'
+                    return G.row(
+                        G.cell(escapeHtml(category.name), 'sun-dateComparisonName') +
+                            G.numCell(String(subCount)),
+                        ' js-venus-cat-root' + selected,
+                        'data-venus-cat-type="' +
+                            type +
+                            '" data-category-id="' +
+                            category.id +
+                            '"',
                     );
                 })
                 .join('');
@@ -282,17 +274,17 @@
      * @param {string|null} [subId]
      */
     function renderSubs(db, type, rootId, subId) {
-        const tbody = document.querySelector('[data-venus-cat-subs="' + type + '"]');
+        const body = document.querySelector('[data-venus-cat-subs="' + type + '"]');
         const countEl = document.querySelector('[data-venus-cat-sub-count="' + type + '"]');
         const labels = TYPE_LABELS[type];
+        const G = global.venusGrid;
 
-        if (!tbody) {
+        if (!body || !G) {
             return;
         }
 
         if (!rootId) {
-            tbody.innerHTML =
-                '<tr><td colspan="2" class="sun-summaryEmpty">Выберите категорию слева.</td></tr>';
+            body.innerHTML = G.emptyRow('Выберите категорию слева.');
             selectedSubId[type] = null;
             if (countEl) {
                 countEl.textContent = 'Подкатегорий ' + labels.sub + ': 0';
@@ -303,8 +295,7 @@
         const subs = subcategories(db, type, rootId);
 
         if (subs.length === 0) {
-            tbody.innerHTML =
-                '<tr><td colspan="2" class="sun-summaryEmpty">Нет подкатегорий.</td></tr>';
+            body.innerHTML = G.emptyRow('Нет подкатегорий.');
             selectedSubId[type] = null;
         } else {
             const activeSubId = subId || selectedSubId[type] || subs[0].id;
@@ -312,25 +303,19 @@
                 ? activeSubId
                 : subs[0].id;
 
-            tbody.innerHTML = subs
+            body.innerHTML = subs
                 .map((category, index) => {
                     const selected =
                         category.id === selectedSubId[type] ? ' sun-protoRowSelected' : '';
-                    return (
-                        '<tr class="js-venus-cat-sub' +
-                        selected +
-                        '" data-venus-cat-type="' +
-                        type +
-                        '" data-category-id="' +
-                        category.id +
-                        '">' +
-                        '<td>' +
-                        (index + 1) +
-                        '</td>' +
-                        '<td class="sun-dateComparisonName">' +
-                        escapeHtml(category.name) +
-                        '</td>' +
-                        '</tr>'
+                    return G.row(
+                        G.numCell(String(index + 1)) +
+                            G.cell(escapeHtml(category.name), 'sun-dateComparisonName'),
+                        ' js-venus-cat-sub' + selected,
+                        'data-venus-cat-type="' +
+                            type +
+                            '" data-category-id="' +
+                            category.id +
+                            '"',
                     );
                 })
                 .join('');
@@ -348,18 +333,18 @@
      */
     function renderList(db, tab, itemId) {
         const config = LIST_TABS[tab];
-        const tbody = document.querySelector('[data-venus-cat-list="' + tab + '"]');
+        const body = document.querySelector('[data-venus-cat-list="' + tab + '"]');
         const countEl = document.querySelector('[data-venus-cat-list-count="' + tab + '"]');
+        const G = global.venusGrid;
 
-        if (!config || !tbody) {
+        if (!config || !body || !G) {
             return;
         }
 
         const items = listItems(db, tab);
 
         if (items.length === 0) {
-            tbody.innerHTML =
-                '<tr><td colspan="2" class="sun-summaryEmpty">' + config.empty + '</td></tr>';
+            body.innerHTML = G.emptyRow(config.empty);
             selectedListId[tab] = null;
         } else {
             const activeId = itemId || selectedListId[tab] || items[0].id;
@@ -367,25 +352,15 @@
                 ? activeId
                 : items[0].id;
 
-            tbody.innerHTML = items
+            body.innerHTML = items
                 .map((item, index) => {
                     const selected =
                         item.id === selectedListId[tab] ? ' sun-protoRowSelected' : '';
-                    return (
-                        '<tr class="js-venus-cat-list-row' +
-                        selected +
-                        '" data-venus-cat-tab="' +
-                        tab +
-                        '" data-item-id="' +
-                        item.id +
-                        '">' +
-                        '<td>' +
-                        (index + 1) +
-                        '</td>' +
-                        '<td class="sun-dateComparisonName">' +
-                        escapeHtml(item.name) +
-                        '</td>' +
-                        '</tr>'
+                    return G.row(
+                        G.numCell(String(index + 1)) +
+                            G.cell(escapeHtml(item.name), 'sun-dateComparisonName'),
+                        ' js-venus-cat-list-row' + selected,
+                        'data-venus-cat-tab="' + tab + '" data-item-id="' + item.id + '"',
                     );
                 })
                 .join('');

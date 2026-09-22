@@ -194,19 +194,19 @@
      * @param {string|null} selectedId
      */
     function renderTransfersTable(db, transfers, selectedId) {
-        const tbody = document.querySelector('[data-venus-transfers-tbody]');
+        const body = document.querySelector('[data-venus-transfers-body]');
         const countEl = document.querySelector('[data-venus-transfers-count]');
-        if (!tbody) {
+        const G = global.venusGrid;
+        if (!body || !G) {
             return;
         }
 
         const sorted = transfers.slice().sort((a, b) => dt.compareTransactionsByDateTime(a, b));
 
         if (sorted.length === 0) {
-            tbody.innerHTML =
-                '<tr><td colspan="6" class="sun-summaryEmpty">Нет переносов. Нажмите «Добавить».</td></tr>';
+            body.innerHTML = G.emptyRow('Нет переносов. Нажмите «Добавить».');
         } else {
-            tbody.innerHTML = sorted
+            body.innerHTML = sorted
                 .map((transaction, index) => {
                     const row = resolveTransferRow(db, transaction);
                     const selectedClass =
@@ -217,31 +217,15 @@
                         ? escapeHtml(row.note)
                         : '<span class="sun-protoMuted">—</span>';
 
-                    return (
-                        '<tr class="js-venus-transfer-row' +
-                        selectedClass +
-                        '" data-transfer-id="' +
-                        transaction.id +
-                        '">' +
-                        '<td>' +
-                        escapeHtml(row.date) +
-                        '</td>' +
-                        '<td>' +
-                        escapeHtml(row.fromName) +
-                        '</td>' +
-                        '<td>' +
-                        escapeHtml(row.toName) +
-                        '</td>' +
-                        '<td class="sun-protoNumBalance">' +
-                        formatMoney(row.amountRur) +
-                        '</td>' +
-                        '<td>' +
-                        formatMoney(row.amountUsd) +
-                        '</td>' +
-                        '<td>' +
-                        noteCell +
-                        '</td>' +
-                        '</tr>'
+                    return G.row(
+                        G.cell(escapeHtml(row.date)) +
+                            G.cell(escapeHtml(row.fromName)) +
+                            G.cell(escapeHtml(row.toName)) +
+                            G.numCell(formatMoney(row.amountRur), 'sun-protoNumBalance') +
+                            G.numCell(formatMoney(row.amountUsd)) +
+                            G.cell(noteCell),
+                        ' js-venus-transfer-row' + selectedClass,
+                        'data-transfer-id="' + transaction.id + '"',
                     );
                 })
                 .join('');

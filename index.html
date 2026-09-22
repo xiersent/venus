@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Venus — домашняя бухгалтерия</title>
+    <title>Бухгалтерия</title>
     <link rel="stylesheet" href="vendor/xiermodal/jquery.xiermodal.css">
     <link rel="stylesheet" href="styles/styles.min.css">
     <script>
@@ -81,52 +81,50 @@
                                 </label>
                             </div>
 
-                            <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead">
-                                <table class="sun-dateComparisonTable sun-protoTable">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2">N</th>
-                                            <th rowspan="2">Счёт</th>
-                                            <th colspan="2">Расход</th>
-                                            <th colspan="2">Доход</th>
-                                            <th colspan="2">Прочие</th>
-                                            <th colspan="2">Остаток</th>
-                                        </tr>
-                                        <tr>
-                                            <th>₽</th>
-                                            <th>$</th>
-                                            <th>₽</th>
-                                            <th>$</th>
-                                            <th>₽</th>
-                                            <th>$</th>
-                                            <th>₽</th>
-                                            <th>$</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-venus-accounts-tbody>
-                                    </tbody>
-                                </table>
+                            <div class="venus-gridWrap">
+                                <div class="venus-grid venus-grid--accounts" role="grid">
+                                    <div class="venus-gridHead" role="rowgroup">
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--spanRows2" style="grid-column:1;grid-row:1 / span 2">N</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--spanRows2" style="grid-column:2;grid-row:1 / span 2">Счёт</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--spanRows2" style="grid-column:3;grid-row:1 / span 2">Категория</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--spanCols2" style="grid-column:4 / span 2;grid-row:1">Расход</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--spanCols2" style="grid-column:6 / span 2;grid-row:1">Доход</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--spanCols2" style="grid-column:8 / span 2;grid-row:1">Прочие</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--spanCols2" style="grid-column:10 / span 2;grid-row:1">Остаток</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--headRow2 venus-gridCell--num" style="grid-column:4;grid-row:2">₽</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--headRow2 venus-gridCell--num" style="grid-column:5;grid-row:2">$</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--headRow2 venus-gridCell--num" style="grid-column:6;grid-row:2">₽</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--headRow2 venus-gridCell--num" style="grid-column:7;grid-row:2">$</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--headRow2 venus-gridCell--num" style="grid-column:8;grid-row:2">₽</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--headRow2 venus-gridCell--num" style="grid-column:9;grid-row:2">$</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--headRow2 venus-gridCell--num" style="grid-column:10;grid-row:2">₽</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--headRow2 venus-gridCell--num" style="grid-column:11;grid-row:2">$</div>
+                                    </div>
+                                    <div class="venus-gridBody" role="rowgroup" data-venus-accounts-body></div>
+                                </div>
                             </div>
 
                             <div class="sun-protoFooter">
                                 <span class="sun-protoHeaderMeta" data-venus-accounts-count>Счетов: 0</span>
                                 <div class="sun-protoTotals">
-                                    <table class="sun-protoTotalsTable">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>₽</th>
-                                                <th>$</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Остаток всего</td>
-                                                <td class="sun-protoNumBalance" data-venus-total-balance-rur>0,00</td>
-                                                <td data-venus-total-balance-usd>0,00</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="venus-totalsWrap">
+                                        <div class="venus-grid venus-grid--totals" role="grid">
+                                            <div class="venus-gridHead" role="rowgroup">
+                                                <div class="venus-gridRow venus-gridRow--head">
+                                                    <div class="venus-gridCell venus-gridCell--head"></div>
+                                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">₽</div>
+                                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">$</div>
+                                                </div>
+                                            </div>
+                                            <div class="venus-gridBody" role="rowgroup">
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Остаток всего</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumBalance" data-venus-total-balance-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-total-balance-usd>0,00</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             </div>
@@ -141,21 +139,20 @@
                                     <span class="sun-protoHeaderMeta" data-venus-transfers-count>Строк: 0</span>
                                 </div>
 
-                                <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead">
-                                    <table class="sun-dateComparisonTable sun-protoTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Дата</th>
-                                                <th>Со счета</th>
-                                                <th>На счет</th>
-                                                <th>₽</th>
-                                                <th>$</th>
-                                                <th>Примечание</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody data-venus-transfers-tbody>
-                                        </tbody>
-                                    </table>
+                                <div class="venus-gridWrap">
+                                    <div class="venus-grid venus-grid--transfers" role="grid">
+                                        <div class="venus-gridHead" role="rowgroup">
+                                            <div class="venus-gridRow venus-gridRow--head">
+                                                <div class="venus-gridCell venus-gridCell--head">Дата</div>
+                                                <div class="venus-gridCell venus-gridCell--head">Со счета</div>
+                                                <div class="venus-gridCell venus-gridCell--head">На счет</div>
+                                                <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">₽</div>
+                                                <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">$</div>
+                                                <div class="venus-gridCell venus-gridCell--head">Примечание</div>
+                                            </div>
+                                        </div>
+                                        <div class="venus-gridBody" role="rowgroup" data-venus-transfers-body></div>
+                                    </div>
                                 </div>
 
                                 <div class="sun-protoFooter">
@@ -189,22 +186,24 @@
                                     </div>
 
                                     <div class="sun-protoTotals">
-                                        <table class="sun-protoTotalsTable">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>₽</th>
-                                                    <th>$</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Итого</td>
-                                                    <td class="sun-protoNumBalance" data-venus-transfer-total-rur>0,00</td>
-                                                    <td data-venus-transfer-total-usd>0,00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="venus-totalsWrap">
+                                            <div class="venus-grid venus-grid--totals" role="grid">
+                                                <div class="venus-gridHead" role="rowgroup">
+                                                    <div class="venus-gridRow venus-gridRow--head">
+                                                        <div class="venus-gridCell venus-gridCell--head"></div>
+                                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">₽</div>
+                                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">$</div>
+                                                    </div>
+                                                </div>
+                                                <div class="venus-gridBody" role="rowgroup">
+                                                    <div class="venus-gridRow">
+                                                        <div class="venus-gridCell">Итого</div>
+                                                        <div class="venus-gridCell venus-gridCell--num sun-protoNumBalance" data-venus-transfer-total-rur>0,00</div>
+                                                        <div class="venus-gridCell venus-gridCell--num" data-venus-transfer-total-usd>0,00</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -222,25 +221,24 @@
                                 <span class="sun-protoHeaderMeta" data-venus-expenses-count>Строк: 0</span>
                             </div>
 
-                            <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead">
-                                <table class="sun-dateComparisonTable sun-protoTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Дата</th>
-                                            <th>Счёт</th>
-                                            <th>Категория</th>
-                                            <th>Подкатегория</th>
-                                            <th>Кол.</th>
-                                            <th>Ед.</th>
-                                            <th>₽</th>
-                                            <th>$</th>
-                                            <th>Курс</th>
-                                            <th>Примечание</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-venus-expenses-tbody>
-                                    </tbody>
-                                </table>
+                            <div class="venus-gridWrap">
+                                <div class="venus-grid venus-grid--journal" role="grid">
+                                    <div class="venus-gridHead" role="rowgroup">
+                                        <div class="venus-gridRow venus-gridRow--head">
+                                            <div class="venus-gridCell venus-gridCell--head">Дата</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Счёт</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Категория</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Подкатегория</div>
+                                            <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">Кол.</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Ед.</div>
+                                            <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">₽</div>
+                                            <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">$</div>
+                                            <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">Курс</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Примечание</div>
+                                        </div>
+                                    </div>
+                                    <div class="venus-gridBody" role="rowgroup" data-venus-expenses-body></div>
+                                </div>
                             </div>
 
                             <div class="sun-protoFooter">
@@ -280,37 +278,39 @@
                                 </div>
 
                                 <div class="sun-protoTotals">
-                                    <table class="sun-protoTotalsTable">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>₽</th>
-                                                <th>$</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Сегодня</td>
-                                                <td class="sun-protoNumExpense" data-venus-expense-total-today-rur>0,00</td>
-                                                <td data-venus-expense-total-today-usd>0,00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Неделя</td>
-                                                <td class="sun-protoNumExpense" data-venus-expense-total-week-rur>0,00</td>
-                                                <td data-venus-expense-total-week-usd>0,00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Месяц</td>
-                                                <td class="sun-protoNumExpense" data-venus-expense-total-month-rur>0,00</td>
-                                                <td data-venus-expense-total-month-usd>0,00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Всего</td>
-                                                <td class="sun-protoNumExpense" data-venus-expense-total-all-rur>0,00</td>
-                                                <td data-venus-expense-total-all-usd>0,00</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="venus-totalsWrap">
+                                        <div class="venus-grid venus-grid--totals" role="grid">
+                                            <div class="venus-gridHead" role="rowgroup">
+                                                <div class="venus-gridRow venus-gridRow--head">
+                                                    <div class="venus-gridCell venus-gridCell--head"></div>
+                                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">₽</div>
+                                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">$</div>
+                                                </div>
+                                            </div>
+                                            <div class="venus-gridBody" role="rowgroup">
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Сегодня</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumExpense" data-venus-expense-total-today-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-expense-total-today-usd>0,00</div>
+                                                </div>
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Неделя</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumExpense" data-venus-expense-total-week-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-expense-total-week-usd>0,00</div>
+                                                </div>
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Месяц</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumExpense" data-venus-expense-total-month-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-expense-total-month-usd>0,00</div>
+                                                </div>
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Всего</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumExpense" data-venus-expense-total-all-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-expense-total-all-usd>0,00</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -327,25 +327,24 @@
                                 <span class="sun-protoHeaderMeta" data-venus-incomes-count>Строк: 0</span>
                             </div>
 
-                            <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead">
-                                <table class="sun-dateComparisonTable sun-protoTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Дата</th>
-                                            <th>Счёт</th>
-                                            <th>Категория</th>
-                                            <th>Подкатегория</th>
-                                            <th>Кол.</th>
-                                            <th>Ед.</th>
-                                            <th>₽</th>
-                                            <th>$</th>
-                                            <th>Курс</th>
-                                            <th>Примечание</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-venus-incomes-tbody>
-                                    </tbody>
-                                </table>
+                            <div class="venus-gridWrap">
+                                <div class="venus-grid venus-grid--journal" role="grid">
+                                    <div class="venus-gridHead" role="rowgroup">
+                                        <div class="venus-gridRow venus-gridRow--head">
+                                            <div class="venus-gridCell venus-gridCell--head">Дата</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Счёт</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Категория</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Подкатегория</div>
+                                            <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">Кол.</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Ед.</div>
+                                            <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">₽</div>
+                                            <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">$</div>
+                                            <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">Курс</div>
+                                            <div class="venus-gridCell venus-gridCell--head">Примечание</div>
+                                        </div>
+                                    </div>
+                                    <div class="venus-gridBody" role="rowgroup" data-venus-incomes-body></div>
+                                </div>
                             </div>
 
                             <div class="sun-protoFooter">
@@ -385,37 +384,39 @@
                                 </div>
 
                                 <div class="sun-protoTotals">
-                                    <table class="sun-protoTotalsTable">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>₽</th>
-                                                <th>$</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Сегодня</td>
-                                                <td class="sun-protoNumIncome" data-venus-income-total-today-rur>0,00</td>
-                                                <td data-venus-income-total-today-usd>0,00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Неделя</td>
-                                                <td class="sun-protoNumIncome" data-venus-income-total-week-rur>0,00</td>
-                                                <td data-venus-income-total-week-usd>0,00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Месяц</td>
-                                                <td class="sun-protoNumIncome" data-venus-income-total-month-rur>0,00</td>
-                                                <td data-venus-income-total-month-usd>0,00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Всего</td>
-                                                <td class="sun-protoNumIncome" data-venus-income-total-all-rur>0,00</td>
-                                                <td data-venus-income-total-all-usd>0,00</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="venus-totalsWrap">
+                                        <div class="venus-grid venus-grid--totals" role="grid">
+                                            <div class="venus-gridHead" role="rowgroup">
+                                                <div class="venus-gridRow venus-gridRow--head">
+                                                    <div class="venus-gridCell venus-gridCell--head"></div>
+                                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">₽</div>
+                                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">$</div>
+                                                </div>
+                                            </div>
+                                            <div class="venus-gridBody" role="rowgroup">
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Сегодня</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumIncome" data-venus-income-total-today-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-income-total-today-usd>0,00</div>
+                                                </div>
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Неделя</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumIncome" data-venus-income-total-week-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-income-total-week-usd>0,00</div>
+                                                </div>
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Месяц</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumIncome" data-venus-income-total-month-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-income-total-month-usd>0,00</div>
+                                                </div>
+                                                <div class="venus-gridRow">
+                                                    <div class="venus-gridCell">Всего</div>
+                                                    <div class="venus-gridCell venus-gridCell--num sun-protoNumIncome" data-venus-income-total-all-rur>0,00</div>
+                                                    <div class="venus-gridCell venus-gridCell--num" data-venus-income-total-all-usd>0,00</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -562,6 +563,10 @@
                     <input type="text" class="sun-summarySelect" id="acc-name" autocomplete="off">
                 </div>
                 <div class="sun-formRow">
+                    <label class="sun-formLabel" for="acc-category">Категория</label>
+                    <select class="sun-summarySelect" id="acc-category"></select>
+                </div>
+                <div class="sun-formRow">
                     <label class="sun-formLabel" for="acc-currency">Валюта</label>
                     <select class="sun-summarySelect" id="acc-currency"></select>
                 </div>
@@ -631,16 +636,16 @@
                             <p class="venus-categoriesPaneTitle">Категории расходов</p>
                             <span class="sun-protoHeaderMeta" data-venus-cat-root-count="expense">Категорий расходов: 0</span>
                         </div>
-                        <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
-                            <table class="sun-dateComparisonTable sun-protoTable">
-                                <thead>
-                                    <tr>
-                                        <th>Категория</th>
-                                        <th>Подкат.</th>
-                                    </tr>
-                                </thead>
-                                <tbody data-venus-cat-roots="expense"></tbody>
-                            </table>
+                        <div class="venus-gridWrap venus-gridWrap--categories">
+                            <div class="venus-grid venus-grid--catRoots" role="grid">
+                                <div class="venus-gridHead" role="rowgroup">
+                                    <div class="venus-gridRow venus-gridRow--head">
+                                        <div class="venus-gridCell venus-gridCell--head">Категория</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">Подкат.</div>
+                                    </div>
+                                </div>
+                                <div class="venus-gridBody" role="rowgroup" data-venus-cat-roots="expense"></div>
+                            </div>
                         </div>
                         <div class="sun-transformRow venus-categoriesPaneActions">
                             <button type="button" class="sun-uiBtn" data-venus-cat-action="add-root" data-venus-cat-type="expense">Добавить</button>
@@ -653,16 +658,16 @@
                             <p class="venus-categoriesPaneTitle">Подкатегории расходов</p>
                             <span class="sun-protoHeaderMeta" data-venus-cat-sub-count="expense">Подкатегорий расходов: 0</span>
                         </div>
-                        <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
-                            <table class="sun-dateComparisonTable sun-protoTable">
-                                <thead>
-                                    <tr>
-                                        <th>N</th>
-                                        <th>Подкатегория</th>
-                                    </tr>
-                                </thead>
-                                <tbody data-venus-cat-subs="expense"></tbody>
-                            </table>
+                        <div class="venus-gridWrap venus-gridWrap--categories">
+                            <div class="venus-grid venus-grid--catList" role="grid">
+                                <div class="venus-gridHead" role="rowgroup">
+                                    <div class="venus-gridRow venus-gridRow--head">
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">N</div>
+                                        <div class="venus-gridCell venus-gridCell--head">Подкатегория</div>
+                                    </div>
+                                </div>
+                                <div class="venus-gridBody" role="rowgroup" data-venus-cat-subs="expense"></div>
+                            </div>
                         </div>
                         <div class="sun-transformRow venus-categoriesPaneActions">
                             <button type="button" class="sun-uiBtn" data-venus-cat-action="add-sub" data-venus-cat-type="expense">Добавить</button>
@@ -679,16 +684,16 @@
                             <p class="venus-categoriesPaneTitle">Категории доходов</p>
                             <span class="sun-protoHeaderMeta" data-venus-cat-root-count="income">Категорий доходов: 0</span>
                         </div>
-                        <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
-                            <table class="sun-dateComparisonTable sun-protoTable">
-                                <thead>
-                                    <tr>
-                                        <th>Категория</th>
-                                        <th>Подкат.</th>
-                                    </tr>
-                                </thead>
-                                <tbody data-venus-cat-roots="income"></tbody>
-                            </table>
+                        <div class="venus-gridWrap venus-gridWrap--categories">
+                            <div class="venus-grid venus-grid--catRoots" role="grid">
+                                <div class="venus-gridHead" role="rowgroup">
+                                    <div class="venus-gridRow venus-gridRow--head">
+                                        <div class="venus-gridCell venus-gridCell--head">Категория</div>
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">Подкат.</div>
+                                    </div>
+                                </div>
+                                <div class="venus-gridBody" role="rowgroup" data-venus-cat-roots="income"></div>
+                            </div>
                         </div>
                         <div class="sun-transformRow venus-categoriesPaneActions">
                             <button type="button" class="sun-uiBtn" data-venus-cat-action="add-root" data-venus-cat-type="income">Добавить</button>
@@ -701,16 +706,16 @@
                             <p class="venus-categoriesPaneTitle">Подкатегории доходов</p>
                             <span class="sun-protoHeaderMeta" data-venus-cat-sub-count="income">Подкатегорий доходов: 0</span>
                         </div>
-                        <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
-                            <table class="sun-dateComparisonTable sun-protoTable">
-                                <thead>
-                                    <tr>
-                                        <th>N</th>
-                                        <th>Подкатегория</th>
-                                    </tr>
-                                </thead>
-                                <tbody data-venus-cat-subs="income"></tbody>
-                            </table>
+                        <div class="venus-gridWrap venus-gridWrap--categories">
+                            <div class="venus-grid venus-grid--catList" role="grid">
+                                <div class="venus-gridHead" role="rowgroup">
+                                    <div class="venus-gridRow venus-gridRow--head">
+                                        <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">N</div>
+                                        <div class="venus-gridCell venus-gridCell--head">Подкатегория</div>
+                                    </div>
+                                </div>
+                                <div class="venus-gridBody" role="rowgroup" data-venus-cat-subs="income"></div>
+                            </div>
                         </div>
                         <div class="sun-transformRow venus-categoriesPaneActions">
                             <button type="button" class="sun-uiBtn" data-venus-cat-action="add-sub" data-venus-cat-type="income">Добавить</button>
@@ -726,16 +731,16 @@
                         <p class="venus-categoriesPaneTitle">Единицы измерения</p>
                         <span class="sun-protoHeaderMeta" data-venus-cat-list-count="units">Единиц измерения: 0</span>
                     </div>
-                    <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
-                        <table class="sun-dateComparisonTable sun-protoTable">
-                            <thead>
-                                <tr>
-                                    <th>N</th>
-                                    <th>Единица</th>
-                                </tr>
-                            </thead>
-                            <tbody data-venus-cat-list="units"></tbody>
-                        </table>
+                    <div class="venus-gridWrap venus-gridWrap--categories">
+                        <div class="venus-grid venus-grid--catList" role="grid">
+                            <div class="venus-gridHead" role="rowgroup">
+                                <div class="venus-gridRow venus-gridRow--head">
+                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">N</div>
+                                    <div class="venus-gridCell venus-gridCell--head">Единица</div>
+                                </div>
+                            </div>
+                            <div class="venus-gridBody" role="rowgroup" data-venus-cat-list="units"></div>
+                        </div>
                     </div>
                     <div class="sun-transformRow venus-categoriesPaneActions">
                         <button type="button" class="sun-uiBtn" data-venus-cat-action="add" data-venus-cat-tab="units">Добавить</button>
@@ -750,16 +755,16 @@
                         <p class="venus-categoriesPaneTitle">Кредиторы</p>
                         <span class="sun-protoHeaderMeta" data-venus-cat-list-count="creditors">Кредиторов: 0</span>
                     </div>
-                    <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
-                        <table class="sun-dateComparisonTable sun-protoTable">
-                            <thead>
-                                <tr>
-                                    <th>N</th>
-                                    <th>Кредитор</th>
-                                </tr>
-                            </thead>
-                            <tbody data-venus-cat-list="creditors"></tbody>
-                        </table>
+                    <div class="venus-gridWrap venus-gridWrap--categories">
+                        <div class="venus-grid venus-grid--catList" role="grid">
+                            <div class="venus-gridHead" role="rowgroup">
+                                <div class="venus-gridRow venus-gridRow--head">
+                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">N</div>
+                                    <div class="venus-gridCell venus-gridCell--head">Кредитор</div>
+                                </div>
+                            </div>
+                            <div class="venus-gridBody" role="rowgroup" data-venus-cat-list="creditors"></div>
+                        </div>
                     </div>
                     <div class="sun-transformRow venus-categoriesPaneActions">
                         <button type="button" class="sun-uiBtn" data-venus-cat-action="add" data-venus-cat-tab="creditors">Добавить</button>
@@ -774,16 +779,16 @@
                         <p class="venus-categoriesPaneTitle">Должники</p>
                         <span class="sun-protoHeaderMeta" data-venus-cat-list-count="debtors">Должников: 0</span>
                     </div>
-                    <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
-                        <table class="sun-dateComparisonTable sun-protoTable">
-                            <thead>
-                                <tr>
-                                    <th>N</th>
-                                    <th>Должник</th>
-                                </tr>
-                            </thead>
-                            <tbody data-venus-cat-list="debtors"></tbody>
-                        </table>
+                    <div class="venus-gridWrap venus-gridWrap--categories">
+                        <div class="venus-grid venus-grid--catList" role="grid">
+                            <div class="venus-gridHead" role="rowgroup">
+                                <div class="venus-gridRow venus-gridRow--head">
+                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">N</div>
+                                    <div class="venus-gridCell venus-gridCell--head">Должник</div>
+                                </div>
+                            </div>
+                            <div class="venus-gridBody" role="rowgroup" data-venus-cat-list="debtors"></div>
+                        </div>
                     </div>
                     <div class="sun-transformRow venus-categoriesPaneActions">
                         <button type="button" class="sun-uiBtn" data-venus-cat-action="add" data-venus-cat-tab="debtors">Добавить</button>
@@ -798,16 +803,16 @@
                         <p class="venus-categoriesPaneTitle">Названия вкладов</p>
                         <span class="sun-protoHeaderMeta" data-venus-cat-list-count="deposits">Названий вкладов: 0</span>
                     </div>
-                    <div class="sun-summaryResultsContainer sun-protoTableScroll sun-protoTableScroll--stickyHead venus-categoriesList">
-                        <table class="sun-dateComparisonTable sun-protoTable">
-                            <thead>
-                                <tr>
-                                    <th>N</th>
-                                    <th>Название вклада</th>
-                                </tr>
-                            </thead>
-                            <tbody data-venus-cat-list="deposits"></tbody>
-                        </table>
+                    <div class="venus-gridWrap venus-gridWrap--categories">
+                        <div class="venus-grid venus-grid--catList" role="grid">
+                            <div class="venus-gridHead" role="rowgroup">
+                                <div class="venus-gridRow venus-gridRow--head">
+                                    <div class="venus-gridCell venus-gridCell--head venus-gridCell--num">N</div>
+                                    <div class="venus-gridCell venus-gridCell--head">Название вклада</div>
+                                </div>
+                            </div>
+                            <div class="venus-gridBody" role="rowgroup" data-venus-cat-list="deposits"></div>
+                        </div>
                     </div>
                     <div class="sun-transformRow venus-categoriesPaneActions">
                         <button type="button" class="sun-uiBtn" data-venus-cat-action="add" data-venus-cat-tab="deposits">Добавить</button>
@@ -879,6 +884,7 @@
     <script src="modules/decimal-input.js"></script>
     <script src="modules/warning.js"></script>
     <script src="modules/storage.js"></script>
+    <script src="modules/grid.js"></script>
     <script src="modules/datetime.js"></script>
     <script src="modules/category-combobox.js"></script>
     <script src="modules/accounts.js"></script>
